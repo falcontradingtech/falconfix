@@ -1,0 +1,57 @@
+generated_at: "2026-05-13T14:15:03.646265Z"
+fix_version: FIX4.4
+only_required: false
+group_repetitions: 1
+delimiter: SOH
+checksum: true
+
+header_defaults:
+  SenderCompID: BRK
+  TargetCompID: CLT
+  MsgSeqNum: 1
+  SendingTime: 20250101000000000
+
+default_values:
+
+  ## ───────── CHAR / BOOLEAN ─────────
+  CHAR: "1"
+  BOOLEAN: "Y"
+
+  ## ───────── INT FAMILY ─────────
+  INT: "1"
+  SEQNUM: "1"
+  NUMINGROUP: "1"
+  LENGTH: "1"
+  DAYOFMONTH: "15"
+
+  ## ───────── FLOAT FAMILY ─────────
+  PRICE: 35.5
+  QTY: 100
+  AMT: 100
+  FLOAT: 100
+  PRICEOFFSET: 1
+  PERCENTAGE: 99
+
+  ## ───────── DATES / TIME ─────────
+  UTCTIMESTAMP: "20250101000000000"
+  UTCDATEONLY: "20250101"
+  UTCTIMEONLY: "100000000"
+  LOCALMKTDATE: "20250101"
+
+  ## ───────── STRING FAMILY ─────────
+  STRING: "VAL"
+  MULTIPLEVALUESTRING: "0"
+  MULTIPLESTRINGVALUE: "0"
+  MULTIPLECHARVALUE: "0"
+  EXCHANGE: "NYSE"
+  COUNTRY: "US"
+  CURRENCY: "DOL"
+  LANGUAGE: "EN"
+  XMLDATA: "XML-DATA"
+  DATA: "DATA"
+  MONTHYEAR: "122035"
+
+override_fields:
+  TestReqID: REQID_1
+  ClOrdID: CLORDID_123
+

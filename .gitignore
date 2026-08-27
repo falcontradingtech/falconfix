@@ -1,0 +1,84 @@
+unittests/compare/
+benchmark/compare/bin/
+benchmark/compare/build/
+benchmark/compare/log/
+benchmark/compare/out/
+
+# Build system
+build/
+3rdparty/
+falconfix-lib/
+CMakeFiles/
+CMakeCache.txt
+/Makefile
+/*.cmake
+vcpkg/
+output/
+pocs/
+.cache/
+.vs
+.vscode
+.codex
+.cache
+.agents
+vcpkg_installed
+compile_commands.json
+
+# Binaries / libs
+*.o
+*.obj
+*.a
+*.la
+*.lo
+*.so
+*.so.*
+*.dll
+*.dylib
+*.exe
+*.lib
+*.out
+
+# Compilers / tools
+*.gcno
+*.gcda
+*.gcov
+
+# IDE / editors
+.vscode/
+.clangd
+.idea/
+*.user
+*.userprefs
+*.suo
+*.swp
+*.swo
+
+# Logs / Zip / temp
+*.log
+*.tmp
+*.bak
+*.zip
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Python: build artifacts and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+*.egg
+.build/
+dist/
+.env
+.venv
+venv/
+ENV/
+env/
+pip-wheel-metadata/
+
+CMakePresets.json
