@@ -64,12 +64,13 @@ jobs:
 
         # Run tests with OpenCppCoverage
         $openCppCoveragePath = "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe"
+        $workspaceRoot = "${{ github.workspace }}"
         if (Test-Path $openCppCoveragePath) {
           & $openCppCoveragePath `
-            --sources ..\..src `
-            --excluded_sources ..\..tests `
-            --excluded_sources ..\..vcpkg `
-            --export_type cobertura:..\..windows_coverage.xml `
+            --sources "$workspaceRoot\src" `
+            --excluded_sources "$workspaceRoot\tests" `
+            --excluded_sources "${{ env.VCPKG_ROOT }}" `
+            --export_type "cobertura:$workspaceRoot\windows_coverage.xml" `
             -- ctest --output-on-failure -C Release
         }
       shell: powershell

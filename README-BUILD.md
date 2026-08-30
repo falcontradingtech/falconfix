@@ -213,3 +213,34 @@ or:
 ## About Ignored Files and Directories
 
 Build artifacts, temporary files, editor settings, local dependencies, and generated `compile_commands.json` files are intentionally ignored. Each developer should generate these locally after cloning the repository so the repo stays portable and free from machine-specific paths.
+
+## Code Coverage
+
+Code coverage reports are generated in CI/CD pipelines and uploaded to [Codecov](https://app.codecov.io/gh/falcontradingtech/falconfix/).
+
+### Local Coverage Report (Linux)
+
+To generate a local coverage report on Linux:
+
+```bash
+export VCPKG_ROOT="$HOME/path/to/vcpkg"
+export CXXFLAGS="--coverage"
+export LDFLAGS="--coverage"
+
+./build.sh
+ctest --preset linux-release
+
+# Generate coverage report
+lcov --directory build/linux-release --capture --output-file coverage.info
+lcov --remove coverage.info '*/vcpkg/*' '*/build/*' '*/usr/include/*' --output-file coverage.info
+lcov --list coverage.info
+```
+
+### Coverage on Windows
+
+On Windows, use [OpenCppCoverage](https://opencppcoverage.codeplex.com/) with the build.ps1 script. The CI/CD workflow handles coverage automatically.
+
+### Viewing Coverage Reports
+
+Coverage reports are automatically uploaded to [Codecov](https://app.codecov.io/gh/falcontradingtech/falconfix/) on every push to `main` and pull request.
+

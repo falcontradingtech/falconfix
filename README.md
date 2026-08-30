@@ -2,8 +2,8 @@
 
 [![CI Linux](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml)
 [![CI Windows](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-windows.yml)
-[![Coverage Linux](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=linux)](https://app.codecov.io/github/falcontradingtech/falconfix?flags=linux)
-[![Coverage Windows](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=windows)](https://app.codecov.io/github/falcontradingtech/falconfix?flags=windows)
+[![Coverage Linux](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=linux)](https://app.codecov.io/gh/falcontradingtech/falconfix?flags=linux)
+[![Coverage Windows](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=windows)](https://app.codecov.io/gh/falcontradingtech/falconfix?flags=windows)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/eeb6f887bd6b448ba074b84ad06eb765)](https://app.codacy.com/gh/falcontradingtech/falconfix/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue)](https://en.wikipedia.org/wiki/C%2B%2B20)
