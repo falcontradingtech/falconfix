@@ -56,13 +56,28 @@ jobs:
         lcov --directory build/linux-release --capture --output-file coverage.info --ignore-errors negative,mismatch
         lcov --remove coverage.info '*/vcpkg/*' '*/build/*' '*/usr/include/*' --output-file coverage.info --ignore-errors unused
         lcov --list coverage.info
+        # Verify coverage.info was created
+        if [ ! -f coverage.info ]; then
+          echo "ERROR: coverage.info file not generated"
+          exit 1
+        fi
+        echo "Coverage file size: $(stat -c%s coverage.info) bytes"
+
+    - name: Validate coverage file
+      run: |
+        echo "Checking coverage.info exists and is valid..."
+        ls -lh coverage.info
+        head -20 coverage.info
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        NODE_OPTIONS: --no-deprecation
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.info
         flags: linux
+        slug: falcontradingtech/falconfix
         name: linux-coverage
         fail_ci_if_error: false
+        verbose: true

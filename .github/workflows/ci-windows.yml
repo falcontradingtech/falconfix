@@ -77,12 +77,15 @@ jobs:
       working-directory: ${{ github.workspace }}/build/windows-release
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       if: always()
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./windows_coverage.xml
         flags: windows
+        slug: falcontradingtech/falconfix
         name: windows-coverage
         fail_ci_if_error: false
+        verbose: true
+      env:
+        NODE_OPTIONS: --no-deprecation
