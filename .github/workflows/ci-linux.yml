@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+env:
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,20 +20,29 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y ninja-build cmake pkg-config
+        sudo apt-get install -y ninja-build cmake pkg-config git
 
     - name: Setup vcpkg cache
       uses: actions/cache@v3
       with:
-        path: ~/.vcpkg
+        path: ${{ env.VCPKG_ROOT }}
         key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
         restore-keys: |
           ${{ runner.os }}-vcpkg-
+
+    - name: Install vcpkg
+      run: |
+        if [ ! -d "${{ env.VCPKG_ROOT }}" ]; then
+          git clone https://github.com/Microsoft/vcpkg.git ${{ env.VCPKG_ROOT }}
+          ${{ env.VCPKG_ROOT }}/bootstrap-vcpkg.sh
+        fi
 
     - name: Build
       run: |
         chmod +x ./build.sh
         ./build.sh
+      env:
+        VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
 
     - name: Run tests
       run: |
