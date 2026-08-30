@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y ninja-build cmake pkg-config git
+        sudo apt-get install -y ninja-build cmake pkg-config git lcov
 
     - name: Setup vcpkg cache
       uses: actions/cache@v3
@@ -37,14 +37,30 @@ jobs:
           ${{ env.VCPKG_ROOT }}/bootstrap-vcpkg.sh
         fi
 
-    - name: Build
+    - name: Build with coverage
       run: |
         chmod +x ./build.sh
         ./build.sh
       env:
         VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+        CXXFLAGS: "--coverage"
+        LDFLAGS: "--coverage"
 
     - name: Run tests
       run: |
         cd build/linux-release
         cmake --build . --target test --config Release
+
+    - name: Generate coverage report
+      run: |
+        lcov --directory build/linux-release --capture --output-file coverage.info
+        lcov --remove coverage.info '*/vcpkg/*' '*/build/*' --output-file coverage.info
+        lcov --list coverage.info
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
