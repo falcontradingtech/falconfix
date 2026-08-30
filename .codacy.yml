@@ -1,0 +1,48 @@
+---
+exclude_paths:
+  - "src/cpp/FIX4.2/**"
+  - "src/cpp/FIX4.3/**"
+  - "src/cpp/FIX4.4/**"
+  - "src/include/FIX4.2/**"
+  - "src/include/FIX4.3/**"
+  - "src/include/FIX4.4/**"
+  - "tests/FIX4.2/**"
+  - "tests/FIX4.3/**"
+  - "tests/FIX4.4/**"
+
+exclude_paths_go:
+  - "src/cpp/FIX4.2/**"
+  - "src/cpp/FIX4.3/**"
+  - "src/cpp/FIX4.4/**"
+  - "src/include/FIX4.2/**"
+  - "src/include/FIX4.3/**"
+  - "src/include/FIX4.4/**"
+  - "tests/FIX4.2/**"
+  - "tests/FIX4.3/**"
+  - "tests/FIX4.4/**"
+
+exclude_paths_javascript:
+  - "src/cpp/FIX4.2/**"
+  - "src/cpp/FIX4.3/**"
+  - "src/cpp/FIX4.4/**"
+  - "src/include/FIX4.2/**"
+  - "src/include/FIX4.3/**"
+  - "src/include/FIX4.4/**"
+  - "tests/FIX4.2/**"
+  - "tests/FIX4.3/**"
+  - "tests/FIX4.4/**"
+
+# Disable specific tools that analyze these generated files
+tools:
+  duplication:
+    enabled: true
+    exclude_paths:
+      - "src/cpp/FIX4.2/**"
+      - "src/cpp/FIX4.3/**"
+      - "src/cpp/FIX4.4/**"
+      - "src/include/FIX4.2/**"
+      - "src/include/FIX4.3/**"
+      - "src/include/FIX4.4/**"
+      - "tests/FIX4.2/**"
+      - "tests/FIX4.3/**"
+      - "tests/FIX4.4/**"

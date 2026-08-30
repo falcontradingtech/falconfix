@@ -38,6 +38,9 @@ jobs:
         }
       shell: powershell
 
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
     - name: Build with coverage flags
       run: |
         $env:VCPKG_ROOT = "${{ env.VCPKG_ROOT }}"

@@ -19,10 +19,12 @@ $CMakePresetsContent = @"
 	{
 	  "name": "windows-base",
 	  "hidden": true,
-	  "generator": "Ninja",
+	  "generator": "Ninja Multi-Config",
 	  "binaryDir": "`${sourceDir}/build/`${presetName}",
 	  "cacheVariables": {
-		"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+		"CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+		"CMAKE_C_COMPILER": "cl.exe",
+		"CMAKE_CXX_COMPILER": "cl.exe"
 	  }
 	},
 	{
