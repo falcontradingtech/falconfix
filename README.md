@@ -1,7 +1,9 @@
 # FalconFIX - High-Performance FIX Engine
 
 [![CI Linux](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml)
-[![codecov](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg)](https://codecov.io/gh/falcontradingtech/falconfix)
+[![CI Windows](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-windows.yml)
+[![Coverage Linux](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=linux)](https://codecov.io/gh/falcontradingtech/falconfix)
+[![Coverage Windows](https://codecov.io/gh/falcontradingtech/falconfix/branch/main/graph/badge.svg?flag=windows)](https://codecov.io/gh/falcontradingtech/falconfix)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue)](https://en.wikipedia.org/wiki/C%2B%2B20)
 [![CMake 3.16+](https://img.shields.io/badge/CMake-3.16%2B-red)](https://cmake.org/)
@@ -319,10 +321,10 @@ falcongen/                  # Code generator
 
 **Author**: Michel Tonetti, Herik Lima, Fabio Galuppo  
 **License**: MIT - See LICENSE file  
-**Repository**: https://gitlab.com/mtonetti/falconfix
+**Repository**: https://github.com/falcontradingtech/falconfix
 
 ## Support
 
-- 🐛 **Issues**: https://gitlab.com/mtonetti/falconfix/issues
+- 🐛 **Issues**: https://github.com/falcontradingtech/falconfix/issues
 - 📚 **Documentation**: See [`README-BUILD.md`](README-BUILD.md) for build details
 - 🚀 **Getting Started**: Run `create_project.py` to bootstrap a new project

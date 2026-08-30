@@ -1,0 +1,79 @@
+name: CI Windows
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        choco install -y cmake ninja opencppcoverage
+      shell: powershell
+
+    - name: Setup vcpkg cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.VCPKG_ROOT }}
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
+    - name: Install vcpkg
+      run: |
+        if (-not (Test-Path "${{ env.VCPKG_ROOT }}")) {
+          git clone https://github.com/Microsoft/vcpkg.git ${{ env.VCPKG_ROOT }}
+          & "${{ env.VCPKG_ROOT }}\bootstrap-vcpkg.bat"
+        }
+      shell: powershell
+
+    - name: Setup Visual Studio
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build with coverage flags
+      run: |
+        $env:VCPKG_ROOT = "${{ env.VCPKG_ROOT }}"
+        & .\build.ps1 -Preset windows-release
+      shell: powershell
+      env:
+        VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+
+    - name: Run tests with coverage
+      run: |
+        $buildDir = "build\windows-release"
+        # Run tests normally first
+        cd $buildDir
+        cmake --build . --target RUN_TESTS --config Release
+        cd ..\..
+
+        # Run tests with OpenCppCoverage
+        $openCppCoveragePath = "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe"
+        if (Test-Path $openCppCoveragePath) {
+          & $openCppCoveragePath `
+            --sources src `
+            --excluded_sources tests `
+            --excluded_sources vcpkg `
+            --export_type cobertura:windows_coverage.xml `
+            -- cmake --build $buildDir --target RUN_TESTS --config Release
+        }
+      shell: powershell
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        files: ./windows_coverage.xml
+        flags: windows
+        name: windows-coverage
+        fail_ci_if_error: false
