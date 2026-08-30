@@ -58,21 +58,18 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        $buildDir = "build\windows-release"
         # Run tests normally first
-        cd $buildDir
         cmake --build . --config Release
         ctest --output-on-failure -C Release
-        cd ..\..
 
         # Run tests with OpenCppCoverage
         $openCppCoveragePath = "C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe"
         if (Test-Path $openCppCoveragePath) {
           & $openCppCoveragePath `
-            --sources src `
-            --excluded_sources tests `
-            --excluded_sources vcpkg `
-            --export_type cobertura:windows_coverage.xml `
+            --sources ..\..src `
+            --excluded_sources ..\..tests `
+            --excluded_sources ..\..vcpkg `
+            --export_type cobertura:..\..windows_coverage.xml `
             -- ctest --output-on-failure -C Release
         }
       shell: powershell
@@ -82,6 +79,7 @@ jobs:
       uses: codecov/codecov-action@v3
       if: always()
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./windows_coverage.xml
         flags: windows
         name: windows-coverage
