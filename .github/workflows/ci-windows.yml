@@ -79,8 +79,9 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       if: always()
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./windows_coverage.xml
         flags: windows
         name: windows-coverage
