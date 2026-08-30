@@ -165,21 +165,21 @@ TEST(MultiVersionTests, ServerHandlesFIX42AndFIX44ClientsOnDifferentPorts) {
     rc = client44Engine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= 2 &&
                client42App.onLogonCount.load() >= 1 &&
                client44App.onLogonCount.load() >= 1;
-    }, std::chrono::seconds(5)))
+    }))
         << "server onLogon=" << serverApp.onLogonCount.load()
         << " client42 onLogon=" << client42App.onLogonCount.load()
         << " client44 onLogon=" << client44App.onLogonCount.load();
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return serverApp.heartbeat42Count.load() > 0 &&
                serverApp.heartbeat44Count.load() > 0 &&
                client42App.heartbeat42Count.load() > 0 &&
                client44App.heartbeat44Count.load() > 0;
-    }, std::chrono::seconds(5)))
+    }))
         << "server hb42=" << serverApp.heartbeat42Count.load()
         << " server hb44=" << serverApp.heartbeat44Count.load()
         << " client42 hb42=" << client42App.heartbeat42Count.load()
@@ -203,10 +203,10 @@ TEST(MultiVersionTests, ServerHandlesFIX42AndFIX44ClientsOnDifferentPorts) {
     rc = serverEngine.sendToTarget(md44, serverSid44);
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return client42App.app42Count.load() > 0 &&
                client44App.app44Count.load() > 0;
-    }, std::chrono::seconds(5)))
+    }))
         << "client42 app42=" << client42App.app42Count.load()
         << " client44 app44=" << client44App.app44Count.load();
 

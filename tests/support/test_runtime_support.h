@@ -122,4 +122,18 @@ inline bool waitUntil(const std::function<bool()> &predicate,
     return predicate();
 }
 
+inline bool waitUntilWithRetries(const std::function<bool()> &predicate,
+                                 int32_t maxRetries = 10,
+                                 std::chrono::milliseconds stepDelay = std::chrono::milliseconds(1000)) {
+    for (int32_t attempt = 1; attempt <= maxRetries; ++attempt) {
+        if (predicate()) {
+            return true;
+        }
+        if (attempt < maxRetries) {
+            std::this_thread::sleep_for(stepDelay);
+        }
+    }
+    return false;
+}
+
 } // namespace falconfix::test
