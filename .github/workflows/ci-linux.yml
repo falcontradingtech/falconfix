@@ -1,0 +1,38 @@
+name: CI Linux
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ninja-build cmake pkg-config
+
+    - name: Setup vcpkg cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.vcpkg
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
+    - name: Build
+      run: |
+        chmod +x ./build.sh
+        ./build.sh
+
+    - name: Run tests
+      run: |
+        cd build/linux-release
+        cmake --build . --target test --config Release

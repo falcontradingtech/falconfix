@@ -1,5 +1,6 @@
 # FalconFIX - High-Performance FIX Engine
 
+[![CI Linux](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/falcontradingtech/falconfix/actions/workflows/ci-linux.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue)](https://en.wikipedia.org/wiki/C%2B%2B20)
 [![CMake 3.16+](https://img.shields.io/badge/CMake-3.16%2B-red)](https://cmake.org/)
