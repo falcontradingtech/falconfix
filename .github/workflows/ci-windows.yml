@@ -41,6 +41,13 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
+    - name: Setup C++ environment
+      uses: aminya/setup-cpp@v1
+      with:
+        compiler: msvc
+        cmake: true
+        ninja: true
+
     - name: Build with coverage flags
       run: |
         $env:VCPKG_ROOT = "${{ env.VCPKG_ROOT }}"

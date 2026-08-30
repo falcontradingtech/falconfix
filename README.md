@@ -328,3 +328,13 @@ falcongen/                  # Code generator
 - 🐛 **Issues**: https://github.com/falcontradingtech/falconfix/issues
 - 📚 **Documentation**: See [`README-BUILD.md`](README-BUILD.md) for build details
 - 🚀 **Getting Started**: Run `create_project.py` to bootstrap a new project
+
+## Contributing
+
+We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) guide for:
+- Setup instructions
+- How to make changes
+- Testing requirements
+- Pull request process
+
+Thank you for helping make FalconFIX better! 🙌
