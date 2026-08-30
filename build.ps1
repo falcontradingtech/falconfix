@@ -19,7 +19,7 @@ $CMakePresetsContent = @"
 	{
 	  "name": "windows-base",
 	  "hidden": true,
-	  "generator": "Visual Studio 17 2022",
+	  "generator": "Ninja",
 	  "binaryDir": "`${sourceDir}/build/`${presetName}",
 	  "cacheVariables": {
 		"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"

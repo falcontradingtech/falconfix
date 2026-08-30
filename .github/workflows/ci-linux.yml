@@ -53,8 +53,8 @@ jobs:
 
     - name: Generate coverage report
       run: |
-        lcov --directory build/linux-release --capture --output-file coverage.info
-        lcov --remove coverage.info '*/vcpkg/*' '*/build/*' --output-file coverage.info
+        lcov --directory build/linux-release --capture --output-file coverage.info --ignore-errors negative
+        lcov --remove coverage.info '*/vcpkg/*' '*/build/*' '*/usr/include/*' --output-file coverage.info
         lcov --list coverage.info
 
     - name: Upload coverage to Codecov

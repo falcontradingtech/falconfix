@@ -38,9 +38,6 @@ jobs:
         }
       shell: powershell
 
-    - name: Setup Visual Studio
-      uses: microsoft/setup-msbuild@v1
-
     - name: Build with coverage flags
       run: |
         $env:VCPKG_ROOT = "${{ env.VCPKG_ROOT }}"
@@ -54,7 +51,8 @@ jobs:
         $buildDir = "build\windows-release"
         # Run tests normally first
         cd $buildDir
-        cmake --build . --target RUN_TESTS --config Release
+        cmake --build . --config Release
+        ctest --output-on-failure -C Release
         cd ..\..
 
         # Run tests with OpenCppCoverage
@@ -65,9 +63,10 @@ jobs:
             --excluded_sources tests `
             --excluded_sources vcpkg `
             --export_type cobertura:windows_coverage.xml `
-            -- cmake --build $buildDir --target RUN_TESTS --config Release
+            -- ctest --output-on-failure -C Release
         }
       shell: powershell
+      working-directory: ${{ github.workspace }}/build/windows-release
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
