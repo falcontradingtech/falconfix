@@ -73,7 +73,7 @@ Set-Content -Path "CMakePresets.json" -Value $CMakePresetsContent
 Write-Host "CMakePresets.json generated for Windows."
 
 $RootDir = Get-Location
-$BuildDir = Join-Path $RootDir "build" $Preset
+$BuildDir = Join-Path -Path (Join-Path -Path $RootDir -ChildPath "build") -ChildPath $Preset
 
 if ($Clean) {
 	Write-Host "[clean] Removing $BuildDir"
