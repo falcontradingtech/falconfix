@@ -1,0 +1,25 @@
+coverage:
+  precision: 2
+  round: down
+  range: "50...100"
+
+ignore:
+  - "vcpkg"
+  - "build"
+  - "tests"
+  - "apps"
+  - "benchmark"
+  - "usr/include"
+
+flags:
+  linux:
+    carryforward: true
+  windows:
+    carryforward: true
+
+comment:
+  layout: "reach, diff, flags, files, footer"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true

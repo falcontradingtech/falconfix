@@ -6,9 +6,9 @@ exclude_paths:
   - "src/include/FIX4.2/**"
   - "src/include/FIX4.3/**"
   - "src/include/FIX4.4/**"
-  - "tests/FIX4.2/**"
-  - "tests/FIX4.3/**"
-  - "tests/FIX4.4/**"
+  - "tests/**"
+  - "apps/**"
+  - "benchmark/**"
 
 exclude_paths_go:
   - "src/cpp/FIX4.2/**"
@@ -17,9 +17,9 @@ exclude_paths_go:
   - "src/include/FIX4.2/**"
   - "src/include/FIX4.3/**"
   - "src/include/FIX4.4/**"
-  - "tests/FIX4.2/**"
-  - "tests/FIX4.3/**"
-  - "tests/FIX4.4/**"
+  - "tests/**"
+  - "apps/**"
+  - "benchmark/**"
 
 exclude_paths_javascript:
   - "src/cpp/FIX4.2/**"
@@ -28,9 +28,9 @@ exclude_paths_javascript:
   - "src/include/FIX4.2/**"
   - "src/include/FIX4.3/**"
   - "src/include/FIX4.4/**"
-  - "tests/FIX4.2/**"
-  - "tests/FIX4.3/**"
-  - "tests/FIX4.4/**"
+  - "tests/**"
+  - "apps/**"
+  - "benchmark/**"
 
 # Disable specific tools that analyze these generated files
 tools:
@@ -43,6 +43,6 @@ tools:
       - "src/include/FIX4.2/**"
       - "src/include/FIX4.3/**"
       - "src/include/FIX4.4/**"
-      - "tests/FIX4.2/**"
-      - "tests/FIX4.3/**"
-      - "tests/FIX4.4/**"
+      - "tests/**"
+      - "apps/**"
+      - "benchmark/**"
