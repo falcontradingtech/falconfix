@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo
 #include <logger/log_factory.h>
+#include <logger/spdlog_engine_log.h>
 
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -13,18 +14,6 @@
 namespace falconfix {
 
 namespace {
-
-class SpdlogEngineLog final : public EngineLog {
-    std::shared_ptr<spdlog::logger> m_logger;
-
-public:
-    explicit SpdlogEngineLog(std::shared_ptr<spdlog::logger> logger)
-        : m_logger(std::move(logger)) {}
-
-    void info(std::string_view msg) noexcept override { m_logger->info("{}", msg); }
-    void warn(std::string_view msg) noexcept override { m_logger->warn("{}", msg); }
-    void error(std::string_view msg) noexcept override { m_logger->error("{}", msg); }
-};
 
 class SpdlogMessageLog final : public MessageLog {
     std::shared_ptr<spdlog::logger> m_messageLogger;
@@ -128,6 +117,14 @@ getOrCreateLogger(const std::string &name,
 }
 
 } // namespace
+
+// SpdlogEngineLog implementations
+SpdlogEngineLog::SpdlogEngineLog(std::shared_ptr<spdlog::logger> logger)
+    : m_logger(std::move(logger)) {}
+
+void SpdlogEngineLog::info(std::string_view msg) noexcept { m_logger->info("{}", msg); }
+void SpdlogEngineLog::warn(std::string_view msg) noexcept { m_logger->warn("{}", msg); }
+void SpdlogEngineLog::error(std::string_view msg) noexcept { m_logger->error("{}", msg); }
 
 std::unique_ptr<EngineLog>
 LogFactory::createEngineLog(const SessionSettings &) {
