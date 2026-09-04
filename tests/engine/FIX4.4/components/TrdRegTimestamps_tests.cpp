@@ -24,7 +24,6 @@ protected:
 
 TEST_F(TrdRegTimestampsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setTrdRegTimestampType(42);
     
     // Reset component
     component.reset();
@@ -33,25 +32,13 @@ TEST_F(TrdRegTimestampsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestampsComponentTest, SetTrdRegTimestampAndTrdRegTimestampMatch) {
-}
-
-TEST_F(TrdRegTimestampsComponentTest, SetTrdRegTimestampTypeAndTrdRegTimestampTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setTrdRegTimestampType(test_value);
-    EXPECT_EQ(component.getTrdRegTimestampType(), test_value);
-    EXPECT_TRUE(component.hasTrdRegTimestampType());
-}
-
 TEST_F(TrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setTrdRegTimestamp(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(TrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[168];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

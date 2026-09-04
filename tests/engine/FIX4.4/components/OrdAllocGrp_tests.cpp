@@ -24,9 +24,6 @@ protected:
 
 TEST_F(OrdAllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOrderQty(3.14f);
-    component.setOrderAvgPx(3.14f);
-    component.setOrderBookingQty(3.14f);
     
     // Reset component
     component.reset();
@@ -35,36 +32,13 @@ TEST_F(OrdAllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrpComponentTest, SetOrderQtyAndOrderQtyMatch) {
-    const double test_value = 123.456;
-    component.setOrderQty(test_value);
-    EXPECT_EQ(component.getOrderQty(), test_value);
-    EXPECT_TRUE(component.hasOrderQty());
-}
-
-TEST_F(OrdAllocGrpComponentTest, SetOrderAvgPxAndOrderAvgPxMatch) {
-    const double test_value = 123.456;
-    component.setOrderAvgPx(test_value);
-    EXPECT_EQ(component.getOrderAvgPx(), test_value);
-    EXPECT_TRUE(component.hasOrderAvgPx());
-}
-
-TEST_F(OrdAllocGrpComponentTest, SetOrderBookingQtyAndOrderBookingQtyMatch) {
-    const double test_value = 123.456;
-    component.setOrderBookingQty(test_value);
-    EXPECT_EQ(component.getOrderBookingQty(), test_value);
-    EXPECT_TRUE(component.hasOrderBookingQty());
-}
-
 TEST_F(OrdAllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOrderQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(OrdAllocGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[536];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

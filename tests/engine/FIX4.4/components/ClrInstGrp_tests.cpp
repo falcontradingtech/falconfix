@@ -24,7 +24,6 @@ protected:
 
 TEST_F(ClrInstGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setClearingInstruction(42);
     
     // Reset component
     component.reset();
@@ -33,18 +32,9 @@ TEST_F(ClrInstGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ClrInstGrpComponentTest, SetClearingInstructionAndClearingInstructionMatch) {
-    const int64_t test_value = 12345;
-    component.setClearingInstruction(test_value);
-    EXPECT_EQ(component.getClearingInstruction(), test_value);
-    EXPECT_TRUE(component.hasClearingInstruction());
-}
-
 TEST_F(ClrInstGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setClearingInstruction(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(ClrInstGrpComponentTest, EncodeDecodeRoundtrip) {

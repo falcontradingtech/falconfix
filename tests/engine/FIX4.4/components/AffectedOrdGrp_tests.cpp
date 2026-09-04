@@ -38,7 +38,7 @@ TEST_F(AffectedOrdGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(AffectedOrdGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[220];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

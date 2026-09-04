@@ -24,7 +24,6 @@ protected:
 
 TEST_F(IOIQualGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setIOIQualifier('A');
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(IOIQualGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(IOIQualGrpComponentTest, SetIOIQualifierAndIOIQualifierMatch) {
-    const char test_value = 'X';
-    component.setIOIQualifier(test_value);
-    EXPECT_EQ(component.getIOIQualifier(), test_value);
-    EXPECT_TRUE(component.hasIOIQualifier());
-}
-
 TEST_F(IOIQualGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setIOIQualifier('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(IOIQualGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[12];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

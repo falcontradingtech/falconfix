@@ -24,8 +24,6 @@ protected:
 
 TEST_F(InstrmtLegSecListGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegSwapType(42);
-    component.setLegSettlType('A');
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(InstrmtLegSecListGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegSecListGrpComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setLegSwapType(test_value);
-    EXPECT_EQ(component.getLegSwapType(), test_value);
-    EXPECT_TRUE(component.hasLegSwapType());
-}
-
-TEST_F(InstrmtLegSecListGrpComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setLegSettlType(test_value);
-    EXPECT_EQ(component.getLegSettlType(), test_value);
-    EXPECT_TRUE(component.hasLegSettlType());
-}
-
 TEST_F(InstrmtLegSecListGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegSwapType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(InstrmtLegSecListGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[62];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

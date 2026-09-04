@@ -38,7 +38,7 @@ TEST_F(MDRjctGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(MDRjctGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[74];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

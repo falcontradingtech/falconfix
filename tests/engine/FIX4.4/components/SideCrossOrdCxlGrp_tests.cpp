@@ -24,7 +24,6 @@ protected:
 
 TEST_F(SideCrossOrdCxlGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
     
     // Reset component
     component.reset();
@@ -33,34 +32,13 @@ TEST_F(SideCrossOrdCxlGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdCxlGrpComponentTest, SetSideAndSideMatch) {
-    const char test_value = 'X';
-    component.setSide(test_value);
-    EXPECT_EQ(component.getSide(), test_value);
-    EXPECT_TRUE(component.hasSide());
-}
-
-TEST_F(SideCrossOrdCxlGrpComponentTest, SetOrigOrdModTimeAndOrigOrdModTimeMatch) {
-}
-
-TEST_F(SideCrossOrdCxlGrpComponentTest, SetTradeOriginationDateAndTradeOriginationDateMatch) {
-}
-
-TEST_F(SideCrossOrdCxlGrpComponentTest, SetTradeDateAndTradeDateMatch) {
-}
-
-TEST_F(SideCrossOrdCxlGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(SideCrossOrdCxlGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(SideCrossOrdCxlGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[666];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

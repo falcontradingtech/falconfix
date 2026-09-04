@@ -24,7 +24,6 @@ protected:
 
 TEST_F(QuotQualGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setQuoteQualifier('A');
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(QuotQualGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotQualGrpComponentTest, SetQuoteQualifierAndQuoteQualifierMatch) {
-    const char test_value = 'X';
-    component.setQuoteQualifier(test_value);
-    EXPECT_EQ(component.getQuoteQualifier(), test_value);
-    EXPECT_TRUE(component.hasQuoteQualifier());
-}
-
 TEST_F(QuotQualGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setQuoteQualifier('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(QuotQualGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[12];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

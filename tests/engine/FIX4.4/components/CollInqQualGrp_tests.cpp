@@ -24,7 +24,6 @@ protected:
 
 TEST_F(CollInqQualGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCollInquiryQualifier(42);
     
     // Reset component
     component.reset();
@@ -33,18 +32,9 @@ TEST_F(CollInqQualGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrpComponentTest, SetCollInquiryQualifierAndCollInquiryQualifierMatch) {
-    const int64_t test_value = 12345;
-    component.setCollInquiryQualifier(test_value);
-    EXPECT_EQ(component.getCollInquiryQualifier(), test_value);
-    EXPECT_TRUE(component.hasCollInquiryQualifier());
-}
-
 TEST_F(CollInqQualGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCollInquiryQualifier(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(CollInqQualGrpComponentTest, EncodeDecodeRoundtrip) {

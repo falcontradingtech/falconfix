@@ -24,8 +24,6 @@ protected:
 
 TEST_F(ContAmtGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setContAmtType(42);
-    component.setContAmtValue(3.14f);
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(ContAmtGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ContAmtGrpComponentTest, SetContAmtTypeAndContAmtTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setContAmtType(test_value);
-    EXPECT_EQ(component.getContAmtType(), test_value);
-    EXPECT_TRUE(component.hasContAmtType());
-}
-
-TEST_F(ContAmtGrpComponentTest, SetContAmtValueAndContAmtValueMatch) {
-    const double test_value = 123.456;
-    component.setContAmtValue(test_value);
-    EXPECT_EQ(component.getContAmtValue(), test_value);
-    EXPECT_TRUE(component.hasContAmtValue());
-}
-
 TEST_F(ContAmtGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setContAmtType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(ContAmtGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[182];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

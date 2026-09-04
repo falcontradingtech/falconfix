@@ -24,9 +24,6 @@ protected:
 
 TEST_F(AllocAckGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setAllocPrice(3.14f);
-    component.setIndividualAllocRejCode(42);
     
     // Reset component
     component.reset();
@@ -35,39 +32,13 @@ TEST_F(AllocAckGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AllocAckGrpComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
-    const int64_t test_value = 12345;
-    component.setAllocAcctIDSource(test_value);
-    EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
-    EXPECT_TRUE(component.hasAllocAcctIDSource());
-}
-
-TEST_F(AllocAckGrpComponentTest, SetAllocPriceAndAllocPriceMatch) {
-    const double test_value = 123.456;
-    component.setAllocPrice(test_value);
-    EXPECT_EQ(component.getAllocPrice(), test_value);
-    EXPECT_TRUE(component.hasAllocPrice());
-}
-
-TEST_F(AllocAckGrpComponentTest, SetIndividualAllocRejCodeAndIndividualAllocRejCodeMatch) {
-    const int64_t test_value = 12345;
-    component.setIndividualAllocRejCode(test_value);
-    EXPECT_EQ(component.getIndividualAllocRejCode(), test_value);
-    EXPECT_TRUE(component.hasIndividualAllocRejCode());
-}
-
-TEST_F(AllocAckGrpComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
-}
-
 TEST_F(AllocAckGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(AllocAckGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[502];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

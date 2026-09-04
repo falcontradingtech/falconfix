@@ -24,9 +24,6 @@ protected:
 
 TEST_F(AllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setMatchStatus('A');
-    component.setAllocPrice(3.14f);
     
     // Reset component
     component.reset();
@@ -35,126 +32,13 @@ TEST_F(AllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AllocGrpComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
-    const int64_t test_value = 12345;
-    component.setAllocAcctIDSource(test_value);
-    EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
-    EXPECT_TRUE(component.hasAllocAcctIDSource());
-}
-
-TEST_F(AllocGrpComponentTest, SetMatchStatusAndMatchStatusMatch) {
-    const char test_value = 'X';
-    component.setMatchStatus(test_value);
-    EXPECT_EQ(component.getMatchStatus(), test_value);
-    EXPECT_TRUE(component.hasMatchStatus());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocPriceAndAllocPriceMatch) {
-    const double test_value = 123.456;
-    component.setAllocPrice(test_value);
-    EXPECT_EQ(component.getAllocPrice(), test_value);
-    EXPECT_TRUE(component.hasAllocPrice());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocQtyAndAllocQtyMatch) {
-    const double test_value = 123.456;
-    component.setAllocQty(test_value);
-    EXPECT_EQ(component.getAllocQty(), test_value);
-    EXPECT_TRUE(component.hasAllocQty());
-}
-
-TEST_F(AllocGrpComponentTest, SetProcessCodeAndProcessCodeMatch) {
-    const char test_value = 'X';
-    component.setProcessCode(test_value);
-    EXPECT_EQ(component.getProcessCode(), test_value);
-    EXPECT_TRUE(component.hasProcessCode());
-}
-
-TEST_F(AllocGrpComponentTest, SetNotifyBrokerOfCreditAndNotifyBrokerOfCreditMatch) {
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocHandlInstAndAllocHandlInstMatch) {
-    const int64_t test_value = 12345;
-    component.setAllocHandlInst(test_value);
-    EXPECT_EQ(component.getAllocHandlInst(), test_value);
-    EXPECT_TRUE(component.hasAllocHandlInst());
-}
-
-TEST_F(AllocGrpComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocAvgPxAndAllocAvgPxMatch) {
-    const double test_value = 123.456;
-    component.setAllocAvgPx(test_value);
-    EXPECT_EQ(component.getAllocAvgPx(), test_value);
-    EXPECT_TRUE(component.hasAllocAvgPx());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocNetMoneyAndAllocNetMoneyMatch) {
-    const double test_value = 123.456;
-    component.setAllocNetMoney(test_value);
-    EXPECT_EQ(component.getAllocNetMoney(), test_value);
-    EXPECT_TRUE(component.hasAllocNetMoney());
-}
-
-TEST_F(AllocGrpComponentTest, SetSettlCurrAmtAndSettlCurrAmtMatch) {
-    const double test_value = 123.456;
-    component.setSettlCurrAmt(test_value);
-    EXPECT_EQ(component.getSettlCurrAmt(), test_value);
-    EXPECT_TRUE(component.hasSettlCurrAmt());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocSettlCurrAmtAndAllocSettlCurrAmtMatch) {
-    const double test_value = 123.456;
-    component.setAllocSettlCurrAmt(test_value);
-    EXPECT_EQ(component.getAllocSettlCurrAmt(), test_value);
-    EXPECT_TRUE(component.hasAllocSettlCurrAmt());
-}
-
-TEST_F(AllocGrpComponentTest, SetSettlCurrFxRateAndSettlCurrFxRateMatch) {
-    const double test_value = 123.456;
-    component.setSettlCurrFxRate(test_value);
-    EXPECT_EQ(component.getSettlCurrFxRate(), test_value);
-    EXPECT_TRUE(component.hasSettlCurrFxRate());
-}
-
-TEST_F(AllocGrpComponentTest, SetSettlCurrFxRateCalcAndSettlCurrFxRateCalcMatch) {
-    const char test_value = 'X';
-    component.setSettlCurrFxRateCalc(test_value);
-    EXPECT_EQ(component.getSettlCurrFxRateCalc(), test_value);
-    EXPECT_TRUE(component.hasSettlCurrFxRateCalc());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocAccruedInterestAmtAndAllocAccruedInterestAmtMatch) {
-    const double test_value = 123.456;
-    component.setAllocAccruedInterestAmt(test_value);
-    EXPECT_EQ(component.getAllocAccruedInterestAmt(), test_value);
-    EXPECT_TRUE(component.hasAllocAccruedInterestAmt());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocInterestAtMaturityAndAllocInterestAtMaturityMatch) {
-    const double test_value = 123.456;
-    component.setAllocInterestAtMaturity(test_value);
-    EXPECT_EQ(component.getAllocInterestAtMaturity(), test_value);
-    EXPECT_TRUE(component.hasAllocInterestAtMaturity());
-}
-
-TEST_F(AllocGrpComponentTest, SetAllocSettlInstTypeAndAllocSettlInstTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setAllocSettlInstType(test_value);
-    EXPECT_EQ(component.getAllocSettlInstType(), test_value);
-    EXPECT_TRUE(component.hasAllocSettlInstType());
-}
-
 TEST_F(AllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(AllocGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[1208];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

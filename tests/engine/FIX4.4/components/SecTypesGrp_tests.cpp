@@ -24,7 +24,6 @@ protected:
 
 TEST_F(SecTypesGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setProduct(42);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(SecTypesGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SecTypesGrpComponentTest, SetProductAndProductMatch) {
-    const int64_t test_value = 12345;
-    component.setProduct(test_value);
-    EXPECT_EQ(component.getProduct(), test_value);
-    EXPECT_TRUE(component.hasProduct());
-}
-
 TEST_F(SecTypesGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setProduct(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(SecTypesGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[272];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

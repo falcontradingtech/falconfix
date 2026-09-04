@@ -38,7 +38,7 @@ TEST_F(TrdCollGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(TrdCollGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[148];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

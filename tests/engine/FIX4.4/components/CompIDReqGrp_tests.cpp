@@ -38,7 +38,7 @@ TEST_F(CompIDReqGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(CompIDReqGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[296];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

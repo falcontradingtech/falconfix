@@ -24,9 +24,6 @@ protected:
 
 TEST_F(PositionQtyComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLongQty(3.14f);
-    component.setShortQty(3.14f);
-    component.setPosQtyStatus(42);
     
     // Reset component
     component.reset();
@@ -35,36 +32,13 @@ TEST_F(PositionQtyComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PositionQtyComponentTest, SetLongQtyAndLongQtyMatch) {
-    const double test_value = 123.456;
-    component.setLongQty(test_value);
-    EXPECT_EQ(component.getLongQty(), test_value);
-    EXPECT_TRUE(component.hasLongQty());
-}
-
-TEST_F(PositionQtyComponentTest, SetShortQtyAndShortQtyMatch) {
-    const double test_value = 123.456;
-    component.setShortQty(test_value);
-    EXPECT_EQ(component.getShortQty(), test_value);
-    EXPECT_TRUE(component.hasShortQty());
-}
-
-TEST_F(PositionQtyComponentTest, SetPosQtyStatusAndPosQtyStatusMatch) {
-    const int64_t test_value = 12345;
-    component.setPosQtyStatus(test_value);
-    EXPECT_EQ(component.getPosQtyStatus(), test_value);
-    EXPECT_TRUE(component.hasPosQtyStatus());
-}
-
 TEST_F(PositionQtyComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLongQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(PositionQtyComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[240];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

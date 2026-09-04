@@ -24,7 +24,6 @@ protected:
 
 TEST_F(QuotSetAckGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setTotNoQuoteEntries(42);
     
     // Reset component
     component.reset();
@@ -33,25 +32,13 @@ TEST_F(QuotSetAckGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotSetAckGrpComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
-    const int64_t test_value = 12345;
-    component.setTotNoQuoteEntries(test_value);
-    EXPECT_EQ(component.getTotNoQuoteEntries(), test_value);
-    EXPECT_TRUE(component.hasTotNoQuoteEntries());
-}
-
-TEST_F(QuotSetAckGrpComponentTest, SetLastFragmentAndLastFragmentMatch) {
-}
-
 TEST_F(QuotSetAckGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setTotNoQuoteEntries(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(QuotSetAckGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[136];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

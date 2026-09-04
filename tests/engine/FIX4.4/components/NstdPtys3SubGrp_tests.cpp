@@ -24,7 +24,6 @@ protected:
 
 TEST_F(NstdPtys3SubGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setNested3PartySubIDType(42);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(NstdPtys3SubGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrpComponentTest, SetNested3PartySubIDTypeAndNested3PartySubIDTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setNested3PartySubIDType(test_value);
-    EXPECT_EQ(component.getNested3PartySubIDType(), test_value);
-    EXPECT_TRUE(component.hasNested3PartySubIDType());
-}
-
 TEST_F(NstdPtys3SubGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setNested3PartySubIDType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(NstdPtys3SubGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[124];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

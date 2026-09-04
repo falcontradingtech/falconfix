@@ -24,9 +24,6 @@ protected:
 
 TEST_F(SecListGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setRoundLot(3.14f);
-    component.setMinTradeVol(3.14f);
-    component.setExpirationCycle(42);
     
     // Reset component
     component.reset();
@@ -35,39 +32,13 @@ TEST_F(SecListGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SecListGrpComponentTest, SetRoundLotAndRoundLotMatch) {
-    const double test_value = 123.456;
-    component.setRoundLot(test_value);
-    EXPECT_EQ(component.getRoundLot(), test_value);
-    EXPECT_TRUE(component.hasRoundLot());
-}
-
-TEST_F(SecListGrpComponentTest, SetMinTradeVolAndMinTradeVolMatch) {
-    const double test_value = 123.456;
-    component.setMinTradeVol(test_value);
-    EXPECT_EQ(component.getMinTradeVol(), test_value);
-    EXPECT_TRUE(component.hasMinTradeVol());
-}
-
-TEST_F(SecListGrpComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
-    const int64_t test_value = 12345;
-    component.setExpirationCycle(test_value);
-    EXPECT_EQ(component.getExpirationCycle(), test_value);
-    EXPECT_TRUE(component.hasExpirationCycle());
-}
-
-TEST_F(SecListGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(SecListGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setRoundLot(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(SecListGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[582];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

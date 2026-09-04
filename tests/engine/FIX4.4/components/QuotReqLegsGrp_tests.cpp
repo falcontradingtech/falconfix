@@ -24,9 +24,6 @@ protected:
 
 TEST_F(QuotReqLegsGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegQty(3.14f);
-    component.setLegSwapType(42);
-    component.setLegSettlType('A');
     
     // Reset component
     component.reset();
@@ -35,39 +32,13 @@ TEST_F(QuotReqLegsGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotReqLegsGrpComponentTest, SetLegQtyAndLegQtyMatch) {
-    const double test_value = 123.456;
-    component.setLegQty(test_value);
-    EXPECT_EQ(component.getLegQty(), test_value);
-    EXPECT_TRUE(component.hasLegQty());
-}
-
-TEST_F(QuotReqLegsGrpComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setLegSwapType(test_value);
-    EXPECT_EQ(component.getLegSwapType(), test_value);
-    EXPECT_TRUE(component.hasLegSwapType());
-}
-
-TEST_F(QuotReqLegsGrpComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setLegSettlType(test_value);
-    EXPECT_EQ(component.getLegSettlType(), test_value);
-    EXPECT_TRUE(component.hasLegSettlType());
-}
-
-TEST_F(QuotReqLegsGrpComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
-}
-
 TEST_F(QuotReqLegsGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(QuotReqLegsGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[146];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

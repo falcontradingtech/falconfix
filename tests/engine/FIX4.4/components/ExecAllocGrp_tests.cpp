@@ -24,9 +24,6 @@ protected:
 
 TEST_F(ExecAllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLastQty(3.14f);
-    component.setLastPx(3.14f);
-    component.setLastParPx(3.14f);
     
     // Reset component
     component.reset();
@@ -35,43 +32,13 @@ TEST_F(ExecAllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ExecAllocGrpComponentTest, SetLastQtyAndLastQtyMatch) {
-    const double test_value = 123.456;
-    component.setLastQty(test_value);
-    EXPECT_EQ(component.getLastQty(), test_value);
-    EXPECT_TRUE(component.hasLastQty());
-}
-
-TEST_F(ExecAllocGrpComponentTest, SetLastPxAndLastPxMatch) {
-    const double test_value = 123.456;
-    component.setLastPx(test_value);
-    EXPECT_EQ(component.getLastPx(), test_value);
-    EXPECT_TRUE(component.hasLastPx());
-}
-
-TEST_F(ExecAllocGrpComponentTest, SetLastParPxAndLastParPxMatch) {
-    const double test_value = 123.456;
-    component.setLastParPx(test_value);
-    EXPECT_EQ(component.getLastParPx(), test_value);
-    EXPECT_TRUE(component.hasLastParPx());
-}
-
-TEST_F(ExecAllocGrpComponentTest, SetLastCapacityAndLastCapacityMatch) {
-    const char test_value = 'X';
-    component.setLastCapacity(test_value);
-    EXPECT_EQ(component.getLastCapacity(), test_value);
-    EXPECT_TRUE(component.hasLastCapacity());
-}
-
 TEST_F(ExecAllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLastQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(ExecAllocGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[326];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

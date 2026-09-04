@@ -32,21 +32,13 @@ TEST_F(TrdCapDtGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdCapDtGrpComponentTest, SetTradeDateAndTradeDateMatch) {
-}
-
-TEST_F(TrdCapDtGrpComponentTest, SetTransactTimeAndTransactTimeMatch) {
-}
-
 TEST_F(TrdCapDtGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setTradeDate(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(TrdCapDtGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[66];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

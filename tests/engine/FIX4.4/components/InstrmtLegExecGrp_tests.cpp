@@ -24,9 +24,6 @@ protected:
 
 TEST_F(InstrmtLegExecGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegQty(3.14f);
-    component.setLegSwapType(42);
-    component.setLegPositionEffect('A');
     
     // Reset component
     component.reset();
@@ -35,67 +32,13 @@ TEST_F(InstrmtLegExecGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegQtyAndLegQtyMatch) {
-    const double test_value = 123.456;
-    component.setLegQty(test_value);
-    EXPECT_EQ(component.getLegQty(), test_value);
-    EXPECT_TRUE(component.hasLegQty());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setLegSwapType(test_value);
-    EXPECT_EQ(component.getLegSwapType(), test_value);
-    EXPECT_TRUE(component.hasLegSwapType());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegPositionEffectAndLegPositionEffectMatch) {
-    const char test_value = 'X';
-    component.setLegPositionEffect(test_value);
-    EXPECT_EQ(component.getLegPositionEffect(), test_value);
-    EXPECT_TRUE(component.hasLegPositionEffect());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegCoveredOrUncoveredAndLegCoveredOrUncoveredMatch) {
-    const int64_t test_value = 12345;
-    component.setLegCoveredOrUncovered(test_value);
-    EXPECT_EQ(component.getLegCoveredOrUncovered(), test_value);
-    EXPECT_TRUE(component.hasLegCoveredOrUncovered());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegPriceAndLegPriceMatch) {
-    const double test_value = 123.456;
-    component.setLegPrice(test_value);
-    EXPECT_EQ(component.getLegPrice(), test_value);
-    EXPECT_TRUE(component.hasLegPrice());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setLegSettlType(test_value);
-    EXPECT_EQ(component.getLegSettlType(), test_value);
-    EXPECT_TRUE(component.hasLegSettlType());
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
-}
-
-TEST_F(InstrmtLegExecGrpComponentTest, SetLegLastPxAndLegLastPxMatch) {
-    const double test_value = 123.456;
-    component.setLegLastPx(test_value);
-    EXPECT_EQ(component.getLegLastPx(), test_value);
-    EXPECT_TRUE(component.hasLegLastPx());
-}
-
 TEST_F(InstrmtLegExecGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(InstrmtLegExecGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[398];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

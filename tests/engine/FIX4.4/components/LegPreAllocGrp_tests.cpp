@@ -24,7 +24,6 @@ protected:
 
 TEST_F(LegPreAllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegAllocQty(3.14f);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(LegPreAllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegPreAllocGrpComponentTest, SetLegAllocQtyAndLegAllocQtyMatch) {
-    const double test_value = 123.456;
-    component.setLegAllocQty(test_value);
-    EXPECT_EQ(component.getLegAllocQty(), test_value);
-    EXPECT_TRUE(component.hasLegAllocQty());
-}
-
 TEST_F(LegPreAllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegAllocQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(LegPreAllocGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[354];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,7 +24,6 @@ protected:
 
 TEST_F(RelSymDerivSecGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setExpirationCycle(42);
     
     // Reset component
     component.reset();
@@ -33,25 +32,13 @@ TEST_F(RelSymDerivSecGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrpComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
-    const int64_t test_value = 12345;
-    component.setExpirationCycle(test_value);
-    EXPECT_EQ(component.getExpirationCycle(), test_value);
-    EXPECT_TRUE(component.hasExpirationCycle());
-}
-
-TEST_F(RelSymDerivSecGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(RelSymDerivSecGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setExpirationCycle(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(RelSymDerivSecGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[466];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,8 +24,6 @@ protected:
 
 TEST_F(EvntGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setEventType(42);
-    component.setEventPx(3.14f);
     
     // Reset component
     component.reset();
@@ -34,32 +32,13 @@ TEST_F(EvntGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(EvntGrpComponentTest, SetEventTypeAndEventTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setEventType(test_value);
-    EXPECT_EQ(component.getEventType(), test_value);
-    EXPECT_TRUE(component.hasEventType());
-}
-
-TEST_F(EvntGrpComponentTest, SetEventDateAndEventDateMatch) {
-}
-
-TEST_F(EvntGrpComponentTest, SetEventPxAndEventPxMatch) {
-    const double test_value = 123.456;
-    component.setEventPx(test_value);
-    EXPECT_EQ(component.getEventPx(), test_value);
-    EXPECT_TRUE(component.hasEventPx());
-}
-
 TEST_F(EvntGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setEventType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(EvntGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[208];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

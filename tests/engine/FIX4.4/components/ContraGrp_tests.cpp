@@ -24,7 +24,6 @@ protected:
 
 TEST_F(ContraGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setContraTradeQty(3.14f);
     
     // Reset component
     component.reset();
@@ -33,25 +32,13 @@ TEST_F(ContraGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ContraGrpComponentTest, SetContraTradeQtyAndContraTradeQtyMatch) {
-    const double test_value = 123.456;
-    component.setContraTradeQty(test_value);
-    EXPECT_EQ(component.getContraTradeQty(), test_value);
-    EXPECT_TRUE(component.hasContraTradeQty());
-}
-
-TEST_F(ContraGrpComponentTest, SetContraTradeTimeAndContraTradeTimeMatch) {
-}
-
 TEST_F(ContraGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setContraTradeQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(ContraGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[324];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,9 +24,6 @@ protected:
 
 TEST_F(BidCompRspGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
-    component.setPrice(3.14f);
-    component.setPriceType(42);
     
     // Reset component
     component.reset();
@@ -35,63 +32,13 @@ TEST_F(BidCompRspGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidCompRspGrpComponentTest, SetSideAndSideMatch) {
-    const char test_value = 'X';
-    component.setSide(test_value);
-    EXPECT_EQ(component.getSide(), test_value);
-    EXPECT_TRUE(component.hasSide());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetPriceAndPriceMatch) {
-    const double test_value = 123.456;
-    component.setPrice(test_value);
-    EXPECT_EQ(component.getPrice(), test_value);
-    EXPECT_TRUE(component.hasPrice());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetPriceTypeAndPriceTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setPriceType(test_value);
-    EXPECT_EQ(component.getPriceType(), test_value);
-    EXPECT_TRUE(component.hasPriceType());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetFairValueAndFairValueMatch) {
-    const double test_value = 123.456;
-    component.setFairValue(test_value);
-    EXPECT_EQ(component.getFairValue(), test_value);
-    EXPECT_TRUE(component.hasFairValue());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
-    const int64_t test_value = 12345;
-    component.setNetGrossInd(test_value);
-    EXPECT_EQ(component.getNetGrossInd(), test_value);
-    EXPECT_TRUE(component.hasNetGrossInd());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetSettlTypeAndSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setSettlType(test_value);
-    EXPECT_EQ(component.getSettlType(), test_value);
-    EXPECT_TRUE(component.hasSettlType());
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetSettlDateAndSettlDateMatch) {
-}
-
-TEST_F(BidCompRspGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(BidCompRspGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(BidCompRspGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[748];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

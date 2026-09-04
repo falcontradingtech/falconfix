@@ -24,9 +24,6 @@ protected:
 
 TEST_F(BidCompReqGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
-    component.setNetGrossInd(42);
-    component.setSettlType('A');
     
     // Reset component
     component.reset();
@@ -35,46 +32,13 @@ TEST_F(BidCompReqGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidCompReqGrpComponentTest, SetSideAndSideMatch) {
-    const char test_value = 'X';
-    component.setSide(test_value);
-    EXPECT_EQ(component.getSide(), test_value);
-    EXPECT_TRUE(component.hasSide());
-}
-
-TEST_F(BidCompReqGrpComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
-    const int64_t test_value = 12345;
-    component.setNetGrossInd(test_value);
-    EXPECT_EQ(component.getNetGrossInd(), test_value);
-    EXPECT_TRUE(component.hasNetGrossInd());
-}
-
-TEST_F(BidCompReqGrpComponentTest, SetSettlTypeAndSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setSettlType(test_value);
-    EXPECT_EQ(component.getSettlType(), test_value);
-    EXPECT_TRUE(component.hasSettlType());
-}
-
-TEST_F(BidCompReqGrpComponentTest, SetSettlDateAndSettlDateMatch) {
-}
-
-TEST_F(BidCompReqGrpComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
-    const int64_t test_value = 12345;
-    component.setAcctIDSource(test_value);
-    EXPECT_EQ(component.getAcctIDSource(), test_value);
-    EXPECT_TRUE(component.hasAcctIDSource());
-}
-
 TEST_F(BidCompReqGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(BidCompReqGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[434];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

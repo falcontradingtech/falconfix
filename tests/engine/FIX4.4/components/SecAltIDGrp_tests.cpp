@@ -38,7 +38,7 @@ TEST_F(SecAltIDGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(SecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[148];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

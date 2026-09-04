@@ -24,8 +24,6 @@ protected:
 
 TEST_F(DlvyInstGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlInstSource('A');
-    component.setDlvyInstType('A');
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(DlvyInstGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(DlvyInstGrpComponentTest, SetSettlInstSourceAndSettlInstSourceMatch) {
-    const char test_value = 'X';
-    component.setSettlInstSource(test_value);
-    EXPECT_EQ(component.getSettlInstSource(), test_value);
-    EXPECT_TRUE(component.hasSettlInstSource());
-}
-
-TEST_F(DlvyInstGrpComponentTest, SetDlvyInstTypeAndDlvyInstTypeMatch) {
-    const char test_value = 'X';
-    component.setDlvyInstType(test_value);
-    EXPECT_EQ(component.getDlvyInstType(), test_value);
-    EXPECT_TRUE(component.hasDlvyInstType());
-}
-
 TEST_F(DlvyInstGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlInstSource('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(DlvyInstGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[24];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

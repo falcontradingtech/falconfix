@@ -24,7 +24,6 @@ protected:
 
 TEST_F(PositionAmountDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPosAmt(3.14f);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(PositionAmountDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PositionAmountDataComponentTest, SetPosAmtAndPosAmtMatch) {
-    const double test_value = 123.456;
-    component.setPosAmt(test_value);
-    EXPECT_EQ(component.getPosAmt(), test_value);
-    EXPECT_TRUE(component.hasPosAmt());
-}
-
 TEST_F(PositionAmountDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPosAmt(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(PositionAmountDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[132];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

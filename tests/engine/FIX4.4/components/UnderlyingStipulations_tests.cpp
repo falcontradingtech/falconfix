@@ -38,7 +38,7 @@ TEST_F(UnderlyingStipulationsComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(UnderlyingStipulationsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[148];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

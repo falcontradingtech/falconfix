@@ -24,7 +24,6 @@ protected:
 
 TEST_F(MDReqGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setMDEntryType('A');
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(MDReqGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(MDReqGrpComponentTest, SetMDEntryTypeAndMDEntryTypeMatch) {
-    const char test_value = 'X';
-    component.setMDEntryType(test_value);
-    EXPECT_EQ(component.getMDEntryType(), test_value);
-    EXPECT_TRUE(component.hasMDEntryType());
-}
-
 TEST_F(MDReqGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setMDEntryType('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(MDReqGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[12];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

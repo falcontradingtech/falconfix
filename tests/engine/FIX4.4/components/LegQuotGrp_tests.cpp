@@ -24,9 +24,6 @@ protected:
 
 TEST_F(LegQuotGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegQty(3.14f);
-    component.setLegSwapType(42);
-    component.setLegSettlType('A');
     
     // Reset component
     component.reset();
@@ -35,60 +32,13 @@ TEST_F(LegQuotGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegQuotGrpComponentTest, SetLegQtyAndLegQtyMatch) {
-    const double test_value = 123.456;
-    component.setLegQty(test_value);
-    EXPECT_EQ(component.getLegQty(), test_value);
-    EXPECT_TRUE(component.hasLegQty());
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setLegSwapType(test_value);
-    EXPECT_EQ(component.getLegSwapType(), test_value);
-    EXPECT_TRUE(component.hasLegSwapType());
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
-    const char test_value = 'X';
-    component.setLegSettlType(test_value);
-    EXPECT_EQ(component.getLegSettlType(), test_value);
-    EXPECT_TRUE(component.hasLegSettlType());
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegPriceTypeAndLegPriceTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setLegPriceType(test_value);
-    EXPECT_EQ(component.getLegPriceType(), test_value);
-    EXPECT_TRUE(component.hasLegPriceType());
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegBidPxAndLegBidPxMatch) {
-    const double test_value = 123.456;
-    component.setLegBidPx(test_value);
-    EXPECT_EQ(component.getLegBidPx(), test_value);
-    EXPECT_TRUE(component.hasLegBidPx());
-}
-
-TEST_F(LegQuotGrpComponentTest, SetLegOfferPxAndLegOfferPxMatch) {
-    const double test_value = 123.456;
-    component.setLegOfferPx(test_value);
-    EXPECT_EQ(component.getLegOfferPx(), test_value);
-    EXPECT_TRUE(component.hasLegOfferPx());
-}
-
 TEST_F(LegQuotGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(LegQuotGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[312];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

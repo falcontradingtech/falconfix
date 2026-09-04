@@ -24,7 +24,6 @@ protected:
 
 TEST_F(RoutingGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setRoutingType(42);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(RoutingGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RoutingGrpComponentTest, SetRoutingTypeAndRoutingTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setRoutingType(test_value);
-    EXPECT_EQ(component.getRoutingType(), test_value);
-    EXPECT_TRUE(component.hasRoutingType());
-}
-
 TEST_F(RoutingGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setRoutingType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(RoutingGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[124];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

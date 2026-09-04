@@ -38,7 +38,7 @@ TEST_F(LegStipulationsComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(LegStipulationsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[148];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

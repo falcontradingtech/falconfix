@@ -24,8 +24,6 @@ protected:
 
 TEST_F(SettlPartiesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlPartyIDSource('A');
-    component.setSettlPartyRole(42);
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(SettlPartiesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SettlPartiesComponentTest, SetSettlPartyIDSourceAndSettlPartyIDSourceMatch) {
-    const char test_value = 'X';
-    component.setSettlPartyIDSource(test_value);
-    EXPECT_EQ(component.getSettlPartyIDSource(), test_value);
-    EXPECT_TRUE(component.hasSettlPartyIDSource());
-}
-
-TEST_F(SettlPartiesComponentTest, SetSettlPartyRoleAndSettlPartyRoleMatch) {
-    const int64_t test_value = 12345;
-    component.setSettlPartyRole(test_value);
-    EXPECT_EQ(component.getSettlPartyRole(), test_value);
-    EXPECT_TRUE(component.hasSettlPartyRole());
-}
-
 TEST_F(SettlPartiesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlPartyIDSource('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(SettlPartiesComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[136];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

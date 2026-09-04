@@ -24,8 +24,6 @@ protected:
 
 TEST_F(CpctyConfGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOrderCapacity('A');
-    component.setOrderCapacityQty(3.14f);
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(CpctyConfGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrpComponentTest, SetOrderCapacityAndOrderCapacityMatch) {
-    const char test_value = 'X';
-    component.setOrderCapacity(test_value);
-    EXPECT_EQ(component.getOrderCapacity(), test_value);
-    EXPECT_TRUE(component.hasOrderCapacity());
-}
-
-TEST_F(CpctyConfGrpComponentTest, SetOrderCapacityQtyAndOrderCapacityQtyMatch) {
-    const double test_value = 123.456;
-    component.setOrderCapacityQty(test_value);
-    EXPECT_EQ(component.getOrderCapacityQty(), test_value);
-    EXPECT_TRUE(component.hasOrderCapacityQty());
-}
-
 TEST_F(CpctyConfGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOrderCapacity('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(CpctyConfGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[144];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

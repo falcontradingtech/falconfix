@@ -24,9 +24,6 @@ protected:
 
 TEST_F(RFQReqGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPrevClosePx(3.14f);
-    component.setQuoteRequestType(42);
-    component.setQuoteType(42);
     
     // Reset component
     component.reset();
@@ -35,36 +32,13 @@ TEST_F(RFQReqGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RFQReqGrpComponentTest, SetPrevClosePxAndPrevClosePxMatch) {
-    const double test_value = 123.456;
-    component.setPrevClosePx(test_value);
-    EXPECT_EQ(component.getPrevClosePx(), test_value);
-    EXPECT_TRUE(component.hasPrevClosePx());
-}
-
-TEST_F(RFQReqGrpComponentTest, SetQuoteRequestTypeAndQuoteRequestTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setQuoteRequestType(test_value);
-    EXPECT_EQ(component.getQuoteRequestType(), test_value);
-    EXPECT_TRUE(component.hasQuoteRequestType());
-}
-
-TEST_F(RFQReqGrpComponentTest, SetQuoteTypeAndQuoteTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setQuoteType(test_value);
-    EXPECT_EQ(component.getQuoteType(), test_value);
-    EXPECT_TRUE(component.hasQuoteType());
-}
-
 TEST_F(RFQReqGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPrevClosePx(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(RFQReqGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[306];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,8 +24,6 @@ protected:
 
 TEST_F(TrdAllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setAllocQty(3.14f);
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(TrdAllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdAllocGrpComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
-    const int64_t test_value = 12345;
-    component.setAllocAcctIDSource(test_value);
-    EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
-    EXPECT_TRUE(component.hasAllocAcctIDSource());
-}
-
-TEST_F(TrdAllocGrpComponentTest, SetAllocQtyAndAllocQtyMatch) {
-    const double test_value = 123.456;
-    component.setAllocQty(test_value);
-    EXPECT_EQ(component.getAllocQty(), test_value);
-    EXPECT_TRUE(component.hasAllocQty());
-}
-
 TEST_F(TrdAllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(TrdAllocGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[326];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

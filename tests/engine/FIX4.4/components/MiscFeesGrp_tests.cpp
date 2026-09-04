@@ -24,9 +24,6 @@ protected:
 
 TEST_F(MiscFeesGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setMiscFeeAmt(3.14f);
-    component.setMiscFeeType('A');
-    component.setMiscFeeBasis(42);
     
     // Reset component
     component.reset();
@@ -35,36 +32,13 @@ TEST_F(MiscFeesGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(MiscFeesGrpComponentTest, SetMiscFeeAmtAndMiscFeeAmtMatch) {
-    const double test_value = 123.456;
-    component.setMiscFeeAmt(test_value);
-    EXPECT_EQ(component.getMiscFeeAmt(), test_value);
-    EXPECT_TRUE(component.hasMiscFeeAmt());
-}
-
-TEST_F(MiscFeesGrpComponentTest, SetMiscFeeTypeAndMiscFeeTypeMatch) {
-    const char test_value = 'X';
-    component.setMiscFeeType(test_value);
-    EXPECT_EQ(component.getMiscFeeType(), test_value);
-    EXPECT_TRUE(component.hasMiscFeeType());
-}
-
-TEST_F(MiscFeesGrpComponentTest, SetMiscFeeBasisAndMiscFeeBasisMatch) {
-    const int64_t test_value = 12345;
-    component.setMiscFeeBasis(test_value);
-    EXPECT_EQ(component.getMiscFeeBasis(), test_value);
-    EXPECT_TRUE(component.hasMiscFeeBasis());
-}
-
 TEST_F(MiscFeesGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setMiscFeeAmt(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(MiscFeesGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[194];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

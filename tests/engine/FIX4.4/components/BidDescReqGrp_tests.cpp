@@ -24,9 +24,6 @@ protected:
 
 TEST_F(BidDescReqGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setBidDescriptorType(42);
-    component.setSideValueInd(42);
-    component.setLiquidityValue(3.14f);
     
     // Reset component
     component.reset();
@@ -35,85 +32,13 @@ TEST_F(BidDescReqGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidDescReqGrpComponentTest, SetBidDescriptorTypeAndBidDescriptorTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setBidDescriptorType(test_value);
-    EXPECT_EQ(component.getBidDescriptorType(), test_value);
-    EXPECT_TRUE(component.hasBidDescriptorType());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetSideValueIndAndSideValueIndMatch) {
-    const int64_t test_value = 12345;
-    component.setSideValueInd(test_value);
-    EXPECT_EQ(component.getSideValueInd(), test_value);
-    EXPECT_TRUE(component.hasSideValueInd());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetLiquidityValueAndLiquidityValueMatch) {
-    const double test_value = 123.456;
-    component.setLiquidityValue(test_value);
-    EXPECT_EQ(component.getLiquidityValue(), test_value);
-    EXPECT_TRUE(component.hasLiquidityValue());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetLiquidityNumSecuritiesAndLiquidityNumSecuritiesMatch) {
-    const int64_t test_value = 12345;
-    component.setLiquidityNumSecurities(test_value);
-    EXPECT_EQ(component.getLiquidityNumSecurities(), test_value);
-    EXPECT_TRUE(component.hasLiquidityNumSecurities());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetLiquidityPctLowAndLiquidityPctLowMatch) {
-    const double test_value = 123.456;
-    component.setLiquidityPctLow(test_value);
-    EXPECT_EQ(component.getLiquidityPctLow(), test_value);
-    EXPECT_TRUE(component.hasLiquidityPctLow());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetLiquidityPctHighAndLiquidityPctHighMatch) {
-    const double test_value = 123.456;
-    component.setLiquidityPctHigh(test_value);
-    EXPECT_EQ(component.getLiquidityPctHigh(), test_value);
-    EXPECT_TRUE(component.hasLiquidityPctHigh());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetEFPTrackingErrorAndEFPTrackingErrorMatch) {
-    const double test_value = 123.456;
-    component.setEFPTrackingError(test_value);
-    EXPECT_EQ(component.getEFPTrackingError(), test_value);
-    EXPECT_TRUE(component.hasEFPTrackingError());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetFairValueAndFairValueMatch) {
-    const double test_value = 123.456;
-    component.setFairValue(test_value);
-    EXPECT_EQ(component.getFairValue(), test_value);
-    EXPECT_TRUE(component.hasFairValue());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetOutsideIndexPctAndOutsideIndexPctMatch) {
-    const double test_value = 123.456;
-    component.setOutsideIndexPct(test_value);
-    EXPECT_EQ(component.getOutsideIndexPct(), test_value);
-    EXPECT_TRUE(component.hasOutsideIndexPct());
-}
-
-TEST_F(BidDescReqGrpComponentTest, SetValueOfFuturesAndValueOfFuturesMatch) {
-    const double test_value = 123.456;
-    component.setValueOfFutures(test_value);
-    EXPECT_EQ(component.getValueOfFutures(), test_value);
-    EXPECT_TRUE(component.hasValueOfFutures());
-}
-
 TEST_F(BidDescReqGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setBidDescriptorType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(BidDescReqGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[630];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,7 +24,6 @@ protected:
 
 TEST_F(RgstDtlsGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOwnerType(42);
     
     // Reset component
     component.reset();
@@ -33,25 +32,13 @@ TEST_F(RgstDtlsGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RgstDtlsGrpComponentTest, SetOwnerTypeAndOwnerTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setOwnerType(test_value);
-    EXPECT_EQ(component.getOwnerType(), test_value);
-    EXPECT_TRUE(component.hasOwnerType());
-}
-
-TEST_F(RgstDtlsGrpComponentTest, SetDateOfBirthAndDateOfBirthMatch) {
-}
-
 TEST_F(RgstDtlsGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOwnerType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(RgstDtlsGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[446];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -38,7 +38,7 @@ TEST_F(InstrmtLegGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(InstrmtLegGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[64];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

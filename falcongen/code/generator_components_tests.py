@@ -26,6 +26,92 @@ from typing import Optional
 from code.common import namespace_from_version, normalize_version_string
 
 
+def _find_nested_struct_blocks(content: str) -> list[tuple[str, str, int, int]]:
+	"""
+	Locate nested `struct Name { ... };` blocks (used by FalconFIX for repeating
+	group entries, e.g. `class AllocAckGrp { struct NoAllocs { ... }; ... };`).
+
+	Returns a list of (struct_name, struct_body, start_index, end_index) using
+	brace-depth matching (regex alone cannot handle nested braces reliably).
+	"""
+	results = []
+	for m in re.finditer(r'struct\s+(\w+)\s*\{', content):
+		struct_name = m.group(1)
+		brace_start = m.end() - 1  # index of the opening '{'
+		depth = 0
+		i = brace_start
+		while i < len(content):
+			if content[i] == '{':
+				depth += 1
+			elif content[i] == '}':
+				depth -= 1
+				if depth == 0:
+					break
+			i += 1
+		if depth != 0:
+			continue  # malformed / unmatched braces, skip
+		brace_end = i
+		body = content[brace_start + 1:brace_end]
+		results.append((struct_name, body, m.start(), brace_end + 1))
+	return results
+
+
+def _parse_members(scope_text: str) -> dict:
+	"""
+	Parse fields/getters/setters/has-methods/REQUIRED/MAX_ENCODE_SIZE from a
+	class or struct body (used for both top-level components and nested group
+	entry structs).
+	"""
+	fields = {}
+	field_pattern = r'types::(\w+)(?:<(\d+)>)?\s+m_(\w+)\s*\{'
+	for match in re.finditer(field_pattern, scope_text):
+		field_type = match.group(1)
+		field_size = match.group(2)
+		field_name = match.group(3)
+		fields[field_name] = {
+			'type': field_type,
+			'size': field_size,
+			'camelCase': _to_camel_case(field_name)
+		}
+
+	required_match = re.search(r'static\s+constexpr\s+uint64_t\s+REQUIRED\s*=\s*(0x[0-9A-Fa-f]+|0ULL)', scope_text)
+	is_any_required = bool(required_match) and required_match.group(1) != '0ULL'
+
+	size_match = re.search(r'static\s+constexpr\s+std::size_t\s+MAX_ENCODE_SIZE\s*=\s*(\d+)', scope_text)
+	max_size = int(size_match.group(1)) if size_match else 256
+
+	methods = {
+		'getters': [],
+		'setters': [],
+		'has_methods': []
+	}
+
+	getter_pattern = r'const\s+(types::\w+(?:<\d+>)?)\s+&get(\w+)\(\)\s+const\s+noexcept'
+	for match in re.finditer(getter_pattern, scope_text):
+		methods['getters'].append({
+			'return_type': match.group(1),
+			'name': match.group(2)
+		})
+
+	setter_pattern = r'void\s+set(\w+)\((const\s+)?(types::\w+(?:<\d+>)?)\s+[&v]\)\s+noexcept'
+	for match in re.finditer(setter_pattern, scope_text):
+		methods['setters'].append({
+			'name': match.group(1),
+			'param_type': match.group(3)
+		})
+
+	has_pattern = r'bool\s+has(\w+)\(\)\s+const\s+noexcept'
+	for match in re.finditer(has_pattern, scope_text):
+		methods['has_methods'].append(match.group(1))
+
+	return {
+		'fields': fields,
+		'methods': methods,
+		'has_required': is_any_required,
+		'max_encode_size': max_size,
+	}
+
+
 def extract_component_info(header_file: Path, namespace: str) -> dict:
 	"""
 	Parse a component header file and extract:
@@ -34,6 +120,11 @@ def extract_component_info(header_file: Path, namespace: str) -> dict:
 	- Getters/setters
 	- Required fields
 	- MAX_ENCODE_SIZE
+
+	Repeating-group components (e.g. AllocAckGrp) declare their real fields
+	inside a nested `struct NoXxx { ... }` entry type; the outer class itself
+	only exposes a std::vector<NoXxx> plus count/has accessors. Nested structs
+	are detected and parsed separately so tests reference the correct type.
 	"""
 	content = header_file.read_text(encoding="utf-8")
 
@@ -44,64 +135,36 @@ def extract_component_info(header_file: Path, namespace: str) -> dict:
 
 	class_name = class_match.group(1)
 
-	# Extract all member fields
-	fields = {}
-	# Match private members like: types::FLOAT m_Commission{fields::NULL_AMT};
-	field_pattern = r'types::(\w+)(?:<(\d+)>)?\s+m_(\w+)\s*\{'
-	for match in re.finditer(field_pattern, content):
-		field_type = match.group(1)
-		field_size = match.group(2)
-		field_name = match.group(3)
-		fields[field_name] = {
-			'type': field_type,
-			'size': field_size,
-			'camelCase': _to_camel_case(field_name)
-		}
+	# Detect nested group-entry structs and strip them out before parsing the
+	# outer class scope, so its fields/setters/getters aren't polluted by the
+	# inner struct's members.
+	nested_blocks = _find_nested_struct_blocks(content)
+	outer_content = content
+	for _, _, start, end in sorted(nested_blocks, key=lambda b: b[2], reverse=True):
+		outer_content = outer_content[:start] + outer_content[end:]
 
-	# Extract REQUIRED constant
-	required_match = re.search(r'static\s+constexpr\s+uint64_t\s+REQUIRED\s*=\s*(0x[0-9A-Fa-f]+|0ULL)', content)
-	is_any_required = required_match and required_match.group(1) != '0ULL'
+	outer_members = _parse_members(outer_content)
 
-	# Extract MAX_ENCODE_SIZE
-	size_match = re.search(r'static\s+constexpr\s+std::size_t\s+MAX_ENCODE_SIZE\s*=\s*(\d+)', content)
-	max_size = int(size_match.group(1)) if size_match else 256
-
-	# Extract method signatures
-	methods = {
-		'getters': [],
-		'setters': [],
-		'has_methods': []
-	}
-
-	# Getters: const types::XXXX &getName() const noexcept
-	getter_pattern = r'const\s+(types::\w+(?:<\d+>)?)\s+&get(\w+)\(\)\s+const\s+noexcept'
-	for match in re.finditer(getter_pattern, content):
-		methods['getters'].append({
-			'return_type': match.group(1),
-			'name': match.group(2)
+	nested = []
+	for struct_name, body, _, _ in nested_blocks:
+		nested_members = _parse_members(body)
+		nested.append({
+			'name': f'{class_name}_{struct_name}',
+			'cpp_type': f'{class_name}::{struct_name}',
+			'header_name': class_name,
+			'namespace': f'{namespace}::components',
+			**nested_members,
+			'file': header_file.name,
 		})
-
-	# Setters: void setXXX(types::YYYY v) noexcept
-	setter_pattern = r'void\s+set(\w+)\((const\s+)?(types::\w+(?:<\d+>)?)\s+[&v]\)\s+noexcept'
-	for match in re.finditer(setter_pattern, content):
-		methods['setters'].append({
-			'name': match.group(1),
-			'param_type': match.group(3)
-		})
-
-	# Has methods: bool hasXXX() const noexcept
-	has_pattern = r'bool\s+has(\w+)\(\)\s+const\s+noexcept'
-	for match in re.finditer(has_pattern, content):
-		methods['has_methods'].append(match.group(1))
 
 	return {
 		'name': class_name,
+		'cpp_type': class_name,
+		'header_name': class_name,
 		'namespace': f'{namespace}::components',
-		'fields': fields,
-		'methods': methods,
-		'has_required': is_any_required,
-		'max_encode_size': max_size,
-		'file': header_file.name
+		**outer_members,
+		'file': header_file.name,
+		'nested': nested,
 	}
 
 
@@ -114,17 +177,19 @@ def _to_camel_case(snake_str: str) -> str:
 def _generate_test_header(component: dict, fix_version: str) -> str:
 	"""Generate the #include section and setup"""
 	include_root = normalize_version_string(fix_version)
+	cpp_type = component.get('cpp_type', component['name'])
+	header_name = component.get('header_name', component['name'])
 	lines = [
 		"// SPDX-License-Identifier: MIT",
 		f"// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
 		"// Auto-generated component tests. Do not edit by hand.",
-		f"// Component: {component['name']} ({fix_version})",
+		f"// Component: {cpp_type} ({fix_version})",
 		"",
 		"#include <gtest/gtest.h>",
 		"#include <string_view>",
 		"#include <cstring>",
 		"",
-		f"#include <{include_root}/components/{component['name']}.h>",
+		f"#include <{include_root}/components/{header_name}.h>",
 		f"#include <{include_root}/utils/serializer.h>",
 		"#include <utils/fast_buffer.h>",
 		"",
@@ -132,7 +197,7 @@ def _generate_test_header(component: dict, fix_version: str) -> str:
 		"",
 		f"class {component['name']}ComponentTest : public ::testing::Test {{",
 		"protected:",
-		f"    {component['name']} component;",
+		f"    {cpp_type} component;",
 		"",
 		"    void SetUp() override {",
 		"        component.reset();",
@@ -236,6 +301,7 @@ def _generate_presence_tests(component: dict) -> str:
 
 def _generate_encode_decode_tests(component: dict) -> str:
 	"""Generate tests for encode/decode roundtrips"""
+	cpp_type = component.get('cpp_type', component['name'])
 	lines = [
 		f"TEST_F({component['name']}ComponentTest, EncodeDecodeRoundtrip) {{",
 		f"    char buffer[{component['max_encode_size'] * 2}];",
@@ -250,7 +316,7 @@ def _generate_encode_decode_tests(component: dict) -> str:
 		"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
 		"    ",
 		"    // Decode back",
-		f"    {component['name']} decoded;",
+		f"    {cpp_type} decoded;",
 		"    const char *q = buffer;",
 		"    bool decode_result = decoded.decode(q, p);",
 		"    EXPECT_TRUE(decode_result);",
@@ -332,7 +398,7 @@ def generate_all_component_tests(
 				stats['skipped'] += 1
 				continue
 
-			# Generate test file
+			# Generate test file for the top-level component (or group container)
 			test_code = _generate_full_test_file(component, fix_version)
 			test_file = output_dir / f"{component['name']}_tests.cpp"
 
@@ -341,6 +407,18 @@ def generate_all_component_tests(
 			stats['files'].append(str(test_file.relative_to(output_dir.parent.parent)))
 
 			print(f"[ok] Generated {component['name']}_tests.cpp ({len(component['methods']['setters'])} setters)")
+
+			# Generate test files for nested group-entry structs (e.g. NoAllocs),
+			# which own the real field setters/getters for repeating groups.
+			for nested_component in component.get('nested', []):
+				nested_code = _generate_full_test_file(nested_component, fix_version)
+				nested_file = output_dir / f"{nested_component['name']}_tests.cpp"
+
+				nested_file.write_text(nested_code, encoding="utf-8")
+				stats['generated'] += 1
+				stats['files'].append(str(nested_file.relative_to(output_dir.parent.parent)))
+
+				print(f"[ok] Generated {nested_component['name']}_tests.cpp ({len(nested_component['methods']['setters'])} setters, nested type)")
 
 		except Exception as e:
 			stats['errors'].append(f"{header_file.name}: {str(e)}")

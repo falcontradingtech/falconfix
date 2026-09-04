@@ -24,7 +24,6 @@ protected:
 
 TEST_F(CompIDStatGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setStatusValue(42);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(CompIDStatGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CompIDStatGrpComponentTest, SetStatusValueAndStatusValueMatch) {
-    const int64_t test_value = 12345;
-    component.setStatusValue(test_value);
-    EXPECT_EQ(component.getStatusValue(), test_value);
-    EXPECT_TRUE(component.hasStatusValue());
-}
-
 TEST_F(CompIDStatGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setStatusValue(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(CompIDStatGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[420];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

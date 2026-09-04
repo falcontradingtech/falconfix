@@ -38,7 +38,7 @@ TEST_F(QuotCxlEntriesGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(QuotCxlEntriesGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[64];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

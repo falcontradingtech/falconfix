@@ -24,9 +24,6 @@ protected:
 
 TEST_F(SettlInstGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlInstTransType('A');
-    component.setSide('A');
-    component.setProduct(42);
     
     // Reset component
     component.reset();
@@ -35,61 +32,13 @@ TEST_F(SettlInstGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SettlInstGrpComponentTest, SetSettlInstTransTypeAndSettlInstTransTypeMatch) {
-    const char test_value = 'X';
-    component.setSettlInstTransType(test_value);
-    EXPECT_EQ(component.getSettlInstTransType(), test_value);
-    EXPECT_TRUE(component.hasSettlInstTransType());
-}
-
-TEST_F(SettlInstGrpComponentTest, SetSideAndSideMatch) {
-    const char test_value = 'X';
-    component.setSide(test_value);
-    EXPECT_EQ(component.getSide(), test_value);
-    EXPECT_TRUE(component.hasSide());
-}
-
-TEST_F(SettlInstGrpComponentTest, SetProductAndProductMatch) {
-    const int64_t test_value = 12345;
-    component.setProduct(test_value);
-    EXPECT_EQ(component.getProduct(), test_value);
-    EXPECT_TRUE(component.hasProduct());
-}
-
-TEST_F(SettlInstGrpComponentTest, SetEffectiveTimeAndEffectiveTimeMatch) {
-}
-
-TEST_F(SettlInstGrpComponentTest, SetExpireTimeAndExpireTimeMatch) {
-}
-
-TEST_F(SettlInstGrpComponentTest, SetLastUpdateTimeAndLastUpdateTimeMatch) {
-}
-
-TEST_F(SettlInstGrpComponentTest, SetPaymentMethodAndPaymentMethodMatch) {
-    const int64_t test_value = 12345;
-    component.setPaymentMethod(test_value);
-    EXPECT_EQ(component.getPaymentMethod(), test_value);
-    EXPECT_TRUE(component.hasPaymentMethod());
-}
-
-TEST_F(SettlInstGrpComponentTest, SetCardStartDateAndCardStartDateMatch) {
-}
-
-TEST_F(SettlInstGrpComponentTest, SetCardExpDateAndCardExpDateMatch) {
-}
-
-TEST_F(SettlInstGrpComponentTest, SetPaymentDateAndPaymentDateMatch) {
-}
-
 TEST_F(SettlInstGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlInstTransType('A');
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(SettlInstGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[998];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

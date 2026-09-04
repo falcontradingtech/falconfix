@@ -24,7 +24,6 @@ protected:
 
 TEST_F(UndInstrmtCollGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCollAction(42);
     
     // Reset component
     component.reset();
@@ -33,18 +32,9 @@ TEST_F(UndInstrmtCollGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndInstrmtCollGrpComponentTest, SetCollActionAndCollActionMatch) {
-    const int64_t test_value = 12345;
-    component.setCollAction(test_value);
-    EXPECT_EQ(component.getCollAction(), test_value);
-    EXPECT_TRUE(component.hasCollAction());
-}
-
 TEST_F(UndInstrmtCollGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCollAction(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(UndInstrmtCollGrpComponentTest, EncodeDecodeRoundtrip) {

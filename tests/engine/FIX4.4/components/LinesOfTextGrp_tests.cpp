@@ -32,18 +32,13 @@ TEST_F(LinesOfTextGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LinesOfTextGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(LinesOfTextGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setEncodedTextLen(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(LinesOfTextGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[196];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

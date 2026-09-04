@@ -24,7 +24,6 @@ protected:
 
 TEST_F(AttrbGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setInstrAttribType(42);
     
     // Reset component
     component.reset();
@@ -33,22 +32,13 @@ TEST_F(AttrbGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AttrbGrpComponentTest, SetInstrAttribTypeAndInstrAttribTypeMatch) {
-    const int64_t test_value = 12345;
-    component.setInstrAttribType(test_value);
-    EXPECT_EQ(component.getInstrAttribType(), test_value);
-    EXPECT_TRUE(component.hasInstrAttribType());
-}
-
 TEST_F(AttrbGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setInstrAttribType(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(AttrbGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[124];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

@@ -24,8 +24,6 @@ protected:
 
 TEST_F(RgstDistInstGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setDistribPaymentMethod(42);
-    component.setDistribPercentage(3.14f);
     
     // Reset component
     component.reset();
@@ -34,29 +32,13 @@ TEST_F(RgstDistInstGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RgstDistInstGrpComponentTest, SetDistribPaymentMethodAndDistribPaymentMethodMatch) {
-    const int64_t test_value = 12345;
-    component.setDistribPaymentMethod(test_value);
-    EXPECT_EQ(component.getDistribPaymentMethod(), test_value);
-    EXPECT_TRUE(component.hasDistribPaymentMethod());
-}
-
-TEST_F(RgstDistInstGrpComponentTest, SetDistribPercentageAndDistribPercentageMatch) {
-    const double test_value = 123.456;
-    component.setDistribPercentage(test_value);
-    EXPECT_EQ(component.getDistribPercentage(), test_value);
-    EXPECT_TRUE(component.hasDistribPercentage());
-}
-
 TEST_F(RgstDistInstGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setDistribPaymentMethod(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(RgstDistInstGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[552];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;

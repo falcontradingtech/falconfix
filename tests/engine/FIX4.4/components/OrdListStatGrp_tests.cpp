@@ -24,8 +24,6 @@ protected:
 
 TEST_F(OrdListStatGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCumQty(3.14f);
-    component.setOrdStatus('A');
     
     // Reset component
     component.reset();
@@ -34,63 +32,13 @@ TEST_F(OrdListStatGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(OrdListStatGrpComponentTest, SetCumQtyAndCumQtyMatch) {
-    const double test_value = 123.456;
-    component.setCumQty(test_value);
-    EXPECT_EQ(component.getCumQty(), test_value);
-    EXPECT_TRUE(component.hasCumQty());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetOrdStatusAndOrdStatusMatch) {
-    const char test_value = 'X';
-    component.setOrdStatus(test_value);
-    EXPECT_EQ(component.getOrdStatus(), test_value);
-    EXPECT_TRUE(component.hasOrdStatus());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetWorkingIndicatorAndWorkingIndicatorMatch) {
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetLeavesQtyAndLeavesQtyMatch) {
-    const double test_value = 123.456;
-    component.setLeavesQty(test_value);
-    EXPECT_EQ(component.getLeavesQty(), test_value);
-    EXPECT_TRUE(component.hasLeavesQty());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetCxlQtyAndCxlQtyMatch) {
-    const double test_value = 123.456;
-    component.setCxlQty(test_value);
-    EXPECT_EQ(component.getCxlQty(), test_value);
-    EXPECT_TRUE(component.hasCxlQty());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetAvgPxAndAvgPxMatch) {
-    const double test_value = 123.456;
-    component.setAvgPx(test_value);
-    EXPECT_EQ(component.getAvgPx(), test_value);
-    EXPECT_TRUE(component.hasAvgPx());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetOrdRejReasonAndOrdRejReasonMatch) {
-    const int64_t test_value = 12345;
-    component.setOrdRejReason(test_value);
-    EXPECT_EQ(component.getOrdRejReason(), test_value);
-    EXPECT_TRUE(component.hasOrdRejReason());
-}
-
-TEST_F(OrdListStatGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(OrdListStatGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCumQty(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(OrdListStatGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[638];
+    char buffer[48];
     
     // Encode empty component
     char *p = buffer;

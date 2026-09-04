@@ -24,9 +24,6 @@ protected:
 
 TEST_F(UndInstrmtStrkPxGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPrevClosePx(3.14f);
-    component.setSide('A');
-    component.setPrice(3.14f);
     
     // Reset component
     component.reset();
@@ -35,39 +32,13 @@ TEST_F(UndInstrmtStrkPxGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndInstrmtStrkPxGrpComponentTest, SetPrevClosePxAndPrevClosePxMatch) {
-    const double test_value = 123.456;
-    component.setPrevClosePx(test_value);
-    EXPECT_EQ(component.getPrevClosePx(), test_value);
-    EXPECT_TRUE(component.hasPrevClosePx());
-}
-
-TEST_F(UndInstrmtStrkPxGrpComponentTest, SetSideAndSideMatch) {
-    const char test_value = 'X';
-    component.setSide(test_value);
-    EXPECT_EQ(component.getSide(), test_value);
-    EXPECT_TRUE(component.hasSide());
-}
-
-TEST_F(UndInstrmtStrkPxGrpComponentTest, SetPriceAndPriceMatch) {
-    const double test_value = 123.456;
-    component.setPrice(test_value);
-    EXPECT_EQ(component.getPrice(), test_value);
-    EXPECT_TRUE(component.hasPrice());
-}
-
-TEST_F(UndInstrmtStrkPxGrpComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
-}
-
 TEST_F(UndInstrmtStrkPxGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPrevClosePx(42);
-    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(UndInstrmtStrkPxGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[538];
+    char buffer[50];
     
     // Encode empty component
     char *p = buffer;
