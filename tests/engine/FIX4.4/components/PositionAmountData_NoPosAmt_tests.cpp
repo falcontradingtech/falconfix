@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PositionAmountData_NoPosAmtComponentTest : public ::testing::Test {
+class FIX4_4_PositionAmountData_NoPosAmtComponentTest : public ::testing::Test {
 protected:
     PositionAmountData::NoPosAmt component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PositionAmountData_NoPosAmtComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setPosAmt(3.14f);
     
@@ -33,21 +33,21 @@ TEST_F(PositionAmountData_NoPosAmtComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PositionAmountData_NoPosAmtComponentTest, SetPosAmtAndPosAmtMatch) {
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, SetPosAmtAndPosAmtMatch) {
     const double test_value = 123.456;
     component.setPosAmt(test_value);
     EXPECT_EQ(component.getPosAmt(), test_value);
     EXPECT_TRUE(component.hasPosAmt());
 }
 
-TEST_F(PositionAmountData_NoPosAmtComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setPosAmt(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PositionAmountData_NoPosAmtComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, EncodeDecodeRoundtrip) {
     char buffer[132];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(PositionAmountData_NoPosAmtComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PositionAmountData_NoPosAmtComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

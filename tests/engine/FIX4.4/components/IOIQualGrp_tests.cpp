@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class IOIQualGrpComponentTest : public ::testing::Test {
+class FIX4_4_IOIQualGrpComponentTest : public ::testing::Test {
 protected:
     IOIQualGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(IOIQualGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_IOIQualGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(IOIQualGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(IOIQualGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_IOIQualGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(IOIQualGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_IOIQualGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(IOIQualGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(IOIQualGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_IOIQualGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

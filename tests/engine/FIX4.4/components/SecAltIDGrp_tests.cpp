@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SecAltIDGrpComponentTest : public ::testing::Test {
+class FIX4_4_SecAltIDGrpComponentTest : public ::testing::Test {
 protected:
     SecAltIDGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SecAltIDGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SecAltIDGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(SecAltIDGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SecAltIDGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SecAltIDGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(SecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(SecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SecAltIDGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SecAltIDGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

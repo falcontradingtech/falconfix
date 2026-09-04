@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class MDRjctGrp_NoAltMDSourceComponentTest : public ::testing::Test {
+class FIX4_4_MDRjctGrp_NoAltMDSourceComponentTest : public ::testing::Test {
 protected:
     MDRjctGrp::NoAltMDSource component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_MDRjctGrp_NoAltMDSourceComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_MDRjctGrp_NoAltMDSourceComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_MDRjctGrp_NoAltMDSourceComponentTest, EncodeDecodeRoundtrip) {
     char buffer[74];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(MDRjctGrp_NoAltMDSourceComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_MDRjctGrp_NoAltMDSourceComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

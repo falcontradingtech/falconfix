@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class AffectedOrdGrp_NoAffectedOrdersComponentTest : public ::testing::Test {
+class FIX4_4_AffectedOrdGrp_NoAffectedOrdersComponentTest : public ::testing::Test {
 protected:
     AffectedOrdGrp::NoAffectedOrders component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_AffectedOrdGrp_NoAffectedOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_AffectedOrdGrp_NoAffectedOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_AffectedOrdGrp_NoAffectedOrdersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[220];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(AffectedOrdGrp_NoAffectedOrdersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_AffectedOrdGrp_NoAffectedOrdersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

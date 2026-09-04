@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class ContraGrp_NoContraBrokersComponentTest : public ::testing::Test {
+class FIX4_4_ContraGrp_NoContraBrokersComponentTest : public ::testing::Test {
 protected:
     ContraGrp::NoContraBrokers component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setContraTradeQty(3.14f);
     
@@ -33,24 +33,24 @@ TEST_F(ContraGrp_NoContraBrokersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, SetContraTradeQtyAndContraTradeQtyMatch) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTradeQtyAndContraTradeQtyMatch) {
     const double test_value = 123.456;
     component.setContraTradeQty(test_value);
     EXPECT_EQ(component.getContraTradeQty(), test_value);
     EXPECT_TRUE(component.hasContraTradeQty());
 }
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, SetContraTradeTimeAndContraTradeTimeMatch) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTradeTimeAndContraTradeTimeMatch) {
 }
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setContraTradeQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[324];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -76,6 +76,6 @@ TEST_F(ContraGrp_NoContraBrokersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(ContraGrp_NoContraBrokersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

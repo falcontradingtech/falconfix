@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UnderlyingStipulations_NoUnderlyingStipsComponentTest : public ::testing::Test {
+class FIX4_4_UnderlyingStipulations_NoUnderlyingStipsComponentTest : public ::testing::Test {
 protected:
     UnderlyingStipulations::NoUnderlyingStips component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UnderlyingStipulations_NoUnderlyingStipsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, ResetClearsAllFiel
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UnderlyingStipulations_NoUnderlyingStipsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UnderlyingStipulations_NoUnderlyingStipsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, EncodeDecodeRoundt
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UnderlyingStipulations_NoUnderlyingStipsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UnderlyingStipulations_NoUnderlyingStipsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

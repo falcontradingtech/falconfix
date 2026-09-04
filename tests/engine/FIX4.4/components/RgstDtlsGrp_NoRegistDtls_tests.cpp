@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RgstDtlsGrp_NoRegistDtlsComponentTest : public ::testing::Test {
+class FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest : public ::testing::Test {
 protected:
     RgstDtlsGrp::NoRegistDtls component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setOwnerType(42);
     
@@ -33,24 +33,24 @@ TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, SetOwnerTypeAndOwnerTypeMatch) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetOwnerTypeAndOwnerTypeMatch) {
     const int64_t test_value = 12345;
     component.setOwnerType(test_value);
     EXPECT_EQ(component.getOwnerType(), test_value);
     EXPECT_TRUE(component.hasOwnerType());
 }
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, SetDateOfBirthAndDateOfBirthMatch) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetDateOfBirthAndDateOfBirthMatch) {
 }
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setOwnerType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[446];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -76,6 +76,6 @@ TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RgstDtlsGrp_NoRegistDtlsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

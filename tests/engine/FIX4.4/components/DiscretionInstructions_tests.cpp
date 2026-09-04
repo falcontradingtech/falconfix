@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class DiscretionInstructionsComponentTest : public ::testing::Test {
+class FIX4_4_DiscretionInstructionsComponentTest : public ::testing::Test {
 protected:
     DiscretionInstructions component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(DiscretionInstructionsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setDiscretionInst('A');
     component.setDiscretionOffsetValue(3.14f);
@@ -35,63 +35,63 @@ TEST_F(DiscretionInstructionsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionInstAndDiscretionInstMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionInstAndDiscretionInstMatch) {
     const char test_value = 'X';
     component.setDiscretionInst(test_value);
     EXPECT_EQ(component.getDiscretionInst(), test_value);
     EXPECT_TRUE(component.hasDiscretionInst());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionOffsetValueAndDiscretionOffsetValueMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionOffsetValueAndDiscretionOffsetValueMatch) {
     const double test_value = 123.456;
     component.setDiscretionOffsetValue(test_value);
     EXPECT_EQ(component.getDiscretionOffsetValue(), test_value);
     EXPECT_TRUE(component.hasDiscretionOffsetValue());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionMoveTypeAndDiscretionMoveTypeMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionMoveTypeAndDiscretionMoveTypeMatch) {
     const int64_t test_value = 12345;
     component.setDiscretionMoveType(test_value);
     EXPECT_EQ(component.getDiscretionMoveType(), test_value);
     EXPECT_TRUE(component.hasDiscretionMoveType());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionOffsetTypeAndDiscretionOffsetTypeMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionOffsetTypeAndDiscretionOffsetTypeMatch) {
     const int64_t test_value = 12345;
     component.setDiscretionOffsetType(test_value);
     EXPECT_EQ(component.getDiscretionOffsetType(), test_value);
     EXPECT_TRUE(component.hasDiscretionOffsetType());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionLimitTypeAndDiscretionLimitTypeMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionLimitTypeAndDiscretionLimitTypeMatch) {
     const int64_t test_value = 12345;
     component.setDiscretionLimitType(test_value);
     EXPECT_EQ(component.getDiscretionLimitType(), test_value);
     EXPECT_TRUE(component.hasDiscretionLimitType());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionRoundDirectionAndDiscretionRoundDirectionMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionRoundDirectionAndDiscretionRoundDirectionMatch) {
     const int64_t test_value = 12345;
     component.setDiscretionRoundDirection(test_value);
     EXPECT_EQ(component.getDiscretionRoundDirection(), test_value);
     EXPECT_TRUE(component.hasDiscretionRoundDirection());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, SetDiscretionScopeAndDiscretionScopeMatch) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionScopeAndDiscretionScopeMatch) {
     const int64_t test_value = 12345;
     component.setDiscretionScope(test_value);
     EXPECT_EQ(component.getDiscretionScope(), test_value);
     EXPECT_TRUE(component.hasDiscretionScope());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setDiscretionInst('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[320];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -117,6 +117,6 @@ TEST_F(DiscretionInstructionsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(DiscretionInstructionsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_DiscretionInstructionsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

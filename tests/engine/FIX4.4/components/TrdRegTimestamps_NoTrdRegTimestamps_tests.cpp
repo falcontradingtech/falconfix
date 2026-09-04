@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class TrdRegTimestamps_NoTrdRegTimestampsComponentTest : public ::testing::Test {
+class FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest : public ::testing::Test {
 protected:
     TrdRegTimestamps::NoTrdRegTimestamps component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setTrdRegTimestampType(42);
     
@@ -33,24 +33,24 @@ TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimestampAndTrdRegTimestampMatch) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimestampAndTrdRegTimestampMatch) {
 }
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimestampTypeAndTrdRegTimestampTypeMatch) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimestampTypeAndTrdRegTimestampTypeMatch) {
     const int64_t test_value = 12345;
     component.setTrdRegTimestampType(test_value);
     EXPECT_EQ(component.getTrdRegTimestampType(), test_value);
     EXPECT_TRUE(component.hasTrdRegTimestampType());
 }
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setTrdRegTimestamp(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[168];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -76,6 +76,6 @@ TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) 
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestamps_NoTrdRegTimestampsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

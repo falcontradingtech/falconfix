@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class QuotSetGrp_NoQuoteSetsComponentTest : public ::testing::Test {
+class FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest : public ::testing::Test {
 protected:
     QuotSetGrp::NoQuoteSets component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setTotNoQuoteEntries(42);
     
@@ -33,27 +33,27 @@ TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, SetQuoteSetValidUntilTimeAndQuoteSetValidUntilTimeMatch) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, SetQuoteSetValidUntilTimeAndQuoteSetValidUntilTimeMatch) {
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
     const int64_t test_value = 12345;
     component.setTotNoQuoteEntries(test_value);
     EXPECT_EQ(component.getTotNoQuoteEntries(), test_value);
     EXPECT_TRUE(component.hasTotNoQuoteEntries());
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, SetLastFragmentAndLastFragmentMatch) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, SetLastFragmentAndLastFragmentMatch) {
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setQuoteSetValidUntilTime(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[180];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -79,6 +79,6 @@ TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(QuotSetGrp_NoQuoteSetsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_QuotSetGrp_NoQuoteSetsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

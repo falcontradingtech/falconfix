@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CpctyConfGrp_NoCapacitiesComponentTest : public ::testing::Test {
+class FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest : public ::testing::Test {
 protected:
     CpctyConfGrp::NoCapacities component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setOrderCapacity('A');
     component.setOrderCapacityQty(3.14f);
@@ -34,28 +34,28 @@ TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityAndOrderCapacityMatch) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityAndOrderCapacityMatch) {
     const char test_value = 'X';
     component.setOrderCapacity(test_value);
     EXPECT_EQ(component.getOrderCapacity(), test_value);
     EXPECT_TRUE(component.hasOrderCapacity());
 }
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityQtyAndOrderCapacityQtyMatch) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityQtyAndOrderCapacityQtyMatch) {
     const double test_value = 123.456;
     component.setOrderCapacityQty(test_value);
     EXPECT_EQ(component.getOrderCapacityQty(), test_value);
     EXPECT_TRUE(component.hasOrderCapacityQty());
 }
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setOrderCapacity('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[144];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrp_NoCapacitiesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

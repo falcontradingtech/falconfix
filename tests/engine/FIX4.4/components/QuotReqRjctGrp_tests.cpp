@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class QuotReqRjctGrpComponentTest : public ::testing::Test {
+class FIX4_4_QuotReqRjctGrpComponentTest : public ::testing::Test {
 protected:
     QuotReqRjctGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(QuotReqRjctGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_QuotReqRjctGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(QuotReqRjctGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotReqRjctGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_QuotReqRjctGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(QuotReqRjctGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_QuotReqRjctGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(QuotReqRjctGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(QuotReqRjctGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_QuotReqRjctGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

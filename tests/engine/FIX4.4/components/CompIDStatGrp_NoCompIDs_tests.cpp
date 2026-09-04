@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CompIDStatGrp_NoCompIDsComponentTest : public ::testing::Test {
+class FIX4_4_CompIDStatGrp_NoCompIDsComponentTest : public ::testing::Test {
 protected:
     CompIDStatGrp::NoCompIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CompIDStatGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setStatusValue(42);
     
@@ -33,21 +33,21 @@ TEST_F(CompIDStatGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CompIDStatGrp_NoCompIDsComponentTest, SetStatusValueAndStatusValueMatch) {
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetStatusValueAndStatusValueMatch) {
     const int64_t test_value = 12345;
     component.setStatusValue(test_value);
     EXPECT_EQ(component.getStatusValue(), test_value);
     EXPECT_TRUE(component.hasStatusValue());
 }
 
-TEST_F(CompIDStatGrp_NoCompIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setStatusValue(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(CompIDStatGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[420];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(CompIDStatGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CompIDStatGrp_NoCompIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

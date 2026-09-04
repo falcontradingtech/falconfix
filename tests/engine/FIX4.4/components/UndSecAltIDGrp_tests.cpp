@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UndSecAltIDGrpComponentTest : public ::testing::Test {
+class FIX4_4_UndSecAltIDGrpComponentTest : public ::testing::Test {
 protected:
     UndSecAltIDGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UndSecAltIDGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UndSecAltIDGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(UndSecAltIDGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndSecAltIDGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UndSecAltIDGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(UndSecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UndSecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(UndSecAltIDGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UndSecAltIDGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UndSecAltIDGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

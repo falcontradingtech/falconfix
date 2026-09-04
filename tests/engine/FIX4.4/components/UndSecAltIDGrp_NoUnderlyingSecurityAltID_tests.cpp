@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest : public ::testing::Test {
+class FIX4_4_UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest : public ::testing::Test {
 protected:
     UndSecAltIDGrp::NoUnderlyingSecurityAltID component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, ResetClearsAllFiel
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, EncodeDecodeRoundt
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UndSecAltIDGrp_NoUnderlyingSecurityAltIDComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

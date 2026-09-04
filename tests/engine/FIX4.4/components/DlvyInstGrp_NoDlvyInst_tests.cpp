@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class DlvyInstGrp_NoDlvyInstComponentTest : public ::testing::Test {
+class FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest : public ::testing::Test {
 protected:
     DlvyInstGrp::NoDlvyInst component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSettlInstSource('A');
     component.setDlvyInstType('A');
@@ -34,28 +34,28 @@ TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, SetSettlInstSourceAndSettlInstSourceMatch) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, SetSettlInstSourceAndSettlInstSourceMatch) {
     const char test_value = 'X';
     component.setSettlInstSource(test_value);
     EXPECT_EQ(component.getSettlInstSource(), test_value);
     EXPECT_TRUE(component.hasSettlInstSource());
 }
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, SetDlvyInstTypeAndDlvyInstTypeMatch) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, SetDlvyInstTypeAndDlvyInstTypeMatch) {
     const char test_value = 'X';
     component.setDlvyInstType(test_value);
     EXPECT_EQ(component.getDlvyInstType(), test_value);
     EXPECT_TRUE(component.hasDlvyInstType());
 }
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSettlInstSource('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, EncodeDecodeRoundtrip) {
     char buffer[24];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(DlvyInstGrp_NoDlvyInstComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

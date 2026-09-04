@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class OrdListStatGrp_NoOrdersComponentTest : public ::testing::Test {
+class FIX4_4_OrdListStatGrp_NoOrdersComponentTest : public ::testing::Test {
 protected:
     OrdListStatGrp::NoOrders component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setCumQty(3.14f);
     component.setOrdStatus('A');
@@ -34,62 +34,62 @@ TEST_F(OrdListStatGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetCumQtyAndCumQtyMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetCumQtyAndCumQtyMatch) {
     const double test_value = 123.456;
     component.setCumQty(test_value);
     EXPECT_EQ(component.getCumQty(), test_value);
     EXPECT_TRUE(component.hasCumQty());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetOrdStatusAndOrdStatusMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetOrdStatusAndOrdStatusMatch) {
     const char test_value = 'X';
     component.setOrdStatus(test_value);
     EXPECT_EQ(component.getOrdStatus(), test_value);
     EXPECT_TRUE(component.hasOrdStatus());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetWorkingIndicatorAndWorkingIndicatorMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetWorkingIndicatorAndWorkingIndicatorMatch) {
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetLeavesQtyAndLeavesQtyMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetLeavesQtyAndLeavesQtyMatch) {
     const double test_value = 123.456;
     component.setLeavesQty(test_value);
     EXPECT_EQ(component.getLeavesQty(), test_value);
     EXPECT_TRUE(component.hasLeavesQty());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetCxlQtyAndCxlQtyMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetCxlQtyAndCxlQtyMatch) {
     const double test_value = 123.456;
     component.setCxlQty(test_value);
     EXPECT_EQ(component.getCxlQty(), test_value);
     EXPECT_TRUE(component.hasCxlQty());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetAvgPxAndAvgPxMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetAvgPxAndAvgPxMatch) {
     const double test_value = 123.456;
     component.setAvgPx(test_value);
     EXPECT_EQ(component.getAvgPx(), test_value);
     EXPECT_TRUE(component.hasAvgPx());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetOrdRejReasonAndOrdRejReasonMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetOrdRejReasonAndOrdRejReasonMatch) {
     const int64_t test_value = 12345;
     component.setOrdRejReason(test_value);
     EXPECT_EQ(component.getOrdRejReason(), test_value);
     EXPECT_TRUE(component.hasOrdRejReason());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setCumQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[638];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -115,6 +115,6 @@ TEST_F(OrdListStatGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(OrdListStatGrp_NoOrdersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

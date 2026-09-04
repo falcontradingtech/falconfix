@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrumentComponentTest : public ::testing::Test {
+class FIX4_4_InstrumentComponentTest : public ::testing::Test {
 protected:
     Instrument component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrumentComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrumentComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setProduct(42);
     component.setPutOrCall(42);
@@ -34,108 +34,108 @@ TEST_F(InstrumentComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrumentComponentTest, SetProductAndProductMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetProductAndProductMatch) {
     const int64_t test_value = 12345;
     component.setProduct(test_value);
     EXPECT_EQ(component.getProduct(), test_value);
     EXPECT_TRUE(component.hasProduct());
 }
 
-TEST_F(InstrumentComponentTest, SetMaturityDateAndMaturityDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetMaturityDateAndMaturityDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetPutOrCallAndPutOrCallMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetPutOrCallAndPutOrCallMatch) {
     const int64_t test_value = 12345;
     component.setPutOrCall(test_value);
     EXPECT_EQ(component.getPutOrCall(), test_value);
     EXPECT_TRUE(component.hasPutOrCall());
 }
 
-TEST_F(InstrumentComponentTest, SetCouponPaymentDateAndCouponPaymentDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetCouponPaymentDateAndCouponPaymentDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetIssueDateAndIssueDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetIssueDateAndIssueDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetRepurchaseTermAndRepurchaseTermMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetRepurchaseTermAndRepurchaseTermMatch) {
     const int64_t test_value = 12345;
     component.setRepurchaseTerm(test_value);
     EXPECT_EQ(component.getRepurchaseTerm(), test_value);
     EXPECT_TRUE(component.hasRepurchaseTerm());
 }
 
-TEST_F(InstrumentComponentTest, SetRepurchaseRateAndRepurchaseRateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetRepurchaseRateAndRepurchaseRateMatch) {
     const double test_value = 123.456;
     component.setRepurchaseRate(test_value);
     EXPECT_EQ(component.getRepurchaseRate(), test_value);
     EXPECT_TRUE(component.hasRepurchaseRate());
 }
 
-TEST_F(InstrumentComponentTest, SetFactorAndFactorMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetFactorAndFactorMatch) {
     const double test_value = 123.456;
     component.setFactor(test_value);
     EXPECT_EQ(component.getFactor(), test_value);
     EXPECT_TRUE(component.hasFactor());
 }
 
-TEST_F(InstrumentComponentTest, SetRedemptionDateAndRedemptionDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetRedemptionDateAndRedemptionDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetStrikePriceAndStrikePriceMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetStrikePriceAndStrikePriceMatch) {
     const double test_value = 123.456;
     component.setStrikePrice(test_value);
     EXPECT_EQ(component.getStrikePrice(), test_value);
     EXPECT_TRUE(component.hasStrikePrice());
 }
 
-TEST_F(InstrumentComponentTest, SetOptAttributeAndOptAttributeMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetOptAttributeAndOptAttributeMatch) {
     const char test_value = 'X';
     component.setOptAttribute(test_value);
     EXPECT_EQ(component.getOptAttribute(), test_value);
     EXPECT_TRUE(component.hasOptAttribute());
 }
 
-TEST_F(InstrumentComponentTest, SetContractMultiplierAndContractMultiplierMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetContractMultiplierAndContractMultiplierMatch) {
     const double test_value = 123.456;
     component.setContractMultiplier(test_value);
     EXPECT_EQ(component.getContractMultiplier(), test_value);
     EXPECT_TRUE(component.hasContractMultiplier());
 }
 
-TEST_F(InstrumentComponentTest, SetCouponRateAndCouponRateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetCouponRateAndCouponRateMatch) {
     const double test_value = 123.456;
     component.setCouponRate(test_value);
     EXPECT_EQ(component.getCouponRate(), test_value);
     EXPECT_TRUE(component.hasCouponRate());
 }
 
-TEST_F(InstrumentComponentTest, SetEncodedIssuerLenAndEncodedIssuerLenMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedIssuerLenAndEncodedIssuerLenMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetEncodedSecurityDescLenAndEncodedSecurityDescLenMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedSecurityDescLenAndEncodedSecurityDescLenMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetCPProgramAndCPProgramMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetCPProgramAndCPProgramMatch) {
     const int64_t test_value = 12345;
     component.setCPProgram(test_value);
     EXPECT_EQ(component.getCPProgram(), test_value);
     EXPECT_TRUE(component.hasCPProgram());
 }
 
-TEST_F(InstrumentComponentTest, SetDatedDateAndDatedDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetDatedDateAndDatedDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, SetInterestAccrualDateAndInterestAccrualDateMatch) {
+TEST_F(FIX4_4_InstrumentComponentTest, SetInterestAccrualDateAndInterestAccrualDateMatch) {
 }
 
-TEST_F(InstrumentComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrumentComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setProduct(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(InstrumentComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrumentComponentTest, EncodeDecodeRoundtrip) {
     char buffer[2452];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -161,6 +161,6 @@ TEST_F(InstrumentComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrumentComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrumentComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

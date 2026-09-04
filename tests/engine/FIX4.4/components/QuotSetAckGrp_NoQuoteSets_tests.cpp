@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class QuotSetAckGrp_NoQuoteSetsComponentTest : public ::testing::Test {
+class FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest : public ::testing::Test {
 protected:
     QuotSetAckGrp::NoQuoteSets component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setTotNoQuoteEntries(42);
     
@@ -33,24 +33,24 @@ TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
     const int64_t test_value = 12345;
     component.setTotNoQuoteEntries(test_value);
     EXPECT_EQ(component.getTotNoQuoteEntries(), test_value);
     EXPECT_TRUE(component.hasTotNoQuoteEntries());
 }
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, SetLastFragmentAndLastFragmentMatch) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, SetLastFragmentAndLastFragmentMatch) {
 }
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setTotNoQuoteEntries(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[136];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -76,6 +76,6 @@ TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(QuotSetAckGrp_NoQuoteSetsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

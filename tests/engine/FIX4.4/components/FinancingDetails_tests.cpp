@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class FinancingDetailsComponentTest : public ::testing::Test {
+class FIX4_4_FinancingDetailsComponentTest : public ::testing::Test {
 protected:
     FinancingDetails component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(FinancingDetailsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setTerminationType(42);
     
@@ -33,44 +33,44 @@ TEST_F(FinancingDetailsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(FinancingDetailsComponentTest, SetAgreementDateAndAgreementDateMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetAgreementDateAndAgreementDateMatch) {
 }
 
-TEST_F(FinancingDetailsComponentTest, SetTerminationTypeAndTerminationTypeMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetTerminationTypeAndTerminationTypeMatch) {
     const int64_t test_value = 12345;
     component.setTerminationType(test_value);
     EXPECT_EQ(component.getTerminationType(), test_value);
     EXPECT_TRUE(component.hasTerminationType());
 }
 
-TEST_F(FinancingDetailsComponentTest, SetStartDateAndStartDateMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetStartDateAndStartDateMatch) {
 }
 
-TEST_F(FinancingDetailsComponentTest, SetEndDateAndEndDateMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetEndDateAndEndDateMatch) {
 }
 
-TEST_F(FinancingDetailsComponentTest, SetDeliveryTypeAndDeliveryTypeMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetDeliveryTypeAndDeliveryTypeMatch) {
     const int64_t test_value = 12345;
     component.setDeliveryType(test_value);
     EXPECT_EQ(component.getDeliveryType(), test_value);
     EXPECT_TRUE(component.hasDeliveryType());
 }
 
-TEST_F(FinancingDetailsComponentTest, SetMarginRatioAndMarginRatioMatch) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetMarginRatioAndMarginRatioMatch) {
     const double test_value = 123.456;
     component.setMarginRatio(test_value);
     EXPECT_EQ(component.getMarginRatio(), test_value);
     EXPECT_TRUE(component.hasMarginRatio());
 }
 
-TEST_F(FinancingDetailsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setAgreementDate(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(FinancingDetailsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[458];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -96,6 +96,6 @@ TEST_F(FinancingDetailsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(FinancingDetailsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_FinancingDetailsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

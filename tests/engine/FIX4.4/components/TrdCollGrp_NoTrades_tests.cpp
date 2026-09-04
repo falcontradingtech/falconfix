@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class TrdCollGrp_NoTradesComponentTest : public ::testing::Test {
+class FIX4_4_TrdCollGrp_NoTradesComponentTest : public ::testing::Test {
 protected:
     TrdCollGrp::NoTrades component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(TrdCollGrp_NoTradesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_TrdCollGrp_NoTradesComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(TrdCollGrp_NoTradesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdCollGrp_NoTradesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_TrdCollGrp_NoTradesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(TrdCollGrp_NoTradesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_TrdCollGrp_NoTradesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(TrdCollGrp_NoTradesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(TrdCollGrp_NoTradesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_TrdCollGrp_NoTradesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

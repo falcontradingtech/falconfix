@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class BidCompReqGrp_NoBidComponentsComponentTest : public ::testing::Test {
+class FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest : public ::testing::Test {
 protected:
     BidCompReqGrp::NoBidComponents component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSide('A');
     component.setNetGrossInd(42);
@@ -35,45 +35,45 @@ TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
     const char test_value = 'X';
     component.setSide(test_value);
     EXPECT_EQ(component.getSide(), test_value);
     EXPECT_TRUE(component.hasSide());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
     const int64_t test_value = 12345;
     component.setNetGrossInd(test_value);
     EXPECT_EQ(component.getNetGrossInd(), test_value);
     EXPECT_TRUE(component.hasNetGrossInd());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTypeMatch) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTypeMatch) {
     const char test_value = 'X';
     component.setSettlType(test_value);
     EXPECT_EQ(component.getSettlType(), test_value);
     EXPECT_TRUE(component.hasSettlType());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAcctIDSource(test_value);
     EXPECT_EQ(component.getAcctIDSource(), test_value);
     EXPECT_TRUE(component.hasAcctIDSource());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSide('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[434];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -99,6 +99,6 @@ TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(BidCompReqGrp_NoBidComponentsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

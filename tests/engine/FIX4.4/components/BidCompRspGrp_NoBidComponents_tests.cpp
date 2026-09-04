@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class BidCompRspGrp_NoBidComponentsComponentTest : public ::testing::Test {
+class FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest : public ::testing::Test {
 protected:
     BidCompRspGrp::NoBidComponents component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSide('A');
     component.setPrice(3.14f);
@@ -35,62 +35,62 @@ TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
     const char test_value = 'X';
     component.setSide(test_value);
     EXPECT_EQ(component.getSide(), test_value);
     EXPECT_TRUE(component.hasSide());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetPriceAndPriceMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetPriceAndPriceMatch) {
     const double test_value = 123.456;
     component.setPrice(test_value);
     EXPECT_EQ(component.getPrice(), test_value);
     EXPECT_TRUE(component.hasPrice());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetPriceTypeAndPriceTypeMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetPriceTypeAndPriceTypeMatch) {
     const int64_t test_value = 12345;
     component.setPriceType(test_value);
     EXPECT_EQ(component.getPriceType(), test_value);
     EXPECT_TRUE(component.hasPriceType());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetFairValueAndFairValueMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetFairValueAndFairValueMatch) {
     const double test_value = 123.456;
     component.setFairValue(test_value);
     EXPECT_EQ(component.getFairValue(), test_value);
     EXPECT_TRUE(component.hasFairValue());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
     const int64_t test_value = 12345;
     component.setNetGrossInd(test_value);
     EXPECT_EQ(component.getNetGrossInd(), test_value);
     EXPECT_TRUE(component.hasNetGrossInd());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTypeMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTypeMatch) {
     const char test_value = 'X';
     component.setSettlType(test_value);
     EXPECT_EQ(component.getSettlType(), test_value);
     EXPECT_TRUE(component.hasSettlType());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSide('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[748];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -116,6 +116,6 @@ TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(BidCompRspGrp_NoBidComponentsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

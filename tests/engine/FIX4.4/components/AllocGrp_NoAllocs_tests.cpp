@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class AllocGrp_NoAllocsComponentTest : public ::testing::Test {
+class FIX4_4_AllocGrp_NoAllocsComponentTest : public ::testing::Test {
 protected:
     AllocGrp::NoAllocs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(AllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setAllocAcctIDSource(42);
     component.setMatchStatus('A');
@@ -35,125 +35,125 @@ TEST_F(AllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAllocAcctIDSource(test_value);
     EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
     EXPECT_TRUE(component.hasAllocAcctIDSource());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetMatchStatusAndMatchStatusMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetMatchStatusAndMatchStatusMatch) {
     const char test_value = 'X';
     component.setMatchStatus(test_value);
     EXPECT_EQ(component.getMatchStatus(), test_value);
     EXPECT_TRUE(component.hasMatchStatus());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocPriceAndAllocPriceMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocPriceAndAllocPriceMatch) {
     const double test_value = 123.456;
     component.setAllocPrice(test_value);
     EXPECT_EQ(component.getAllocPrice(), test_value);
     EXPECT_TRUE(component.hasAllocPrice());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
     const double test_value = 123.456;
     component.setAllocQty(test_value);
     EXPECT_EQ(component.getAllocQty(), test_value);
     EXPECT_TRUE(component.hasAllocQty());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetProcessCodeAndProcessCodeMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetProcessCodeAndProcessCodeMatch) {
     const char test_value = 'X';
     component.setProcessCode(test_value);
     EXPECT_EQ(component.getProcessCode(), test_value);
     EXPECT_TRUE(component.hasProcessCode());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetNotifyBrokerOfCreditAndNotifyBrokerOfCreditMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetNotifyBrokerOfCreditAndNotifyBrokerOfCreditMatch) {
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocHandlInstAndAllocHandlInstMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocHandlInstAndAllocHandlInstMatch) {
     const int64_t test_value = 12345;
     component.setAllocHandlInst(test_value);
     EXPECT_EQ(component.getAllocHandlInst(), test_value);
     EXPECT_TRUE(component.hasAllocHandlInst());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocAvgPxAndAllocAvgPxMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAvgPxAndAllocAvgPxMatch) {
     const double test_value = 123.456;
     component.setAllocAvgPx(test_value);
     EXPECT_EQ(component.getAllocAvgPx(), test_value);
     EXPECT_TRUE(component.hasAllocAvgPx());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocNetMoneyAndAllocNetMoneyMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocNetMoneyAndAllocNetMoneyMatch) {
     const double test_value = 123.456;
     component.setAllocNetMoney(test_value);
     EXPECT_EQ(component.getAllocNetMoney(), test_value);
     EXPECT_TRUE(component.hasAllocNetMoney());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetSettlCurrAmtAndSettlCurrAmtMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetSettlCurrAmtAndSettlCurrAmtMatch) {
     const double test_value = 123.456;
     component.setSettlCurrAmt(test_value);
     EXPECT_EQ(component.getSettlCurrAmt(), test_value);
     EXPECT_TRUE(component.hasSettlCurrAmt());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocSettlCurrAmtAndAllocSettlCurrAmtMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocSettlCurrAmtAndAllocSettlCurrAmtMatch) {
     const double test_value = 123.456;
     component.setAllocSettlCurrAmt(test_value);
     EXPECT_EQ(component.getAllocSettlCurrAmt(), test_value);
     EXPECT_TRUE(component.hasAllocSettlCurrAmt());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetSettlCurrFxRateAndSettlCurrFxRateMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetSettlCurrFxRateAndSettlCurrFxRateMatch) {
     const double test_value = 123.456;
     component.setSettlCurrFxRate(test_value);
     EXPECT_EQ(component.getSettlCurrFxRate(), test_value);
     EXPECT_TRUE(component.hasSettlCurrFxRate());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetSettlCurrFxRateCalcAndSettlCurrFxRateCalcMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetSettlCurrFxRateCalcAndSettlCurrFxRateCalcMatch) {
     const char test_value = 'X';
     component.setSettlCurrFxRateCalc(test_value);
     EXPECT_EQ(component.getSettlCurrFxRateCalc(), test_value);
     EXPECT_TRUE(component.hasSettlCurrFxRateCalc());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocAccruedInterestAmtAndAllocAccruedInterestAmtMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAccruedInterestAmtAndAllocAccruedInterestAmtMatch) {
     const double test_value = 123.456;
     component.setAllocAccruedInterestAmt(test_value);
     EXPECT_EQ(component.getAllocAccruedInterestAmt(), test_value);
     EXPECT_TRUE(component.hasAllocAccruedInterestAmt());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocInterestAtMaturityAndAllocInterestAtMaturityMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocInterestAtMaturityAndAllocInterestAtMaturityMatch) {
     const double test_value = 123.456;
     component.setAllocInterestAtMaturity(test_value);
     EXPECT_EQ(component.getAllocInterestAtMaturity(), test_value);
     EXPECT_TRUE(component.hasAllocInterestAtMaturity());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, SetAllocSettlInstTypeAndAllocSettlInstTypeMatch) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocSettlInstTypeAndAllocSettlInstTypeMatch) {
     const int64_t test_value = 12345;
     component.setAllocSettlInstType(test_value);
     EXPECT_EQ(component.getAllocSettlInstType(), test_value);
     EXPECT_TRUE(component.hasAllocSettlInstType());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setAllocAcctIDSource(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[1208];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -179,6 +179,6 @@ TEST_F(AllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(AllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

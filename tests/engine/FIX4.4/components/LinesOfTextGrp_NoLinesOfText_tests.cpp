@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LinesOfTextGrp_NoLinesOfTextComponentTest : public ::testing::Test {
+class FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest : public ::testing::Test {
 protected:
     LinesOfTextGrp::NoLinesOfText component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,17 +32,17 @@ TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setEncodedTextLen(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, EncodeDecodeRoundtrip) {
     char buffer[196];
     
     // No scalar setter available to populate deterministically (this
@@ -62,6 +62,6 @@ TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LinesOfTextGrp_NoLinesOfTextComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

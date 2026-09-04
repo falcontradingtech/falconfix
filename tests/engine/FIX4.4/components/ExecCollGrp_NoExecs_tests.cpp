@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class ExecCollGrp_NoExecsComponentTest : public ::testing::Test {
+class FIX4_4_ExecCollGrp_NoExecsComponentTest : public ::testing::Test {
 protected:
     ExecCollGrp::NoExecs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(ExecCollGrp_NoExecsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(ExecCollGrp_NoExecsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ExecCollGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(ExecCollGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[72];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(ExecCollGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(ExecCollGrp_NoExecsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

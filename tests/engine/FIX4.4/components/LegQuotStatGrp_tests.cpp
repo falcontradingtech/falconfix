@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LegQuotStatGrpComponentTest : public ::testing::Test {
+class FIX4_4_LegQuotStatGrpComponentTest : public ::testing::Test {
 protected:
     LegQuotStatGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LegQuotStatGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LegQuotStatGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(LegQuotStatGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegQuotStatGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LegQuotStatGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(LegQuotStatGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LegQuotStatGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(LegQuotStatGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LegQuotStatGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LegQuotStatGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

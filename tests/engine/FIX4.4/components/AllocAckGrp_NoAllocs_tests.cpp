@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class AllocAckGrp_NoAllocsComponentTest : public ::testing::Test {
+class FIX4_4_AllocAckGrp_NoAllocsComponentTest : public ::testing::Test {
 protected:
     AllocAckGrp::NoAllocs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setAllocAcctIDSource(42);
     component.setAllocPrice(3.14f);
@@ -35,38 +35,38 @@ TEST_F(AllocAckGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAllocAcctIDSource(test_value);
     EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
     EXPECT_TRUE(component.hasAllocAcctIDSource());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, SetAllocPriceAndAllocPriceMatch) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocPriceAndAllocPriceMatch) {
     const double test_value = 123.456;
     component.setAllocPrice(test_value);
     EXPECT_EQ(component.getAllocPrice(), test_value);
     EXPECT_TRUE(component.hasAllocPrice());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, SetIndividualAllocRejCodeAndIndividualAllocRejCodeMatch) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetIndividualAllocRejCodeAndIndividualAllocRejCodeMatch) {
     const int64_t test_value = 12345;
     component.setIndividualAllocRejCode(test_value);
     EXPECT_EQ(component.getIndividualAllocRejCode(), test_value);
     EXPECT_TRUE(component.hasIndividualAllocRejCode());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setAllocAcctIDSource(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[502];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -92,6 +92,6 @@ TEST_F(AllocAckGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(AllocAckGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

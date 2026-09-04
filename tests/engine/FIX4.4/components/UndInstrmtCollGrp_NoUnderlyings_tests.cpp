@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UndInstrmtCollGrp_NoUnderlyingsComponentTest : public ::testing::Test {
+class FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest : public ::testing::Test {
 protected:
     UndInstrmtCollGrp::NoUnderlyings component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setCollAction(42);
     
@@ -33,21 +33,21 @@ TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, SetCollActionAndCollActionMatch) {
+TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, SetCollActionAndCollActionMatch) {
     const int64_t test_value = 12345;
     component.setCollAction(test_value);
     EXPECT_EQ(component.getCollAction(), test_value);
     EXPECT_TRUE(component.hasCollAction());
 }
 
-TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setCollAction(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UndInstrmtCollGrp_NoUnderlyingsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

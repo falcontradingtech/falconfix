@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RgstDistInstGrp_NoDistribInstsComponentTest : public ::testing::Test {
+class FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest : public ::testing::Test {
 protected:
     RgstDistInstGrp::NoDistribInsts component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setDistribPaymentMethod(42);
     component.setDistribPercentage(3.14f);
@@ -34,28 +34,28 @@ TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, SetDistribPaymentMethodAndDistribPaymentMethodMatch) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetDistribPaymentMethodAndDistribPaymentMethodMatch) {
     const int64_t test_value = 12345;
     component.setDistribPaymentMethod(test_value);
     EXPECT_EQ(component.getDistribPaymentMethod(), test_value);
     EXPECT_TRUE(component.hasDistribPaymentMethod());
 }
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, SetDistribPercentageAndDistribPercentageMatch) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetDistribPercentageAndDistribPercentageMatch) {
     const double test_value = 123.456;
     component.setDistribPercentage(test_value);
     EXPECT_EQ(component.getDistribPercentage(), test_value);
     EXPECT_TRUE(component.hasDistribPercentage());
 }
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setDistribPaymentMethod(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[552];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RgstDistInstGrp_NoDistribInstsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

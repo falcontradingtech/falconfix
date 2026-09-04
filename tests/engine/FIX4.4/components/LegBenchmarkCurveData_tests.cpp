@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LegBenchmarkCurveDataComponentTest : public ::testing::Test {
+class FIX4_4_LegBenchmarkCurveDataComponentTest : public ::testing::Test {
 protected:
     LegBenchmarkCurveData component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LegBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegBenchmarkPrice(3.14f);
     component.setLegBenchmarkPriceType(42);
@@ -34,28 +34,28 @@ TEST_F(LegBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceAndLegBenchmarkPriceMatch) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceAndLegBenchmarkPriceMatch) {
     const double test_value = 123.456;
     component.setLegBenchmarkPrice(test_value);
     EXPECT_EQ(component.getLegBenchmarkPrice(), test_value);
     EXPECT_TRUE(component.hasLegBenchmarkPrice());
 }
 
-TEST_F(LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceTypeAndLegBenchmarkPriceTypeMatch) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceTypeAndLegBenchmarkPriceTypeMatch) {
     const int64_t test_value = 12345;
     component.setLegBenchmarkPriceType(test_value);
     EXPECT_EQ(component.getLegBenchmarkPriceType(), test_value);
     EXPECT_TRUE(component.hasLegBenchmarkPriceType());
 }
 
-TEST_F(LegBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegBenchmarkPrice(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(LegBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
     char buffer[330];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(LegBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LegBenchmarkCurveDataComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

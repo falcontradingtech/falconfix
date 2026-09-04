@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CommissionDataComponentTest : public ::testing::Test {
+class FIX4_4_CommissionDataComponentTest : public ::testing::Test {
 protected:
     CommissionData component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CommissionDataComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CommissionDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setCommission(3.14f);
     component.setCommType('A');
@@ -35,35 +35,35 @@ TEST_F(CommissionDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CommissionDataComponentTest, SetCommissionAndCommissionMatch) {
+TEST_F(FIX4_4_CommissionDataComponentTest, SetCommissionAndCommissionMatch) {
     const double test_value = 123.456;
     component.setCommission(test_value);
     EXPECT_EQ(component.getCommission(), test_value);
     EXPECT_TRUE(component.hasCommission());
 }
 
-TEST_F(CommissionDataComponentTest, SetCommTypeAndCommTypeMatch) {
+TEST_F(FIX4_4_CommissionDataComponentTest, SetCommTypeAndCommTypeMatch) {
     const char test_value = 'X';
     component.setCommType(test_value);
     EXPECT_EQ(component.getCommType(), test_value);
     EXPECT_TRUE(component.hasCommType());
 }
 
-TEST_F(CommissionDataComponentTest, SetFundRenewWaivAndFundRenewWaivMatch) {
+TEST_F(FIX4_4_CommissionDataComponentTest, SetFundRenewWaivAndFundRenewWaivMatch) {
     const char test_value = 'X';
     component.setFundRenewWaiv(test_value);
     EXPECT_EQ(component.getFundRenewWaiv(), test_value);
     EXPECT_TRUE(component.hasFundRenewWaiv());
 }
 
-TEST_F(CommissionDataComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CommissionDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setCommission(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(CommissionDataComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CommissionDataComponentTest, EncodeDecodeRoundtrip) {
     char buffer[152];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(CommissionDataComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CommissionDataComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CommissionDataComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

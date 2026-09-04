@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SettlInstructionsDataComponentTest : public ::testing::Test {
+class FIX4_4_SettlInstructionsDataComponentTest : public ::testing::Test {
 protected:
     SettlInstructionsData component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SettlInstructionsDataComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSettlDeliveryType(42);
     component.setStandInstDbType(42);
@@ -34,28 +34,28 @@ TEST_F(SettlInstructionsDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SettlInstructionsDataComponentTest, SetSettlDeliveryTypeAndSettlDeliveryTypeMatch) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, SetSettlDeliveryTypeAndSettlDeliveryTypeMatch) {
     const int64_t test_value = 12345;
     component.setSettlDeliveryType(test_value);
     EXPECT_EQ(component.getSettlDeliveryType(), test_value);
     EXPECT_TRUE(component.hasSettlDeliveryType());
 }
 
-TEST_F(SettlInstructionsDataComponentTest, SetStandInstDbTypeAndStandInstDbTypeMatch) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, SetStandInstDbTypeAndStandInstDbTypeMatch) {
     const int64_t test_value = 12345;
     component.setStandInstDbType(test_value);
     EXPECT_EQ(component.getStandInstDbType(), test_value);
     EXPECT_TRUE(component.hasStandInstDbType());
 }
 
-TEST_F(SettlInstructionsDataComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSettlDeliveryType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SettlInstructionsDataComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, EncodeDecodeRoundtrip) {
     char buffer[248];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(SettlInstructionsDataComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SettlInstructionsDataComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

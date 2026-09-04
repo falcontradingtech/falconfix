@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PreAllocGrp_NoAllocsComponentTest : public ::testing::Test {
+class FIX4_4_PreAllocGrp_NoAllocsComponentTest : public ::testing::Test {
 protected:
     PreAllocGrp::NoAllocs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setAllocAcctIDSource(42);
     component.setAllocQty(3.14f);
@@ -34,28 +34,28 @@ TEST_F(PreAllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAllocAcctIDSource(test_value);
     EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
     EXPECT_TRUE(component.hasAllocAcctIDSource());
 }
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
     const double test_value = 123.456;
     component.setAllocQty(test_value);
     EXPECT_EQ(component.getAllocQty(), test_value);
     EXPECT_TRUE(component.hasAllocQty());
 }
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setAllocAcctIDSource(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[326];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(PreAllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PreAllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PreAllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

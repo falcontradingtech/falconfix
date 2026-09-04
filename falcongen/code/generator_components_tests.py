@@ -183,6 +183,11 @@ def _generate_test_header(component: dict, fix_version: str) -> str:
 	include_root = normalize_version_string(fix_version)
 	cpp_type = component.get('cpp_type', component['name'])
 	header_name = component.get('header_name', component['name'])
+
+	# Create version-prefixed test class name to avoid symbol conflicts
+	version_prefix = fix_version.replace('.', '_')  # e.g., "FIX4.4" -> "FIX4_4"
+	test_class_name = f"{version_prefix}_{component['name']}ComponentTest"
+
 	lines = [
 		"// SPDX-License-Identifier: MIT",
 		f"// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
@@ -199,7 +204,7 @@ def _generate_test_header(component: dict, fix_version: str) -> str:
 		"",
 		f"using namespace {component['namespace']};",
 		"",
-		f"class {component['name']}ComponentTest : public ::testing::Test {{",
+		f"class {test_class_name} : public ::testing::Test {{",
 		"protected:",
 		f"    {cpp_type} component;",
 		"",
@@ -209,13 +214,18 @@ def _generate_test_header(component: dict, fix_version: str) -> str:
 		"};",
 		"",
 	]
+
+	# Store test_class_name in component for use in other functions
+	component['_test_class_name'] = test_class_name
+
 	return "\n".join(lines)
 
 
 def _generate_reset_tests(component: dict) -> str:
 	"""Generate tests for reset() functionality"""
+	test_class_name = component.get('_test_class_name', f"{component['name']}ComponentTest")
 	lines = [
-		f"TEST_F({component['name']}ComponentTest, ResetClearsAllFields) {{",
+		f"TEST_F({test_class_name}, ResetClearsAllFields) {{",
 		"    // Set some fields",
 	]
 
@@ -247,6 +257,7 @@ def _generate_reset_tests(component: dict) -> str:
 
 def _generate_setter_getter_tests(component: dict) -> str:
 	"""Generate tests for all setters and getters"""
+	test_class_name = component.get('_test_class_name', f"{component['name']}ComponentTest")
 	lines = []
 
 	for setter in component['methods']['setters']:
@@ -258,7 +269,7 @@ def _generate_setter_getter_tests(component: dict) -> str:
 		if not getter:
 			continue
 
-		test_name = f"{component['name']}ComponentTest, Set{field_name}And{field_name}Match"
+		test_name = f"{test_class_name}, Set{field_name}And{field_name}Match"
 		lines.append(f"TEST_F({test_name}) {{")
 
 		# Generate appropriate test value based on type
@@ -288,8 +299,9 @@ def _generate_setter_getter_tests(component: dict) -> str:
 
 def _generate_presence_tests(component: dict) -> str:
 	"""Generate tests for field presence tracking"""
+	test_class_name = component.get('_test_class_name', f"{component['name']}ComponentTest")
 	lines = [
-		f"TEST_F({component['name']}ComponentTest, HasAnySetTracksPresence) {{",
+		f"TEST_F({test_class_name}, HasAnySetTracksPresence) {{",
 		"    EXPECT_FALSE(component.hasAnySet());",
 		"    ",
 	]
@@ -321,6 +333,7 @@ def _test_value_literal_and_setup(param_type: str) -> tuple[str, str]:
 
 def _generate_encode_decode_tests(component: dict) -> str:
 	"""Generate tests for encode/decode roundtrips"""
+	test_class_name = component.get('_test_class_name', f"{component['name']}ComponentTest")
 	cpp_type = component.get('cpp_type', component['name'])
 
 	# Prefer a setter whose type we can populate deterministically (CHAR/INT/
@@ -337,7 +350,7 @@ def _generate_encode_decode_tests(component: dict) -> str:
 			break
 
 	lines = [
-		f"TEST_F({component['name']}ComponentTest, EncodeDecodeRoundtrip) {{",
+		f"TEST_F({test_class_name}, EncodeDecodeRoundtrip) {{",
 		f"    char buffer[{component['max_encode_size'] * 2}];",
 		"    ",
 	]
@@ -394,8 +407,9 @@ def _generate_encode_decode_tests(component: dict) -> str:
 
 def _generate_boundary_tests(component: dict) -> str:
 	"""Generate tests for boundary conditions and edge cases"""
+	test_class_name = component.get('_test_class_name', f"{component['name']}ComponentTest")
 	lines = [
-		f"TEST_F({component['name']}ComponentTest, CheckRequiredWhenEmpty) {{",
+		f"TEST_F({test_class_name}, CheckRequiredWhenEmpty) {{",
 	]
 
 	if component['has_required']:

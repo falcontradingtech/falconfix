@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class OrdAllocGrpComponentTest : public ::testing::Test {
+class FIX4_4_OrdAllocGrpComponentTest : public ::testing::Test {
 protected:
     OrdAllocGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(OrdAllocGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(OrdAllocGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(OrdAllocGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[48];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(OrdAllocGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

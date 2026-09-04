@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PegInstructionsComponentTest : public ::testing::Test {
+class FIX4_4_PegInstructionsComponentTest : public ::testing::Test {
 protected:
     PegInstructions component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PegInstructionsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setPegOffsetValue(3.14f);
     component.setPegMoveType(42);
@@ -35,56 +35,56 @@ TEST_F(PegInstructionsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegOffsetValueAndPegOffsetValueMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegOffsetValueAndPegOffsetValueMatch) {
     const double test_value = 123.456;
     component.setPegOffsetValue(test_value);
     EXPECT_EQ(component.getPegOffsetValue(), test_value);
     EXPECT_TRUE(component.hasPegOffsetValue());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegMoveTypeAndPegMoveTypeMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegMoveTypeAndPegMoveTypeMatch) {
     const int64_t test_value = 12345;
     component.setPegMoveType(test_value);
     EXPECT_EQ(component.getPegMoveType(), test_value);
     EXPECT_TRUE(component.hasPegMoveType());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegOffsetTypeAndPegOffsetTypeMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegOffsetTypeAndPegOffsetTypeMatch) {
     const int64_t test_value = 12345;
     component.setPegOffsetType(test_value);
     EXPECT_EQ(component.getPegOffsetType(), test_value);
     EXPECT_TRUE(component.hasPegOffsetType());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegLimitTypeAndPegLimitTypeMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegLimitTypeAndPegLimitTypeMatch) {
     const int64_t test_value = 12345;
     component.setPegLimitType(test_value);
     EXPECT_EQ(component.getPegLimitType(), test_value);
     EXPECT_TRUE(component.hasPegLimitType());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegRoundDirectionAndPegRoundDirectionMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegRoundDirectionAndPegRoundDirectionMatch) {
     const int64_t test_value = 12345;
     component.setPegRoundDirection(test_value);
     EXPECT_EQ(component.getPegRoundDirection(), test_value);
     EXPECT_TRUE(component.hasPegRoundDirection());
 }
 
-TEST_F(PegInstructionsComponentTest, SetPegScopeAndPegScopeMatch) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegScopeAndPegScopeMatch) {
     const int64_t test_value = 12345;
     component.setPegScope(test_value);
     EXPECT_EQ(component.getPegScope(), test_value);
     EXPECT_TRUE(component.hasPegScope());
 }
 
-TEST_F(PegInstructionsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setPegOffsetValue(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PegInstructionsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[308];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -110,6 +110,6 @@ TEST_F(PegInstructionsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PegInstructionsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PegInstructionsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

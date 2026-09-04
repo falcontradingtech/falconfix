@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class QuotQualGrp_NoQuoteQualifiersComponentTest : public ::testing::Test {
+class FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest : public ::testing::Test {
 protected:
     QuotQualGrp::NoQuoteQualifiers component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setQuoteQualifier('A');
     
@@ -33,21 +33,21 @@ TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, SetQuoteQualifierAndQuoteQualifierMatch) {
+TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, SetQuoteQualifierAndQuoteQualifierMatch) {
     const char test_value = 'X';
     component.setQuoteQualifier(test_value);
     EXPECT_EQ(component.getQuoteQualifier(), test_value);
     EXPECT_TRUE(component.hasQuoteQualifier());
 }
 
-TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setQuoteQualifier('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[12];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(QuotQualGrp_NoQuoteQualifiersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

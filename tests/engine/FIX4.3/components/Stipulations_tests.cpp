@@ -13,50 +13,50 @@
 
 using namespace fix43::components;
 
-class StipulationsComponentTest : public ::testing::Test {
+class FIX4_3_StipulationsComponentTest : public ::testing::Test {
 protected:
-	Stipulations component;
+    Stipulations component;
 
-	void SetUp() override {
-		component.reset();
-	}
+    void SetUp() override {
+        component.reset();
+    }
 };
 
-TEST_F(StipulationsComponentTest, ResetClearsAllFields) {
-	// Set some fields
-	
-	// Reset component
-	component.reset();
-	
-	// Verify all fields are cleared
-	EXPECT_FALSE(component.hasAnySet());
+TEST_F(FIX4_3_StipulationsComponentTest, ResetClearsAllFields) {
+    // Set some fields
+    
+    // Reset component
+    component.reset();
+    
+    // Verify all fields are cleared
+    EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(StipulationsComponentTest, HasAnySetTracksPresence) {
-	EXPECT_FALSE(component.hasAnySet());
-	
+TEST_F(FIX4_3_StipulationsComponentTest, HasAnySetTracksPresence) {
+    EXPECT_FALSE(component.hasAnySet());
+    
 }
 
-TEST_F(StipulationsComponentTest, EncodeDecodeRoundtrip) {
-	char buffer[50];
-	
-	// No scalar setter available to populate deterministically (this
-	// component only wraps nested groups/sub-components). Group-only
-	// containers with no required fields legitimately encode to 0
-	// bytes, and some decode() implementations return false when no
-	// bytes were consumed, so we only assert the two views agree.
-	char *p = buffer;
-	p = component.encode(p, true);
-	std::size_t encoded_size = p - buffer;
-	
-	EXPECT_LE(encoded_size, component.compute_buffer_size());
-	
-	Stipulations decoded;
-	const char *q = buffer;
-	(void)decoded.decode(q, p);
-	EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
+TEST_F(FIX4_3_StipulationsComponentTest, EncodeDecodeRoundtrip) {
+    char buffer[50];
+    
+    // No scalar setter available to populate deterministically (this
+    // component only wraps nested groups/sub-components). Group-only
+    // containers with no required fields legitimately encode to 0
+    // bytes, and some decode() implementations return false when no
+    // bytes were consumed, so we only assert the two views agree.
+    char *p = buffer;
+    p = component.encode(p, true);
+    std::size_t encoded_size = p - buffer;
+    
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    Stipulations decoded;
+    const char *q = buffer;
+    (void)decoded.decode(q, p);
+    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(StipulationsComponentTest, CheckRequiredWhenEmpty) {
-	EXPECT_TRUE(component.checkRequired());
+TEST_F(FIX4_3_StipulationsComponentTest, CheckRequiredWhenEmpty) {
+    EXPECT_TRUE(component.checkRequired());
 }

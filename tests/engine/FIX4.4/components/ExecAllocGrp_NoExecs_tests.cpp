@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class ExecAllocGrp_NoExecsComponentTest : public ::testing::Test {
+class FIX4_4_ExecAllocGrp_NoExecsComponentTest : public ::testing::Test {
 protected:
     ExecAllocGrp::NoExecs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLastQty(3.14f);
     component.setLastPx(3.14f);
@@ -35,42 +35,42 @@ TEST_F(ExecAllocGrp_NoExecsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, SetLastQtyAndLastQtyMatch) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastQtyAndLastQtyMatch) {
     const double test_value = 123.456;
     component.setLastQty(test_value);
     EXPECT_EQ(component.getLastQty(), test_value);
     EXPECT_TRUE(component.hasLastQty());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, SetLastPxAndLastPxMatch) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastPxAndLastPxMatch) {
     const double test_value = 123.456;
     component.setLastPx(test_value);
     EXPECT_EQ(component.getLastPx(), test_value);
     EXPECT_TRUE(component.hasLastPx());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, SetLastParPxAndLastParPxMatch) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastParPxAndLastParPxMatch) {
     const double test_value = 123.456;
     component.setLastParPx(test_value);
     EXPECT_EQ(component.getLastParPx(), test_value);
     EXPECT_TRUE(component.hasLastParPx());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, SetLastCapacityAndLastCapacityMatch) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastCapacityAndLastCapacityMatch) {
     const char test_value = 'X';
     component.setLastCapacity(test_value);
     EXPECT_EQ(component.getLastCapacity(), test_value);
     EXPECT_TRUE(component.hasLastCapacity());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLastQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[326];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -96,6 +96,6 @@ TEST_F(ExecAllocGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(ExecAllocGrp_NoExecsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

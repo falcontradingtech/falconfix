@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CompIDReqGrp_NoCompIDsComponentTest : public ::testing::Test {
+class FIX4_4_CompIDReqGrp_NoCompIDsComponentTest : public ::testing::Test {
 protected:
     CompIDReqGrp::NoCompIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CompIDReqGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CompIDReqGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(CompIDReqGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CompIDReqGrp_NoCompIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CompIDReqGrp_NoCompIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(CompIDReqGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CompIDReqGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[296];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(CompIDReqGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CompIDReqGrp_NoCompIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CompIDReqGrp_NoCompIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

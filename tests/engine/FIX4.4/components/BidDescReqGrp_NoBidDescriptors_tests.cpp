@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class BidDescReqGrp_NoBidDescriptorsComponentTest : public ::testing::Test {
+class FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest : public ::testing::Test {
 protected:
     BidDescReqGrp::NoBidDescriptors component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setBidDescriptorType(42);
     component.setSideValueInd(42);
@@ -35,84 +35,84 @@ TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetBidDescriptorTypeAndBidDescriptorTypeMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetBidDescriptorTypeAndBidDescriptorTypeMatch) {
     const int64_t test_value = 12345;
     component.setBidDescriptorType(test_value);
     EXPECT_EQ(component.getBidDescriptorType(), test_value);
     EXPECT_TRUE(component.hasBidDescriptorType());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetSideValueIndAndSideValueIndMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetSideValueIndAndSideValueIndMatch) {
     const int64_t test_value = 12345;
     component.setSideValueInd(test_value);
     EXPECT_EQ(component.getSideValueInd(), test_value);
     EXPECT_TRUE(component.hasSideValueInd());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityValueAndLiquidityValueMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityValueAndLiquidityValueMatch) {
     const double test_value = 123.456;
     component.setLiquidityValue(test_value);
     EXPECT_EQ(component.getLiquidityValue(), test_value);
     EXPECT_TRUE(component.hasLiquidityValue());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityNumSecuritiesAndLiquidityNumSecuritiesMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityNumSecuritiesAndLiquidityNumSecuritiesMatch) {
     const int64_t test_value = 12345;
     component.setLiquidityNumSecurities(test_value);
     EXPECT_EQ(component.getLiquidityNumSecurities(), test_value);
     EXPECT_TRUE(component.hasLiquidityNumSecurities());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityPctLowAndLiquidityPctLowMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityPctLowAndLiquidityPctLowMatch) {
     const double test_value = 123.456;
     component.setLiquidityPctLow(test_value);
     EXPECT_EQ(component.getLiquidityPctLow(), test_value);
     EXPECT_TRUE(component.hasLiquidityPctLow());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityPctHighAndLiquidityPctHighMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetLiquidityPctHighAndLiquidityPctHighMatch) {
     const double test_value = 123.456;
     component.setLiquidityPctHigh(test_value);
     EXPECT_EQ(component.getLiquidityPctHigh(), test_value);
     EXPECT_TRUE(component.hasLiquidityPctHigh());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetEFPTrackingErrorAndEFPTrackingErrorMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetEFPTrackingErrorAndEFPTrackingErrorMatch) {
     const double test_value = 123.456;
     component.setEFPTrackingError(test_value);
     EXPECT_EQ(component.getEFPTrackingError(), test_value);
     EXPECT_TRUE(component.hasEFPTrackingError());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetFairValueAndFairValueMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetFairValueAndFairValueMatch) {
     const double test_value = 123.456;
     component.setFairValue(test_value);
     EXPECT_EQ(component.getFairValue(), test_value);
     EXPECT_TRUE(component.hasFairValue());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetOutsideIndexPctAndOutsideIndexPctMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetOutsideIndexPctAndOutsideIndexPctMatch) {
     const double test_value = 123.456;
     component.setOutsideIndexPct(test_value);
     EXPECT_EQ(component.getOutsideIndexPct(), test_value);
     EXPECT_TRUE(component.hasOutsideIndexPct());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, SetValueOfFuturesAndValueOfFuturesMatch) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetValueOfFuturesAndValueOfFuturesMatch) {
     const double test_value = 123.456;
     component.setValueOfFutures(test_value);
     EXPECT_EQ(component.getValueOfFutures(), test_value);
     EXPECT_TRUE(component.hasValueOfFutures());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setBidDescriptorType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[630];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -138,6 +138,6 @@ TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(BidDescReqGrp_NoBidDescriptorsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

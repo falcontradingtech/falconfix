@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class TrdCapRptSideGrpComponentTest : public ::testing::Test {
+class FIX4_4_TrdCapRptSideGrpComponentTest : public ::testing::Test {
 protected:
     TrdCapRptSideGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(TrdCapRptSideGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_TrdCapRptSideGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(TrdCapRptSideGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdCapRptSideGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_TrdCapRptSideGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(TrdCapRptSideGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_TrdCapRptSideGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(TrdCapRptSideGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(TrdCapRptSideGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_TrdCapRptSideGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

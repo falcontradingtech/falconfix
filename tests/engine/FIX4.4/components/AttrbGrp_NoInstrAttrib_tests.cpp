@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class AttrbGrp_NoInstrAttribComponentTest : public ::testing::Test {
+class FIX4_4_AttrbGrp_NoInstrAttribComponentTest : public ::testing::Test {
 protected:
     AttrbGrp::NoInstrAttrib component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(AttrbGrp_NoInstrAttribComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setInstrAttribType(42);
     
@@ -33,21 +33,21 @@ TEST_F(AttrbGrp_NoInstrAttribComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(AttrbGrp_NoInstrAttribComponentTest, SetInstrAttribTypeAndInstrAttribTypeMatch) {
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, SetInstrAttribTypeAndInstrAttribTypeMatch) {
     const int64_t test_value = 12345;
     component.setInstrAttribType(test_value);
     EXPECT_EQ(component.getInstrAttribType(), test_value);
     EXPECT_TRUE(component.hasInstrAttribType());
 }
 
-TEST_F(AttrbGrp_NoInstrAttribComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setInstrAttribType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(AttrbGrp_NoInstrAttribComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(AttrbGrp_NoInstrAttribComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(AttrbGrp_NoInstrAttribComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

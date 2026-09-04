@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CollInqQualGrpComponentTest : public ::testing::Test {
+class FIX4_4_CollInqQualGrpComponentTest : public ::testing::Test {
 protected:
     CollInqQualGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CollInqQualGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CollInqQualGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(CollInqQualGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CollInqQualGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(CollInqQualGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CollInqQualGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(CollInqQualGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CollInqQualGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

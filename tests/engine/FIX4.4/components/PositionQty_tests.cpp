@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PositionQtyComponentTest : public ::testing::Test {
+class FIX4_4_PositionQtyComponentTest : public ::testing::Test {
 protected:
     PositionQty component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PositionQtyComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PositionQtyComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(PositionQtyComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PositionQtyComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PositionQtyComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(PositionQtyComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PositionQtyComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(PositionQtyComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PositionQtyComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PositionQtyComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LegSecAltIDGrp_NoLegSecurityAltIDComponentTest : public ::testing::Test {
+class FIX4_4_LegSecAltIDGrp_NoLegSecurityAltIDComponentTest : public ::testing::Test {
 protected:
     LegSecAltIDGrp::NoLegSecurityAltID component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LegSecAltIDGrp_NoLegSecurityAltIDComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

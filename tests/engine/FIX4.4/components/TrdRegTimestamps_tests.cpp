@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class TrdRegTimestampsComponentTest : public ::testing::Test {
+class FIX4_4_TrdRegTimestampsComponentTest : public ::testing::Test {
 protected:
     TrdRegTimestamps component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(TrdRegTimestampsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_TrdRegTimestampsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(TrdRegTimestampsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_TrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(TrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_TrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(TrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(TrdRegTimestampsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_TrdRegTimestampsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

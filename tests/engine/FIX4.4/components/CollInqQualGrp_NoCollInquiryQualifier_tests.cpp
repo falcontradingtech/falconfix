@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CollInqQualGrp_NoCollInquiryQualifierComponentTest : public ::testing::Test {
+class FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest : public ::testing::Test {
 protected:
     CollInqQualGrp::NoCollInquiryQualifier component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setCollInquiryQualifier(42);
     
@@ -33,21 +33,21 @@ TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, ResetClearsAllFields)
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, SetCollInquiryQualifierAndCollInquiryQualifierMatch) {
+TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, SetCollInquiryQualifierAndCollInquiryQualifierMatch) {
     const int64_t test_value = 12345;
     component.setCollInquiryQualifier(test_value);
     EXPECT_EQ(component.getCollInquiryQualifier(), test_value);
     EXPECT_TRUE(component.hasCollInquiryQualifier());
 }
 
-TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setCollInquiryQualifier(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, EncodeDecodeRoundtrip
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CollInqQualGrp_NoCollInquiryQualifierComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

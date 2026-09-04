@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SideCrossOrdModGrpComponentTest : public ::testing::Test {
+class FIX4_4_SideCrossOrdModGrpComponentTest : public ::testing::Test {
 protected:
     SideCrossOrdModGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SideCrossOrdModGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SideCrossOrdModGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(SideCrossOrdModGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdModGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SideCrossOrdModGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(SideCrossOrdModGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SideCrossOrdModGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(SideCrossOrdModGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdModGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SideCrossOrdModGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

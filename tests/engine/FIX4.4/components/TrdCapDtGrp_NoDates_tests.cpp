@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class TrdCapDtGrp_NoDatesComponentTest : public ::testing::Test {
+class FIX4_4_TrdCapDtGrp_NoDatesComponentTest : public ::testing::Test {
 protected:
     TrdCapDtGrp::NoDates component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,20 +32,20 @@ TEST_F(TrdCapDtGrp_NoDatesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, SetTradeDateAndTradeDateMatch) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, SetTradeDateAndTradeDateMatch) {
 }
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, SetTransactTimeAndTransactTimeMatch) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, SetTransactTimeAndTransactTimeMatch) {
 }
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setTradeDate(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[66];
     
     // No scalar setter available to populate deterministically (this
@@ -65,6 +65,6 @@ TEST_F(TrdCapDtGrp_NoDatesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(TrdCapDtGrp_NoDatesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_TrdCapDtGrp_NoDatesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

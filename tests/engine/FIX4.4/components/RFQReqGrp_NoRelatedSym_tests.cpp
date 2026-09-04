@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RFQReqGrp_NoRelatedSymComponentTest : public ::testing::Test {
+class FIX4_4_RFQReqGrp_NoRelatedSymComponentTest : public ::testing::Test {
 protected:
     RFQReqGrp::NoRelatedSym component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setPrevClosePx(3.14f);
     component.setQuoteRequestType(42);
@@ -35,35 +35,35 @@ TEST_F(RFQReqGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, SetPrevClosePxAndPrevClosePxMatch) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetPrevClosePxAndPrevClosePxMatch) {
     const double test_value = 123.456;
     component.setPrevClosePx(test_value);
     EXPECT_EQ(component.getPrevClosePx(), test_value);
     EXPECT_TRUE(component.hasPrevClosePx());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, SetQuoteRequestTypeAndQuoteRequestTypeMatch) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetQuoteRequestTypeAndQuoteRequestTypeMatch) {
     const int64_t test_value = 12345;
     component.setQuoteRequestType(test_value);
     EXPECT_EQ(component.getQuoteRequestType(), test_value);
     EXPECT_TRUE(component.hasQuoteRequestType());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, SetQuoteTypeAndQuoteTypeMatch) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetQuoteTypeAndQuoteTypeMatch) {
     const int64_t test_value = 12345;
     component.setQuoteType(test_value);
     EXPECT_EQ(component.getQuoteType(), test_value);
     EXPECT_TRUE(component.hasQuoteType());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setPrevClosePx(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     char buffer[306];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(RFQReqGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RFQReqGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

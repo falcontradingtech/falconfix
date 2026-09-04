@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PosUndInstrmtGrp_NoUnderlyingsComponentTest : public ::testing::Test {
+class FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest : public ::testing::Test {
 protected:
     PosUndInstrmtGrp::NoUnderlyings component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setUnderlyingSettlPrice(3.14f);
     component.setUnderlyingSettlPriceType(42);
@@ -34,28 +34,28 @@ TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, SetUnderlyingSettlPriceAndUnderlyingSettlPriceMatch) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, SetUnderlyingSettlPriceAndUnderlyingSettlPriceMatch) {
     const double test_value = 123.456;
     component.setUnderlyingSettlPrice(test_value);
     EXPECT_EQ(component.getUnderlyingSettlPrice(), test_value);
     EXPECT_TRUE(component.hasUnderlyingSettlPrice());
 }
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, SetUnderlyingSettlPriceTypeAndUnderlyingSettlPriceTypeMatch) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, SetUnderlyingSettlPriceTypeAndUnderlyingSettlPriceTypeMatch) {
     const int64_t test_value = 12345;
     component.setUnderlyingSettlPriceType(test_value);
     EXPECT_EQ(component.getUnderlyingSettlPriceType(), test_value);
     EXPECT_TRUE(component.hasUnderlyingSettlPriceType());
 }
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setUnderlyingSettlPrice(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[108];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PosUndInstrmtGrp_NoUnderlyingsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

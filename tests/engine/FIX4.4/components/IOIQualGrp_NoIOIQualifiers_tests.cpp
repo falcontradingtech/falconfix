@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class IOIQualGrp_NoIOIQualifiersComponentTest : public ::testing::Test {
+class FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest : public ::testing::Test {
 protected:
     IOIQualGrp::NoIOIQualifiers component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setIOIQualifier('A');
     
@@ -33,21 +33,21 @@ TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, SetIOIQualifierAndIOIQualifierMatch) {
+TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, SetIOIQualifierAndIOIQualifierMatch) {
     const char test_value = 'X';
     component.setIOIQualifier(test_value);
     EXPECT_EQ(component.getIOIQualifier(), test_value);
     EXPECT_TRUE(component.hasIOIQualifier());
 }
 
-TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setIOIQualifier('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[12];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(IOIQualGrp_NoIOIQualifiersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class NstdPtys3SubGrpComponentTest : public ::testing::Test {
+class FIX4_4_NstdPtys3SubGrpComponentTest : public ::testing::Test {
 protected:
     NstdPtys3SubGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(NstdPtys3SubGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(NstdPtys3SubGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(NstdPtys3SubGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(NstdPtys3SubGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

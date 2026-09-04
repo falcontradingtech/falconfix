@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LegPreAllocGrp_NoLegAllocsComponentTest : public ::testing::Test {
+class FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest : public ::testing::Test {
 protected:
     LegPreAllocGrp::NoLegAllocs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegAllocQty(3.14f);
     
@@ -33,21 +33,21 @@ TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocQtyAndLegAllocQtyMatch) {
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocQtyAndLegAllocQtyMatch) {
     const double test_value = 123.456;
     component.setLegAllocQty(test_value);
     EXPECT_EQ(component.getLegAllocQty(), test_value);
     EXPECT_TRUE(component.hasLegAllocQty());
 }
 
-TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegAllocQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[354];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LegPreAllocGrp_NoLegAllocsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

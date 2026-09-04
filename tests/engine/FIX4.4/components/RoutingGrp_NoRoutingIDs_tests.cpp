@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RoutingGrp_NoRoutingIDsComponentTest : public ::testing::Test {
+class FIX4_4_RoutingGrp_NoRoutingIDsComponentTest : public ::testing::Test {
 protected:
     RoutingGrp::NoRoutingIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RoutingGrp_NoRoutingIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setRoutingType(42);
     
@@ -33,21 +33,21 @@ TEST_F(RoutingGrp_NoRoutingIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RoutingGrp_NoRoutingIDsComponentTest, SetRoutingTypeAndRoutingTypeMatch) {
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, SetRoutingTypeAndRoutingTypeMatch) {
     const int64_t test_value = 12345;
     component.setRoutingType(test_value);
     EXPECT_EQ(component.getRoutingType(), test_value);
     EXPECT_TRUE(component.hasRoutingType());
 }
 
-TEST_F(RoutingGrp_NoRoutingIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setRoutingType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(RoutingGrp_NoRoutingIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(RoutingGrp_NoRoutingIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RoutingGrp_NoRoutingIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

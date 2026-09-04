@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class NstdPtysSubGrp_NoNestedPartySubIDsComponentTest : public ::testing::Test {
+class FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest : public ::testing::Test {
 protected:
     NstdPtysSubGrp::NoNestedPartySubIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setNestedPartySubIDType(42);
     
@@ -33,21 +33,21 @@ TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, SetNestedPartySubIDTypeAndNestedPartySubIDTypeMatch) {
+TEST_F(FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, SetNestedPartySubIDTypeAndNestedPartySubIDTypeMatch) {
     const int64_t test_value = 12345;
     component.setNestedPartySubIDType(test_value);
     EXPECT_EQ(component.getNestedPartySubIDType(), test_value);
     EXPECT_TRUE(component.hasNestedPartySubIDType());
 }
 
-TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setNestedPartySubIDType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_NstdPtysSubGrp_NoNestedPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

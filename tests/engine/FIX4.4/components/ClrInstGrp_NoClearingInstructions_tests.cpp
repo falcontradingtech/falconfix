@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class ClrInstGrp_NoClearingInstructionsComponentTest : public ::testing::Test {
+class FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest : public ::testing::Test {
 protected:
     ClrInstGrp::NoClearingInstructions component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setClearingInstruction(42);
     
@@ -33,21 +33,21 @@ TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, SetClearingInstructionAndClearingInstructionMatch) {
+TEST_F(FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest, SetClearingInstructionAndClearingInstructionMatch) {
     const int64_t test_value = 12345;
     component.setClearingInstruction(test_value);
     EXPECT_EQ(component.getClearingInstruction(), test_value);
     EXPECT_TRUE(component.hasClearingInstruction());
 }
 
-TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setClearingInstruction(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(ClrInstGrp_NoClearingInstructionsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_ClrInstGrp_NoClearingInstructionsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrmtLegSecListGrp_NoLegsComponentTest : public ::testing::Test {
+class FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest : public ::testing::Test {
 protected:
     InstrmtLegSecListGrp::NoLegs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegSwapType(42);
     component.setLegSettlType('A');
@@ -34,28 +34,28 @@ TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
     const int64_t test_value = 12345;
     component.setLegSwapType(test_value);
     EXPECT_EQ(component.getLegSwapType(), test_value);
     EXPECT_TRUE(component.hasLegSwapType());
 }
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
     const char test_value = 'X';
     component.setLegSettlType(test_value);
     EXPECT_EQ(component.getLegSettlType(), test_value);
     EXPECT_TRUE(component.hasLegSettlType());
 }
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegSwapType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[62];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrmtLegSecListGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

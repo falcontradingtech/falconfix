@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrmtGrp_NoRelatedSymComponentTest : public ::testing::Test {
+class FIX4_4_InstrmtGrp_NoRelatedSymComponentTest : public ::testing::Test {
 protected:
     InstrmtGrp::NoRelatedSym component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrmtGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrmtGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(InstrmtGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrmtGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrmtGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(InstrmtGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrmtGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     char buffer[64];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(InstrmtGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrmtGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrmtGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

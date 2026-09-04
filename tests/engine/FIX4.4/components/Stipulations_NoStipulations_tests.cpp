@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class Stipulations_NoStipulationsComponentTest : public ::testing::Test {
+class FIX4_4_Stipulations_NoStipulationsComponentTest : public ::testing::Test {
 protected:
     Stipulations::NoStipulations component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(Stipulations_NoStipulationsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_Stipulations_NoStipulationsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(Stipulations_NoStipulationsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(Stipulations_NoStipulationsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_Stipulations_NoStipulationsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(Stipulations_NoStipulationsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_Stipulations_NoStipulationsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(Stipulations_NoStipulationsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(Stipulations_NoStipulationsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_Stipulations_NoStipulationsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

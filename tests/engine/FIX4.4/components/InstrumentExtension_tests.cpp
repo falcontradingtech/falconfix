@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrumentExtensionComponentTest : public ::testing::Test {
+class FIX4_4_InstrumentExtensionComponentTest : public ::testing::Test {
 protected:
     InstrumentExtension component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrumentExtensionComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setDeliveryForm(42);
     component.setPctAtRisk(3.14f);
@@ -34,28 +34,28 @@ TEST_F(InstrumentExtensionComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrumentExtensionComponentTest, SetDeliveryFormAndDeliveryFormMatch) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, SetDeliveryFormAndDeliveryFormMatch) {
     const int64_t test_value = 12345;
     component.setDeliveryForm(test_value);
     EXPECT_EQ(component.getDeliveryForm(), test_value);
     EXPECT_TRUE(component.hasDeliveryForm());
 }
 
-TEST_F(InstrumentExtensionComponentTest, SetPctAtRiskAndPctAtRiskMatch) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, SetPctAtRiskAndPctAtRiskMatch) {
     const double test_value = 123.456;
     component.setPctAtRisk(test_value);
     EXPECT_EQ(component.getPctAtRisk(), test_value);
     EXPECT_TRUE(component.hasPctAtRisk());
 }
 
-TEST_F(InstrumentExtensionComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setDeliveryForm(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(InstrumentExtensionComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, EncodeDecodeRoundtrip) {
     char buffer[108];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(InstrumentExtensionComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrumentExtensionComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrumentExtensionComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

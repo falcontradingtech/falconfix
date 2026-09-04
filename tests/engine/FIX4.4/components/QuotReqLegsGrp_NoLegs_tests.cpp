@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class QuotReqLegsGrp_NoLegsComponentTest : public ::testing::Test {
+class FIX4_4_QuotReqLegsGrp_NoLegsComponentTest : public ::testing::Test {
 protected:
     QuotReqLegsGrp::NoLegs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegQty(3.14f);
     component.setLegSwapType(42);
@@ -35,38 +35,38 @@ TEST_F(QuotReqLegsGrp_NoLegsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, SetLegQtyAndLegQtyMatch) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, SetLegQtyAndLegQtyMatch) {
     const double test_value = 123.456;
     component.setLegQty(test_value);
     EXPECT_EQ(component.getLegQty(), test_value);
     EXPECT_TRUE(component.hasLegQty());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
     const int64_t test_value = 12345;
     component.setLegSwapType(test_value);
     EXPECT_EQ(component.getLegSwapType(), test_value);
     EXPECT_TRUE(component.hasLegSwapType());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
     const char test_value = 'X';
     component.setLegSettlType(test_value);
     EXPECT_EQ(component.getLegSettlType(), test_value);
     EXPECT_TRUE(component.hasLegSettlType());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[146];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -92,6 +92,6 @@ TEST_F(QuotReqLegsGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(QuotReqLegsGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_QuotReqLegsGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

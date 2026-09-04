@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class LegStipulations_NoLegStipulationsComponentTest : public ::testing::Test {
+class FIX4_4_LegStipulations_NoLegStipulationsComponentTest : public ::testing::Test {
 protected:
     LegStipulations::NoLegStipulations component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(LegStipulations_NoLegStipulationsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_LegStipulations_NoLegStipulationsComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(LegStipulations_NoLegStipulationsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(LegStipulations_NoLegStipulationsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_LegStipulations_NoLegStipulationsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(LegStipulations_NoLegStipulationsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_LegStipulations_NoLegStipulationsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[148];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(LegStipulations_NoLegStipulationsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(LegStipulations_NoLegStipulationsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_LegStipulations_NoLegStipulationsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrumentLegComponentTest : public ::testing::Test {
+class FIX4_4_InstrumentLegComponentTest : public ::testing::Test {
 protected:
     InstrumentLeg component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrumentLegComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegProduct(42);
     
@@ -33,108 +33,108 @@ TEST_F(InstrumentLegComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegProductAndLegProductMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegProductAndLegProductMatch) {
     const int64_t test_value = 12345;
     component.setLegProduct(test_value);
     EXPECT_EQ(component.getLegProduct(), test_value);
     EXPECT_TRUE(component.hasLegProduct());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegMaturityDateAndLegMaturityDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegMaturityDateAndLegMaturityDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegCouponPaymentDateAndLegCouponPaymentDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegCouponPaymentDateAndLegCouponPaymentDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegIssueDateAndLegIssueDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegIssueDateAndLegIssueDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegRepurchaseTermAndLegRepurchaseTermMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegRepurchaseTermAndLegRepurchaseTermMatch) {
     const int64_t test_value = 12345;
     component.setLegRepurchaseTerm(test_value);
     EXPECT_EQ(component.getLegRepurchaseTerm(), test_value);
     EXPECT_TRUE(component.hasLegRepurchaseTerm());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegRepurchaseRateAndLegRepurchaseRateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegRepurchaseRateAndLegRepurchaseRateMatch) {
     const double test_value = 123.456;
     component.setLegRepurchaseRate(test_value);
     EXPECT_EQ(component.getLegRepurchaseRate(), test_value);
     EXPECT_TRUE(component.hasLegRepurchaseRate());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegFactorAndLegFactorMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegFactorAndLegFactorMatch) {
     const double test_value = 123.456;
     component.setLegFactor(test_value);
     EXPECT_EQ(component.getLegFactor(), test_value);
     EXPECT_TRUE(component.hasLegFactor());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegRedemptionDateAndLegRedemptionDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegRedemptionDateAndLegRedemptionDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegStrikePriceAndLegStrikePriceMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegStrikePriceAndLegStrikePriceMatch) {
     const double test_value = 123.456;
     component.setLegStrikePrice(test_value);
     EXPECT_EQ(component.getLegStrikePrice(), test_value);
     EXPECT_TRUE(component.hasLegStrikePrice());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegOptAttributeAndLegOptAttributeMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegOptAttributeAndLegOptAttributeMatch) {
     const char test_value = 'X';
     component.setLegOptAttribute(test_value);
     EXPECT_EQ(component.getLegOptAttribute(), test_value);
     EXPECT_TRUE(component.hasLegOptAttribute());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegContractMultiplierAndLegContractMultiplierMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegContractMultiplierAndLegContractMultiplierMatch) {
     const double test_value = 123.456;
     component.setLegContractMultiplier(test_value);
     EXPECT_EQ(component.getLegContractMultiplier(), test_value);
     EXPECT_TRUE(component.hasLegContractMultiplier());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegCouponRateAndLegCouponRateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegCouponRateAndLegCouponRateMatch) {
     const double test_value = 123.456;
     component.setLegCouponRate(test_value);
     EXPECT_EQ(component.getLegCouponRate(), test_value);
     EXPECT_TRUE(component.hasLegCouponRate());
 }
 
-TEST_F(InstrumentLegComponentTest, SetEncodedLegIssuerLenAndEncodedLegIssuerLenMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetEncodedLegIssuerLenAndEncodedLegIssuerLenMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetEncodedLegSecurityDescLenAndEncodedLegSecurityDescLenMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetEncodedLegSecurityDescLenAndEncodedLegSecurityDescLenMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegRatioQtyAndLegRatioQtyMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegRatioQtyAndLegRatioQtyMatch) {
     const double test_value = 123.456;
     component.setLegRatioQty(test_value);
     EXPECT_EQ(component.getLegRatioQty(), test_value);
     EXPECT_TRUE(component.hasLegRatioQty());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegSideAndLegSideMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegSideAndLegSideMatch) {
     const char test_value = 'X';
     component.setLegSide(test_value);
     EXPECT_EQ(component.getLegSide(), test_value);
     EXPECT_TRUE(component.hasLegSide());
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegDatedDateAndLegDatedDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegDatedDateAndLegDatedDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, SetLegInterestAccrualDateAndLegInterestAccrualDateMatch) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetLegInterestAccrualDateAndLegInterestAccrualDateMatch) {
 }
 
-TEST_F(InstrumentLegComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegProduct(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(InstrumentLegComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, EncodeDecodeRoundtrip) {
     char buffer[2430];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -160,6 +160,6 @@ TEST_F(InstrumentLegComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrumentLegComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrumentLegComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

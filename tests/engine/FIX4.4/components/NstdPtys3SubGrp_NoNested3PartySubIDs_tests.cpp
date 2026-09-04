@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest : public ::testing::Test {
+class FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest : public ::testing::Test {
 protected:
     NstdPtys3SubGrp::NoNested3PartySubIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setNested3PartySubIDType(42);
     
@@ -33,21 +33,21 @@ TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, ResetClearsAllFields) 
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, SetNested3PartySubIDTypeAndNested3PartySubIDTypeMatch) {
+TEST_F(FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, SetNested3PartySubIDTypeAndNested3PartySubIDTypeMatch) {
     const int64_t test_value = 12345;
     component.setNested3PartySubIDType(test_value);
     EXPECT_EQ(component.getNested3PartySubIDType(), test_value);
     EXPECT_TRUE(component.hasNested3PartySubIDType());
 }
 
-TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setNested3PartySubIDType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, EncodeDecodeRoundtrip)
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_NstdPtys3SubGrp_NoNested3PartySubIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

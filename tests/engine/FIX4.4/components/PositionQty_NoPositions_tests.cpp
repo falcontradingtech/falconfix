@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PositionQty_NoPositionsComponentTest : public ::testing::Test {
+class FIX4_4_PositionQty_NoPositionsComponentTest : public ::testing::Test {
 protected:
     PositionQty::NoPositions component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PositionQty_NoPositionsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLongQty(3.14f);
     component.setShortQty(3.14f);
@@ -35,35 +35,35 @@ TEST_F(PositionQty_NoPositionsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, SetLongQtyAndLongQtyMatch) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetLongQtyAndLongQtyMatch) {
     const double test_value = 123.456;
     component.setLongQty(test_value);
     EXPECT_EQ(component.getLongQty(), test_value);
     EXPECT_TRUE(component.hasLongQty());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, SetShortQtyAndShortQtyMatch) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetShortQtyAndShortQtyMatch) {
     const double test_value = 123.456;
     component.setShortQty(test_value);
     EXPECT_EQ(component.getShortQty(), test_value);
     EXPECT_TRUE(component.hasShortQty());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, SetPosQtyStatusAndPosQtyStatusMatch) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetPosQtyStatusAndPosQtyStatusMatch) {
     const int64_t test_value = 12345;
     component.setPosQtyStatus(test_value);
     EXPECT_EQ(component.getPosQtyStatus(), test_value);
     EXPECT_TRUE(component.hasPosQtyStatus());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLongQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[240];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(PositionQty_NoPositionsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PositionQty_NoPositionsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

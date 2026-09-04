@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class MDReqGrp_NoMDEntryTypesComponentTest : public ::testing::Test {
+class FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest : public ::testing::Test {
 protected:
     MDReqGrp::NoMDEntryTypes component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setMDEntryType('A');
     
@@ -33,21 +33,21 @@ TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, SetMDEntryTypeAndMDEntryTypeMatch) {
+TEST_F(FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest, SetMDEntryTypeAndMDEntryTypeMatch) {
     const char test_value = 'X';
     component.setMDEntryType(test_value);
     EXPECT_EQ(component.getMDEntryType(), test_value);
     EXPECT_TRUE(component.hasMDEntryType());
 }
 
-TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setMDEntryType('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[12];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(MDReqGrp_NoMDEntryTypesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_MDReqGrp_NoMDEntryTypesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

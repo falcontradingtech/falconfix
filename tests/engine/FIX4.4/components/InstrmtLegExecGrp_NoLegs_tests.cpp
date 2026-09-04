@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class InstrmtLegExecGrp_NoLegsComponentTest : public ::testing::Test {
+class FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest : public ::testing::Test {
 protected:
     InstrmtLegExecGrp::NoLegs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setLegQty(3.14f);
     component.setLegSwapType(42);
@@ -35,66 +35,66 @@ TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegQtyAndLegQtyMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegQtyAndLegQtyMatch) {
     const double test_value = 123.456;
     component.setLegQty(test_value);
     EXPECT_EQ(component.getLegQty(), test_value);
     EXPECT_TRUE(component.hasLegQty());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegSwapTypeAndLegSwapTypeMatch) {
     const int64_t test_value = 12345;
     component.setLegSwapType(test_value);
     EXPECT_EQ(component.getLegSwapType(), test_value);
     EXPECT_TRUE(component.hasLegSwapType());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegPositionEffectAndLegPositionEffectMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegPositionEffectAndLegPositionEffectMatch) {
     const char test_value = 'X';
     component.setLegPositionEffect(test_value);
     EXPECT_EQ(component.getLegPositionEffect(), test_value);
     EXPECT_TRUE(component.hasLegPositionEffect());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegCoveredOrUncoveredAndLegCoveredOrUncoveredMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegCoveredOrUncoveredAndLegCoveredOrUncoveredMatch) {
     const int64_t test_value = 12345;
     component.setLegCoveredOrUncovered(test_value);
     EXPECT_EQ(component.getLegCoveredOrUncovered(), test_value);
     EXPECT_TRUE(component.hasLegCoveredOrUncovered());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegPriceAndLegPriceMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegPriceAndLegPriceMatch) {
     const double test_value = 123.456;
     component.setLegPrice(test_value);
     EXPECT_EQ(component.getLegPrice(), test_value);
     EXPECT_TRUE(component.hasLegPrice());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSettlTypeMatch) {
     const char test_value = 'X';
     component.setLegSettlType(test_value);
     EXPECT_EQ(component.getLegSettlType(), test_value);
     EXPECT_TRUE(component.hasLegSettlType());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegSettlDateAndLegSettlDateMatch) {
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, SetLegLastPxAndLegLastPxMatch) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegLastPxAndLegLastPxMatch) {
     const double test_value = 123.456;
     component.setLegLastPx(test_value);
     EXPECT_EQ(component.getLegLastPx(), test_value);
     EXPECT_TRUE(component.hasLegLastPx());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setLegQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[398];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -120,6 +120,6 @@ TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(InstrmtLegExecGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

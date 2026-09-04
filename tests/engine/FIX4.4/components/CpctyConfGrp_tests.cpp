@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class CpctyConfGrpComponentTest : public ::testing::Test {
+class FIX4_4_CpctyConfGrpComponentTest : public ::testing::Test {
 protected:
     CpctyConfGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(CpctyConfGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_CpctyConfGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(CpctyConfGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_CpctyConfGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(CpctyConfGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_CpctyConfGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(CpctyConfGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(CpctyConfGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_CpctyConfGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

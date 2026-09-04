@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class YieldDataComponentTest : public ::testing::Test {
+class FIX4_4_YieldDataComponentTest : public ::testing::Test {
 protected:
     YieldData component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(YieldDataComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_YieldDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setYield(3.14f);
     
@@ -33,41 +33,41 @@ TEST_F(YieldDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(YieldDataComponentTest, SetYieldAndYieldMatch) {
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldAndYieldMatch) {
     const double test_value = 123.456;
     component.setYield(test_value);
     EXPECT_EQ(component.getYield(), test_value);
     EXPECT_TRUE(component.hasYield());
 }
 
-TEST_F(YieldDataComponentTest, SetYieldCalcDateAndYieldCalcDateMatch) {
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldCalcDateAndYieldCalcDateMatch) {
 }
 
-TEST_F(YieldDataComponentTest, SetYieldRedemptionDateAndYieldRedemptionDateMatch) {
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldRedemptionDateAndYieldRedemptionDateMatch) {
 }
 
-TEST_F(YieldDataComponentTest, SetYieldRedemptionPriceAndYieldRedemptionPriceMatch) {
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldRedemptionPriceAndYieldRedemptionPriceMatch) {
     const double test_value = 123.456;
     component.setYieldRedemptionPrice(test_value);
     EXPECT_EQ(component.getYieldRedemptionPrice(), test_value);
     EXPECT_TRUE(component.hasYieldRedemptionPrice());
 }
 
-TEST_F(YieldDataComponentTest, SetYieldRedemptionPriceTypeAndYieldRedemptionPriceTypeMatch) {
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldRedemptionPriceTypeAndYieldRedemptionPriceTypeMatch) {
     const int64_t test_value = 12345;
     component.setYieldRedemptionPriceType(test_value);
     EXPECT_EQ(component.getYieldRedemptionPriceType(), test_value);
     EXPECT_TRUE(component.hasYieldRedemptionPriceType());
 }
 
-TEST_F(YieldDataComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_YieldDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setYield(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(YieldDataComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_YieldDataComponentTest, EncodeDecodeRoundtrip) {
     char buffer[292];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -93,6 +93,6 @@ TEST_F(YieldDataComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(YieldDataComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_YieldDataComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

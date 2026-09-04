@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class NestedParties_NoNestedPartyIDsComponentTest : public ::testing::Test {
+class FIX4_4_NestedParties_NoNestedPartyIDsComponentTest : public ::testing::Test {
 protected:
     NestedParties::NoNestedPartyIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setNestedPartyIDSource('A');
     component.setNestedPartyRole(42);
@@ -34,28 +34,28 @@ TEST_F(NestedParties_NoNestedPartyIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, SetNestedPartyIDSourceAndNestedPartyIDSourceMatch) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, SetNestedPartyIDSourceAndNestedPartyIDSourceMatch) {
     const char test_value = 'X';
     component.setNestedPartyIDSource(test_value);
     EXPECT_EQ(component.getNestedPartyIDSource(), test_value);
     EXPECT_TRUE(component.hasNestedPartyIDSource());
 }
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, SetNestedPartyRoleAndNestedPartyRoleMatch) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, SetNestedPartyRoleAndNestedPartyRoleMatch) {
     const int64_t test_value = 12345;
     component.setNestedPartyRole(test_value);
     EXPECT_EQ(component.getNestedPartyRole(), test_value);
     EXPECT_TRUE(component.hasNestedPartyRole());
 }
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setNestedPartyIDSource('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[136];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -81,6 +81,6 @@ TEST_F(NestedParties_NoNestedPartyIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(NestedParties_NoNestedPartyIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_NestedParties_NoNestedPartyIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

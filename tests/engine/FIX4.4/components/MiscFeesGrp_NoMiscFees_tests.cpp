@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class MiscFeesGrp_NoMiscFeesComponentTest : public ::testing::Test {
+class FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest : public ::testing::Test {
 protected:
     MiscFeesGrp::NoMiscFees component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setMiscFeeAmt(3.14f);
     component.setMiscFeeType('A');
@@ -35,35 +35,35 @@ TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeAmtAndMiscFeeAmtMatch) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeAmtAndMiscFeeAmtMatch) {
     const double test_value = 123.456;
     component.setMiscFeeAmt(test_value);
     EXPECT_EQ(component.getMiscFeeAmt(), test_value);
     EXPECT_TRUE(component.hasMiscFeeAmt());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeTypeAndMiscFeeTypeMatch) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeTypeAndMiscFeeTypeMatch) {
     const char test_value = 'X';
     component.setMiscFeeType(test_value);
     EXPECT_EQ(component.getMiscFeeType(), test_value);
     EXPECT_TRUE(component.hasMiscFeeType());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeBasisAndMiscFeeBasisMatch) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeBasisAndMiscFeeBasisMatch) {
     const int64_t test_value = 12345;
     component.setMiscFeeBasis(test_value);
     EXPECT_EQ(component.getMiscFeeBasis(), test_value);
     EXPECT_TRUE(component.hasMiscFeeBasis());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setMiscFeeAmt(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[194];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(MiscFeesGrp_NoMiscFeesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

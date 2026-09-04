@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PtysSubGrpComponentTest : public ::testing::Test {
+class FIX4_4_PtysSubGrpComponentTest : public ::testing::Test {
 protected:
     PtysSubGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PtysSubGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PtysSubGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(PtysSubGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PtysSubGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PtysSubGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(PtysSubGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PtysSubGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(PtysSubGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PtysSubGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PtysSubGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

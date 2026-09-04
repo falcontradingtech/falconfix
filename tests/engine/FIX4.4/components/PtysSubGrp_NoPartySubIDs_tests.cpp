@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class PtysSubGrp_NoPartySubIDsComponentTest : public ::testing::Test {
+class FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest : public ::testing::Test {
 protected:
     PtysSubGrp::NoPartySubIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setPartySubIDType(42);
     
@@ -33,21 +33,21 @@ TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, SetPartySubIDTypeAndPartySubIDTypeMatch) {
+TEST_F(FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest, SetPartySubIDTypeAndPartySubIDTypeMatch) {
     const int64_t test_value = 12345;
     component.setPartySubIDType(test_value);
     EXPECT_EQ(component.getPartySubIDType(), test_value);
     EXPECT_TRUE(component.hasPartySubIDType());
 }
 
-TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setPartySubIDType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(PtysSubGrp_NoPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_PtysSubGrp_NoPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UndInstrmtStrkPxGrpComponentTest : public ::testing::Test {
+class FIX4_4_UndInstrmtStrkPxGrpComponentTest : public ::testing::Test {
 protected:
     UndInstrmtStrkPxGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UndInstrmtStrkPxGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UndInstrmtStrkPxGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(UndInstrmtStrkPxGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UndInstrmtStrkPxGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UndInstrmtStrkPxGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(UndInstrmtStrkPxGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UndInstrmtStrkPxGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(UndInstrmtStrkPxGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UndInstrmtStrkPxGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UndInstrmtStrkPxGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

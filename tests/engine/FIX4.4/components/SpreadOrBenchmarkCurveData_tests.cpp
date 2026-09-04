@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SpreadOrBenchmarkCurveDataComponentTest : public ::testing::Test {
+class FIX4_4_SpreadOrBenchmarkCurveDataComponentTest : public ::testing::Test {
 protected:
     SpreadOrBenchmarkCurveData component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSpread(3.14f);
     component.setBenchmarkPrice(3.14f);
@@ -35,35 +35,35 @@ TEST_F(SpreadOrBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, SetSpreadAndSpreadMatch) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetSpreadAndSpreadMatch) {
     const double test_value = 123.456;
     component.setSpread(test_value);
     EXPECT_EQ(component.getSpread(), test_value);
     EXPECT_TRUE(component.hasSpread());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceAndBenchmarkPriceMatch) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceAndBenchmarkPriceMatch) {
     const double test_value = 123.456;
     component.setBenchmarkPrice(test_value);
     EXPECT_EQ(component.getBenchmarkPrice(), test_value);
     EXPECT_TRUE(component.hasBenchmarkPrice());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceTypeAndBenchmarkPriceTypeMatch) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceTypeAndBenchmarkPriceTypeMatch) {
     const int64_t test_value = 12345;
     component.setBenchmarkPriceType(test_value);
     EXPECT_EQ(component.getBenchmarkPriceType(), test_value);
     EXPECT_TRUE(component.hasBenchmarkPriceType());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSpread(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
     char buffer[536];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(SpreadOrBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SpreadOrBenchmarkCurveDataComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

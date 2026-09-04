@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class UnderlyingInstrumentComponentTest : public ::testing::Test {
+class FIX4_4_UnderlyingInstrumentComponentTest : public ::testing::Test {
 protected:
     UnderlyingInstrument component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(UnderlyingInstrumentComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setUnderlyingProduct(42);
     component.setUnderlyingPutOrCall(42);
@@ -34,144 +34,144 @@ TEST_F(UnderlyingInstrumentComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingProductAndUnderlyingProductMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingProductAndUnderlyingProductMatch) {
     const int64_t test_value = 12345;
     component.setUnderlyingProduct(test_value);
     EXPECT_EQ(component.getUnderlyingProduct(), test_value);
     EXPECT_TRUE(component.hasUnderlyingProduct());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingMaturityDateAndUnderlyingMaturityDateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingMaturityDateAndUnderlyingMaturityDateMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingPutOrCallAndUnderlyingPutOrCallMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingPutOrCallAndUnderlyingPutOrCallMatch) {
     const int64_t test_value = 12345;
     component.setUnderlyingPutOrCall(test_value);
     EXPECT_EQ(component.getUnderlyingPutOrCall(), test_value);
     EXPECT_TRUE(component.hasUnderlyingPutOrCall());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingCouponPaymentDateAndUnderlyingCouponPaymentDateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCouponPaymentDateAndUnderlyingCouponPaymentDateMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingIssueDateAndUnderlyingIssueDateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingIssueDateAndUnderlyingIssueDateMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingRepurchaseTermAndUnderlyingRepurchaseTermMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRepurchaseTermAndUnderlyingRepurchaseTermMatch) {
     const int64_t test_value = 12345;
     component.setUnderlyingRepurchaseTerm(test_value);
     EXPECT_EQ(component.getUnderlyingRepurchaseTerm(), test_value);
     EXPECT_TRUE(component.hasUnderlyingRepurchaseTerm());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingRepurchaseRateAndUnderlyingRepurchaseRateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRepurchaseRateAndUnderlyingRepurchaseRateMatch) {
     const double test_value = 123.456;
     component.setUnderlyingRepurchaseRate(test_value);
     EXPECT_EQ(component.getUnderlyingRepurchaseRate(), test_value);
     EXPECT_TRUE(component.hasUnderlyingRepurchaseRate());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingFactorAndUnderlyingFactorMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingFactorAndUnderlyingFactorMatch) {
     const double test_value = 123.456;
     component.setUnderlyingFactor(test_value);
     EXPECT_EQ(component.getUnderlyingFactor(), test_value);
     EXPECT_TRUE(component.hasUnderlyingFactor());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingRedemptionDateAndUnderlyingRedemptionDateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRedemptionDateAndUnderlyingRedemptionDateMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingStrikePriceAndUnderlyingStrikePriceMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingStrikePriceAndUnderlyingStrikePriceMatch) {
     const double test_value = 123.456;
     component.setUnderlyingStrikePrice(test_value);
     EXPECT_EQ(component.getUnderlyingStrikePrice(), test_value);
     EXPECT_TRUE(component.hasUnderlyingStrikePrice());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingOptAttributeAndUnderlyingOptAttributeMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingOptAttributeAndUnderlyingOptAttributeMatch) {
     const char test_value = 'X';
     component.setUnderlyingOptAttribute(test_value);
     EXPECT_EQ(component.getUnderlyingOptAttribute(), test_value);
     EXPECT_TRUE(component.hasUnderlyingOptAttribute());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingContractMultiplierAndUnderlyingContractMultiplierMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingContractMultiplierAndUnderlyingContractMultiplierMatch) {
     const double test_value = 123.456;
     component.setUnderlyingContractMultiplier(test_value);
     EXPECT_EQ(component.getUnderlyingContractMultiplier(), test_value);
     EXPECT_TRUE(component.hasUnderlyingContractMultiplier());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingCouponRateAndUnderlyingCouponRateMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCouponRateAndUnderlyingCouponRateMatch) {
     const double test_value = 123.456;
     component.setUnderlyingCouponRate(test_value);
     EXPECT_EQ(component.getUnderlyingCouponRate(), test_value);
     EXPECT_TRUE(component.hasUnderlyingCouponRate());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetEncodedUnderlyingIssuerLenAndEncodedUnderlyingIssuerLenMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingIssuerLenAndEncodedUnderlyingIssuerLenMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetEncodedUnderlyingSecurityDescLenAndEncodedUnderlyingSecurityDescLenMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingSecurityDescLenAndEncodedUnderlyingSecurityDescLenMatch) {
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingQtyAndUnderlyingQtyMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingQtyAndUnderlyingQtyMatch) {
     const double test_value = 123.456;
     component.setUnderlyingQty(test_value);
     EXPECT_EQ(component.getUnderlyingQty(), test_value);
     EXPECT_TRUE(component.hasUnderlyingQty());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingPxAndUnderlyingPxMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingPxAndUnderlyingPxMatch) {
     const double test_value = 123.456;
     component.setUnderlyingPx(test_value);
     EXPECT_EQ(component.getUnderlyingPx(), test_value);
     EXPECT_TRUE(component.hasUnderlyingPx());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingDirtyPriceAndUnderlyingDirtyPriceMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingDirtyPriceAndUnderlyingDirtyPriceMatch) {
     const double test_value = 123.456;
     component.setUnderlyingDirtyPrice(test_value);
     EXPECT_EQ(component.getUnderlyingDirtyPrice(), test_value);
     EXPECT_TRUE(component.hasUnderlyingDirtyPrice());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingEndPriceAndUnderlyingEndPriceMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingEndPriceAndUnderlyingEndPriceMatch) {
     const double test_value = 123.456;
     component.setUnderlyingEndPrice(test_value);
     EXPECT_EQ(component.getUnderlyingEndPrice(), test_value);
     EXPECT_TRUE(component.hasUnderlyingEndPrice());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingStartValueAndUnderlyingStartValueMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingStartValueAndUnderlyingStartValueMatch) {
     const double test_value = 123.456;
     component.setUnderlyingStartValue(test_value);
     EXPECT_EQ(component.getUnderlyingStartValue(), test_value);
     EXPECT_TRUE(component.hasUnderlyingStartValue());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingCurrentValueAndUnderlyingCurrentValueMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCurrentValueAndUnderlyingCurrentValueMatch) {
     const double test_value = 123.456;
     component.setUnderlyingCurrentValue(test_value);
     EXPECT_EQ(component.getUnderlyingCurrentValue(), test_value);
     EXPECT_TRUE(component.hasUnderlyingCurrentValue());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, SetUnderlyingEndValueAndUnderlyingEndValueMatch) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingEndValueAndUnderlyingEndValueMatch) {
     const double test_value = 123.456;
     component.setUnderlyingEndValue(test_value);
     EXPECT_EQ(component.getUnderlyingEndValue(), test_value);
     EXPECT_TRUE(component.hasUnderlyingEndValue());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setUnderlyingProduct(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, EncodeDecodeRoundtrip) {
     char buffer[2764];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -197,6 +197,6 @@ TEST_F(UnderlyingInstrumentComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(UnderlyingInstrumentComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

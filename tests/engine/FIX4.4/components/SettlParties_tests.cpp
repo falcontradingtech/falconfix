@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SettlPartiesComponentTest : public ::testing::Test {
+class FIX4_4_SettlPartiesComponentTest : public ::testing::Test {
 protected:
     SettlParties component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SettlPartiesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SettlPartiesComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(SettlPartiesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SettlPartiesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SettlPartiesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(SettlPartiesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SettlPartiesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(SettlPartiesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SettlPartiesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SettlPartiesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

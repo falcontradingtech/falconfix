@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SecTypesGrp_NoSecurityTypesComponentTest : public ::testing::Test {
+class FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest : public ::testing::Test {
 protected:
     SecTypesGrp::NoSecurityTypes component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setProduct(42);
     
@@ -33,21 +33,21 @@ TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, SetProductAndProductMatch) {
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetProductAndProductMatch) {
     const int64_t test_value = 12345;
     component.setProduct(test_value);
     EXPECT_EQ(component.getProduct(), test_value);
     EXPECT_TRUE(component.hasProduct());
 }
 
-TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setProduct(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[272];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SecTypesGrp_NoSecurityTypesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

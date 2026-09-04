@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RelSymDerivSecGrp_NoRelatedSymComponentTest : public ::testing::Test {
+class FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest : public ::testing::Test {
 protected:
     RelSymDerivSecGrp::NoRelatedSym component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setExpirationCycle(42);
     
@@ -33,24 +33,24 @@ TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
     const int64_t test_value = 12345;
     component.setExpirationCycle(test_value);
     EXPECT_EQ(component.getExpirationCycle(), test_value);
     EXPECT_TRUE(component.hasExpirationCycle());
 }
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setExpirationCycle(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     char buffer[466];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -76,6 +76,6 @@ TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

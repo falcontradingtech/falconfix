@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class EvntGrp_NoEventsComponentTest : public ::testing::Test {
+class FIX4_4_EvntGrp_NoEventsComponentTest : public ::testing::Test {
 protected:
     EvntGrp::NoEvents component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(EvntGrp_NoEventsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setEventType(42);
     component.setEventPx(3.14f);
@@ -34,31 +34,31 @@ TEST_F(EvntGrp_NoEventsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, SetEventTypeAndEventTypeMatch) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, SetEventTypeAndEventTypeMatch) {
     const int64_t test_value = 12345;
     component.setEventType(test_value);
     EXPECT_EQ(component.getEventType(), test_value);
     EXPECT_TRUE(component.hasEventType());
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, SetEventDateAndEventDateMatch) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, SetEventDateAndEventDateMatch) {
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, SetEventPxAndEventPxMatch) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, SetEventPxAndEventPxMatch) {
     const double test_value = 123.456;
     component.setEventPx(test_value);
     EXPECT_EQ(component.getEventPx(), test_value);
     EXPECT_TRUE(component.hasEventPx());
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setEventType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[208];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -84,6 +84,6 @@ TEST_F(EvntGrp_NoEventsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(EvntGrp_NoEventsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

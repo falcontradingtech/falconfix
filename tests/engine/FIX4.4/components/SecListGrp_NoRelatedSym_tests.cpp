@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SecListGrp_NoRelatedSymComponentTest : public ::testing::Test {
+class FIX4_4_SecListGrp_NoRelatedSymComponentTest : public ::testing::Test {
 protected:
     SecListGrp::NoRelatedSym component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setRoundLot(3.14f);
     component.setMinTradeVol(3.14f);
@@ -35,38 +35,38 @@ TEST_F(SecListGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, SetRoundLotAndRoundLotMatch) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetRoundLotAndRoundLotMatch) {
     const double test_value = 123.456;
     component.setRoundLot(test_value);
     EXPECT_EQ(component.getRoundLot(), test_value);
     EXPECT_TRUE(component.hasRoundLot());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, SetMinTradeVolAndMinTradeVolMatch) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetMinTradeVolAndMinTradeVolMatch) {
     const double test_value = 123.456;
     component.setMinTradeVol(test_value);
     EXPECT_EQ(component.getMinTradeVol(), test_value);
     EXPECT_TRUE(component.hasMinTradeVol());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
     const int64_t test_value = 12345;
     component.setExpirationCycle(test_value);
     EXPECT_EQ(component.getExpirationCycle(), test_value);
     EXPECT_TRUE(component.hasExpirationCycle());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setRoundLot(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     char buffer[582];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -92,6 +92,6 @@ TEST_F(SecListGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SecListGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

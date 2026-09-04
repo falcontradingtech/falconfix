@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SideCrossOrdCxlGrp_NoSidesComponentTest : public ::testing::Test {
+class FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest : public ::testing::Test {
 protected:
     SideCrossOrdCxlGrp::NoSides component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSide('A');
     
@@ -33,33 +33,33 @@ TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, SetSideAndSideMatch) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetSideAndSideMatch) {
     const char test_value = 'X';
     component.setSide(test_value);
     EXPECT_EQ(component.getSide(), test_value);
     EXPECT_TRUE(component.hasSide());
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, SetOrigOrdModTimeAndOrigOrdModTimeMatch) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetOrigOrdModTimeAndOrigOrdModTimeMatch) {
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeOriginationDateAndTradeOriginationDateMatch) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeOriginationDateAndTradeOriginationDateMatch) {
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeDateAndTradeDateMatch) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeDateAndTradeDateMatch) {
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSide('A');
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, EncodeDecodeRoundtrip) {
     char buffer[666];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -85,6 +85,6 @@ TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SideCrossOrdCxlGrp_NoSidesComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
 }

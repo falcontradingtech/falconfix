@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class OrdAllocGrp_NoOrdersComponentTest : public ::testing::Test {
+class FIX4_4_OrdAllocGrp_NoOrdersComponentTest : public ::testing::Test {
 protected:
     OrdAllocGrp::NoOrders component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setOrderQty(3.14f);
     component.setOrderAvgPx(3.14f);
@@ -35,35 +35,35 @@ TEST_F(OrdAllocGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, SetOrderQtyAndOrderQtyMatch) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderQtyAndOrderQtyMatch) {
     const double test_value = 123.456;
     component.setOrderQty(test_value);
     EXPECT_EQ(component.getOrderQty(), test_value);
     EXPECT_TRUE(component.hasOrderQty());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, SetOrderAvgPxAndOrderAvgPxMatch) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderAvgPxAndOrderAvgPxMatch) {
     const double test_value = 123.456;
     component.setOrderAvgPx(test_value);
     EXPECT_EQ(component.getOrderAvgPx(), test_value);
     EXPECT_TRUE(component.hasOrderAvgPx());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, SetOrderBookingQtyAndOrderBookingQtyMatch) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderBookingQtyAndOrderBookingQtyMatch) {
     const double test_value = 123.456;
     component.setOrderBookingQty(test_value);
     EXPECT_EQ(component.getOrderBookingQty(), test_value);
     EXPECT_TRUE(component.hasOrderBookingQty());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setOrderQty(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[536];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -89,6 +89,6 @@ TEST_F(OrdAllocGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(OrdAllocGrp_NoOrdersComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

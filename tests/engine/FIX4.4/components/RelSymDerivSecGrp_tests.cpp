@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class RelSymDerivSecGrpComponentTest : public ::testing::Test {
+class FIX4_4_RelSymDerivSecGrpComponentTest : public ::testing::Test {
 protected:
     RelSymDerivSecGrp component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(RelSymDerivSecGrpComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_RelSymDerivSecGrpComponentTest, ResetClearsAllFields) {
     // Set some fields
     
     // Reset component
@@ -32,12 +32,12 @@ TEST_F(RelSymDerivSecGrpComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrpComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_RelSymDerivSecGrpComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
 }
 
-TEST_F(RelSymDerivSecGrpComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_RelSymDerivSecGrpComponentTest, EncodeDecodeRoundtrip) {
     char buffer[50];
     
     // No scalar setter available to populate deterministically (this
@@ -57,6 +57,6 @@ TEST_F(RelSymDerivSecGrpComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(RelSymDerivSecGrpComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_RelSymDerivSecGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

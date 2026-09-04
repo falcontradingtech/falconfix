@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class SettlPtysSubGrp_NoSettlPartySubIDsComponentTest : public ::testing::Test {
+class FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest : public ::testing::Test {
 protected:
     SettlPtysSubGrp::NoSettlPartySubIDs component;
 
@@ -22,7 +22,7 @@ protected:
     }
 };
 
-TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
     component.setSettlPartySubIDType(42);
     
@@ -33,21 +33,21 @@ TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, SetSettlPartySubIDTypeAndSettlPartySubIDTypeMatch) {
+TEST_F(FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, SetSettlPartySubIDTypeAndSettlPartySubIDTypeMatch) {
     const int64_t test_value = 12345;
     component.setSettlPartySubIDType(test_value);
     EXPECT_EQ(component.getSettlPartySubIDType(), test_value);
     EXPECT_TRUE(component.hasSettlPartySubIDType());
 }
 
-TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
     component.setSettlPartySubIDType(42);
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
+TEST_F(FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     char buffer[124];
     
     // Populate a real field so the encoded payload is non-empty and
@@ -73,6 +73,6 @@ TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_SettlPtysSubGrp_NoSettlPartySubIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }
