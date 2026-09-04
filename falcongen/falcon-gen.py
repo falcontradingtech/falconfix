@@ -441,6 +441,7 @@ def run_code(args):
         from code import generator_samples
         from code import generator_objects
         from code import generator_tests
+        from code import generator_components_tests
 
     # generate string_sizes.yaml if missing
         generator_string_sizes.generate_or_validate_string_sizes(xml_path, template_string_size)
@@ -480,6 +481,7 @@ def run_code(args):
         generator_samples.generate(samples_dir, samples_config, xml_path)
         generator_objects.generate(samples_dir, xml_path)
         generator_tests.generate(base, fix_version, samples_config)
+        generator_components_tests.generate(base, fix_version)
         _normalize_generated_indentation(base)
 
         print(f"[ok] FalconFIX generated at: {base}")
