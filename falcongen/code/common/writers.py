@@ -74,13 +74,18 @@ def write_autogen_header(
     description: str = "Auto-generated FIX code",
 ) -> None:
     """
-    Writes boilerplate header for auto-generated file.
+    Writes boilerplate header for auto-generated file with SPDX license.
 
     Args:
         f: File handle aberto para escrita
         description: Description of what the file is
     """
     _ = description
+    # Write SPDX license header
+    f.write("// SPDX-License-Identifier: MIT\n")
+    f.write("// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo\n")
+    f.write("// Auto-generated FIX code. Do not edit by hand.\n")
+    f.write("\n")
     write_generated_line_header(f)
 
 

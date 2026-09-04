@@ -200,7 +200,7 @@ def _read_samples_map(fix_samples: Path) -> Dict[str, str]:
 
     # Captures each SamplePair{"Name", ... }
     entry_pattern = re.compile(
-        r'SamplePair\{"([^"]+)",\s*(?P<>.*?)\n\s*},',
+        r'SamplePair\{"([^"]+)",\s*(?P<content>.*?)\n\s*},',
         re.DOTALL,
     )
 
@@ -209,10 +209,10 @@ def _read_samples_map(fix_samples: Path) -> Dict[str, str]:
 
     for m in entry_pattern.finditer(text):
         msg_name = m.group(1)
-         = m.group("")
+        content = m.group("content")
 
         literal_parts = []
-        for sm in string_literal_pattern.finditer():
+        for sm in string_literal_pattern.finditer(content):
             literal_cpp = sm.group(1)
             literal_parts.append(_unescape_cpp_string_literal(literal_cpp))
 

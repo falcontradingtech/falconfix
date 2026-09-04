@@ -58,3 +58,6 @@ default_values:
 override_fields:
   TestReqID: REQID_1
   ClOrdID: CLORDID_123
+  # FIX4.3 time fields that need explicit formatting (not auto-detected correctly)
+  MDEntryTime: "00:00:00.000"
+  TotalVolumeTradedTime: "00:00:00.000"

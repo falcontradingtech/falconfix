@@ -472,6 +472,13 @@ def _trim_float(v: str) -> str:
 
 def _fake_value_for(field_name, fix_type, cfg, tagnum, maxlen=None):
     # -----------------------------------------------
+    # Special case: tags that need specific time formatting in FIX4.3
+    # (MDEntryTime=273, TotalVolumeTradedTime=450)
+    # -----------------------------------------------
+    if tagnum in (273, 450):
+        return "00:00:00.000"[:maxlen] if maxlen else "00:00:00.000"
+
+    # -----------------------------------------------
     # 1) OVERRIDE DO USUARIO (vence tudo)
     # -----------------------------------------------
     if (ov := cfg["override_fields"].get(field_name)) is not None:
