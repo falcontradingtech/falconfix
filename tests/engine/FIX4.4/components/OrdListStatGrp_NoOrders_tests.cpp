@@ -92,22 +92,29 @@ TEST_F(OrdListStatGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
 TEST_F(OrdListStatGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
     char buffer[638];
     
-    // Encode empty component
+    // Populate a real field so the encoded payload is non-empty and
+    // decode() is genuinely exercised (some component wrappers return
+    // false on a decode of zero consumed bytes).
+    const double test_value = 123.456;
+    component.setCumQty(test_value);
+    
     char *p = buffer;
     p = component.encode(p, true);
     std::size_t encoded_size = p - buffer;
     
     // Verify encode succeeded
-    EXPECT_GT(encoded_size, 0);
     EXPECT_LE(encoded_size, component.compute_buffer_size());
+    EXPECT_GT(encoded_size, 0u);
     
     // Decode back
     OrdListStatGrp::NoOrders decoded;
     const char *q = buffer;
     bool decode_result = decoded.decode(q, p);
     EXPECT_TRUE(decode_result);
+    EXPECT_EQ(decoded.getCumQty(), component.getCumQty());
+    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
 TEST_F(OrdListStatGrp_NoOrdersComponentTest, CheckRequiredWhenEmpty) {
-    EXPECT_TRUE(component.checkRequired());
+    EXPECT_FALSE(component.checkRequired());
 }

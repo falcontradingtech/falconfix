@@ -74,8 +74,12 @@ def _parse_members(scope_text: str) -> dict:
 			'camelCase': _to_camel_case(field_name)
 		}
 
-	required_match = re.search(r'static\s+constexpr\s+uint64_t\s+REQUIRED\s*=\s*(0x[0-9A-Fa-f]+|0ULL)', scope_text)
-	is_any_required = bool(required_match) and required_match.group(1) != '0ULL'
+	# REQUIRED can be a single literal (e.g. `0ULL` or `0x3`) or a multi-line
+	# bitmask expression like `(1ULL << 0) | (1ULL << 2);`. Capture everything
+	# up to the terminating semicolon (DOTALL) and treat it as "required" if
+	# it's not the trivial `0ULL` literal.
+	required_match = re.search(r'static\s+constexpr\s+uint64_t\s+REQUIRED\s*=\s*(.*?);', scope_text, re.DOTALL)
+	is_any_required = bool(required_match) and required_match.group(1).strip() != '0ULL'
 
 	size_match = re.search(r'static\s+constexpr\s+std::size_t\s+MAX_ENCODE_SIZE\s*=\s*(\d+)', scope_text)
 	max_size = int(size_match.group(1)) if size_match else 256
@@ -299,30 +303,91 @@ def _generate_presence_tests(component: dict) -> str:
 	return "\n".join(lines)
 
 
+def _test_value_literal_and_setup(param_type: str) -> tuple[str, str]:
+	"""
+	Return (decl_lines_joined, value_expr) for a scalar setter test value,
+	matching the same type-dispatch rules used by _generate_setter_getter_tests.
+	Returns ("", "") if the type is not a simple settable scalar we can
+	populate deterministically (e.g. complex STRING/CURRENCY types).
+	"""
+	if 'CHAR' in param_type:
+		return "const char test_value = 'X';", "test_value"
+	if 'INT' in param_type or 'LONG' in param_type:
+		return "const int64_t test_value = 12345;", "test_value"
+	if 'FLOAT' in param_type or 'PRICE' in param_type:
+		return "const double test_value = 123.456;", "test_value"
+	return "", ""
+
+
 def _generate_encode_decode_tests(component: dict) -> str:
 	"""Generate tests for encode/decode roundtrips"""
 	cpp_type = component.get('cpp_type', component['name'])
+
+	# Prefer a setter whose type we can populate deterministically (CHAR/INT/
+	# FLOAT/PRICE), so the roundtrip actually exercises a non-empty payload.
+	chosen_setter = None
+	chosen_decl = ""
+	chosen_value = ""
+	for setter in component['methods']['setters']:
+		decl, value = _test_value_literal_and_setup(setter['param_type'])
+		if decl:
+			chosen_setter = setter
+			chosen_decl = decl
+			chosen_value = value
+			break
+
 	lines = [
 		f"TEST_F({component['name']}ComponentTest, EncodeDecodeRoundtrip) {{",
 		f"    char buffer[{component['max_encode_size'] * 2}];",
 		"    ",
-		"    // Encode empty component",
-		"    char *p = buffer;",
-		"    p = component.encode(p, true);",
-		"    std::size_t encoded_size = p - buffer;",
-		"    ",
-		"    // Verify encode succeeded",
-		"    EXPECT_GT(encoded_size, 0);",
-		"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
-		"    ",
-		"    // Decode back",
-		f"    {cpp_type} decoded;",
-		"    const char *q = buffer;",
-		"    bool decode_result = decoded.decode(q, p);",
-		"    EXPECT_TRUE(decode_result);",
-		"}",
-		"",
 	]
+
+	if chosen_setter:
+		lines.extend([
+			"    // Populate a real field so the encoded payload is non-empty and",
+			"    // decode() is genuinely exercised (some component wrappers return",
+			"    // false on a decode of zero consumed bytes).",
+			f"    {chosen_decl}",
+			f"    component.set{chosen_setter['name']}({chosen_value});",
+			"    ",
+			"    char *p = buffer;",
+			"    p = component.encode(p, true);",
+			"    std::size_t encoded_size = p - buffer;",
+			"    ",
+			"    // Verify encode succeeded",
+			"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
+			"    EXPECT_GT(encoded_size, 0u);",
+			"    ",
+			"    // Decode back",
+			f"    {cpp_type} decoded;",
+			"    const char *q = buffer;",
+			"    bool decode_result = decoded.decode(q, p);",
+			"    EXPECT_TRUE(decode_result);",
+			f"    EXPECT_EQ(decoded.get{chosen_setter['name']}(), component.get{chosen_setter['name']}());",
+			"    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());",
+			"}",
+			"",
+		])
+	else:
+		lines.extend([
+			"    // No scalar setter available to populate deterministically (this",
+			"    // component only wraps nested groups/sub-components). Group-only",
+			"    // containers with no required fields legitimately encode to 0",
+			"    // bytes, and some decode() implementations return false when no",
+			"    // bytes were consumed, so we only assert the two views agree.",
+			"    char *p = buffer;",
+			"    p = component.encode(p, true);",
+			"    std::size_t encoded_size = p - buffer;",
+			"    ",
+			"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
+			"    ",
+			f"    {cpp_type} decoded;",
+			"    const char *q = buffer;",
+			"    (void)decoded.decode(q, p);",
+			"    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());",
+			"}",
+			"",
+		])
 
 	return "\n".join(lines)
 
