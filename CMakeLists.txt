@@ -68,6 +68,7 @@ message(STATUS "VCPKG_TARGET_TRIPLET  : ${VCPKG_TARGET_TRIPLET}")
 
 option(FALCONFIX_BUILD_TESTS "Build unit tests" ON)
 option(FALCONFIX_BUILD_BENCHMARKS "Build benchmark targets" ON)
+option(FALCONFIX_CODE_COVERAGE "Enable code coverage instrumentation" ON)
 
 # ------------------------------------------------------------------------------
 # Testing support
@@ -75,6 +76,26 @@ option(FALCONFIX_BUILD_BENCHMARKS "Build benchmark targets" ON)
 
 include(CTest)
 enable_testing()
+
+# ------------------------------------------------------------------------------
+# Code coverage instrumentation
+# Note: OpenCppCoverage works standalone, no special compile flags needed
+# But debug info (/Zi) helps with coverage accuracy
+# ------------------------------------------------------------------------------
+
+if(FALCONFIX_CODE_COVERAGE)
+    if(MSVC)
+        # Ensure debug info is available for better coverage reporting
+        add_compile_options(/Zi)
+        message(STATUS "Code coverage enabled (debug info enabled)")
+        # Include OpenCppCoverage integration
+        include(cmake/CodeCoverage.cmake)
+    else()
+        add_compile_options(--coverage -fprofile-arcs -ftest-coverage)
+        add_link_options(--coverage)
+        message(STATUS "Code coverage enabled with GCC/Clang instrumentation")
+    endif()
+endif()
 
 # ------------------------------------------------------------------------------
 # Release optimizations
