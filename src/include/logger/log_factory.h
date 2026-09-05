@@ -11,9 +11,13 @@
 namespace falconfix {
 
 class LogFactory {
-public:
+  public:
     static std::unique_ptr<EngineLog> createEngineLog(const SessionSettings &settings);
     static std::unique_ptr<MessageLog> createSessionLog(const SessionConfig &config);
+    static void disableLogging() noexcept;
+    static bool isLoggingDisabled() noexcept;
+  private:
+    inline static std::atomic_bool m_disabled{false};
 };
 
 } // namespace falconfix

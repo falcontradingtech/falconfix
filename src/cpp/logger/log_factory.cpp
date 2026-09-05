@@ -134,11 +134,9 @@ LogFactory::createEngineLog(const SessionSettings &) {
 
 std::unique_ptr<MessageLog>
 LogFactory::createSessionLog(const SessionConfig &config) {
-#ifdef FALCONFIX_TESTS
-    // During tests, disable all logging using NullMessageLog
-    // This is a compile-time decision when FALCONFIX_TESTS is defined
-    return std::make_unique<NullMessageLog>();
-#endif
+    if (isLoggingDisabled()) {
+        return std::make_unique<NullMessageLog>();
+    }
 
     if (config.logging.logType == LogType::None) {
         return std::make_unique<NullMessageLog>();
@@ -203,6 +201,16 @@ LogFactory::createSessionLog(const SessionConfig &config) {
         std::move(evtLogger),
         humanReadableFIX
     );
+}
+
+void LogFactory::disableLogging() noexcept
+{
+    m_disabled.store(true, std::memory_order_release);
+}
+
+bool LogFactory::isLoggingDisabled() noexcept
+{
+    return m_disabled.load(std::memory_order_acquire);
 }
 
 } // namespace falconfix

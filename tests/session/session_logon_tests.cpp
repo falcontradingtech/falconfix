@@ -141,6 +141,9 @@ TEST(FIXSessionTests, ClientServerLogonHandshake) {
 
     EXPECT_GT(serverApp.onLogoutCount.load(), 0);
 
+    // Wait for server to fully process LOGOUT and finish all message handlers
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
     serverEngine.stop();
     socketEngine.stop();
     spdlog::drop_all();
