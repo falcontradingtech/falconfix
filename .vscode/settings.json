@@ -1,0 +1,40 @@
+{
+  "github.copilot.enable": {
+    "*": true,
+    "[markdown]": true,
+    "[cpp]": true,
+    "[cmake]": true
+  },
+  "github.copilot.chat.localeOverride": "en",
+  "github.copilot.advanced": {
+    "inlineSuggestCount": 3,
+    "debug.overrideChatSystem Prompt": "${workspaceFolder}/.copilot/instructions.md"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.rulers": [100, 120],
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  "[cmake]": {
+    "editor.defaultFormatter": "ms-vscode.cmake-tools",
+    "editor.formatOnSave": true
+  },
+  "C_Cpp.clangFormatStyle": "file",
+  "C_Cpp.codeAnalysis.runAutomatically": true,
+  "C_Cpp.intelliSenseEngine": "default",
+  "cmake.generator": "Visual Studio 17 2022",
+  "cmake.configureArgs": [
+    "-DVCPKG_ROOT=${env:VCPKG_ROOT}"
+  ],
+  "cmake.parallel": 8,
+  "cmake.buildDirectory": "${workspaceFolder}/build/windows-debug",
+  "cmake.status.show": true,
+  "cmake.status.trackBuildSelection": true,
+  "cmake.showOptionsMovedNotification": false,
+  "editor.wordWrap": "on",
+  "editor.rulers": [80, 120],
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true
+}
