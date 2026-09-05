@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo
 enable_testing()
 
+# Define FALCONFIX_TESTS for all targets compiled under tests/
+# This disables real logging during tests (compile-time, not runtime)
+add_compile_definitions(FALCONFIX_TESTS)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(app)

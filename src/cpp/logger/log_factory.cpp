@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 #include <filesystem>
+#include <functional>
 
 namespace falconfix {
 
@@ -133,6 +134,12 @@ LogFactory::createEngineLog(const SessionSettings &) {
 
 std::unique_ptr<MessageLog>
 LogFactory::createSessionLog(const SessionConfig &config) {
+#ifdef FALCONFIX_TESTS
+    // During tests, disable all logging using NullMessageLog
+    // This is a compile-time decision when FALCONFIX_TESTS is defined
+    return std::make_unique<NullMessageLog>();
+#endif
+
     if (config.logging.logType == LogType::None) {
         return std::make_unique<NullMessageLog>();
     }
