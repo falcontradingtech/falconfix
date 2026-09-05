@@ -1,1 +1,563 @@
-# FalconFIX C++20 Code Standards (Compressed)\n\n**Reference**: Full version in `CODE_STYLE.md` at project root.\n\n---\n\n## 📋 Naming Conventions\n\n| Element | Style | Example |\n|---------|-------|----------|\n| **Files** | PascalCase | `SessionManager.h`, `SessionManager.cpp` |\n| **Classes** | PascalCase | `class SessionManager { }` |\n| **Structs** | PascalCase | `struct ConfigOptions { }` |\n| **Functions** | snake_case | `void send_message()` |\n| **Methods** | snake_case | `obj.process_data()` |\n| **Variables** | snake_case | `int message_count` |\n| **Member vars** | snake_case_ | `std::string session_id_` |\n| **Constants** | UPPER_CASE | `constexpr int MAX_SIZE = 100` |\n| **Namespaces** | snake_case | `namespace falcon_fix::session` |\n| **Templates** | Descriptive | `template<typename MessageType>` |\n| **Enum class** | PascalCase | `enum class Status { Active, Inactive }` |\n| **Enum values** | PascalCase | `Status::Active` |\n\n---\n\n## 📝 File Structure\n\n### Header Files (src/include/module/ClassName.h)\n\n```cpp\n#ifndef FALCON_FIX_MODULE_CLASS_NAME_H\n#define FALCON_FIX_MODULE_CLASS_NAME_H\n\n// SPDX-License-Identifier: MIT\n// Copyright (c) 2026 [Author]\n\n// 1. System includes (alphabetical)\n#include <algorithm>\n#include <memory>\n#include <string>\n\n// 2. External includes (alphabetical)\n#include <fmt/format.h>\n#include <spdlog/spdlog.h>\n\n// 3. Project includes (alphabetical)\n#include \"logger/Logger.h\"\n#include \"module/OtherClass.h\"\n\nnamespace falcon_fix::module {\n\n/// Brief one-liner description.\n/// \\details Longer explanation of what this class does,\n/// any important behaviors, and usage patterns.\n/// \\see RelatedClass\nclass ClassName {\npublic:\n    // Type aliases\n    using value_type = int;\n    using iterator = std::vector<int>::iterator;\n    \n    // Constructors (always explicit unless copy constructor)\n    explicit ClassName(std::string_view name, int size);\n    \n    // Destructor\n    ~ClassName();\n    \n    // Deleted copy operations (move-only by default)\n    ClassName(const ClassName&) = delete;\n    ClassName& operator=(const ClassName&) = delete;\n    \n    // Default move operations\n    ClassName(ClassName&&) = default;\n    ClassName& operator=(ClassName&&) = default;\n    \n    // Core operations\n    /// Does something important.\n    /// \\param value Input value\n    /// \\return Result of operation\n    /// \\throws std::invalid_argument if value is negative\n    int do_work(int value);\n    \n    // Query methods\n    /// Returns true if object is in active state.\n    bool is_active() const;\n    \n    /// Returns current size.\n    size_t size() const;\n    \nprivate:\n    // Private implementation\n    void validate_input(int value);\n    \n    // Member variables\n    std::string name_;\n    std::vector<int> data_;\n    int size_{0};\n};\n\n}  // namespace falcon_fix::module\n\n#endif\n```\n\n### Implementation Files (src/cpp/module/ClassName.cpp)\n\n```cpp\n#include \"module/ClassName.h\"\n\n#include <algorithm>\n#include <fmt/format.h>\n#include <spdlog/spdlog.h>\n\n#include \"logger/Logger.h\"\n\nnamespace falcon_fix::module {\n\nClassName::ClassName(std::string_view name, int size)\n    : name_(name), size_(size) {\n    auto logger = logger::GetLogger(\"ClassName\");\n    logger->debug(\"Created with name={}, size={}\", name, size);\n    data_.reserve(size);  // Pre-allocate\n}\n\nClassName::~ClassName() = default;\n\nint ClassName::do_work(int value) {\n    validate_input(value);\n    // Implementation\n    return result;\n}\n\n}  // namespace falcon_fix::module\n```\n\n---\n\n## 🔤 Class Design Patterns\n\n### Constructor Style\n\n```cpp\nclass MyClass {\npublic:\n    // Always explicit (prevents implicit conversions)\n    explicit MyClass(int value);\n    \n    // No default constructor (unless meaningful)\n    MyClass() = delete;  // Or don't declare\n    \n    // Explicitly delete copy (most classes should be move-only)\n    MyClass(const MyClass&) = delete;\n    MyClass& operator=(const MyClass&) = delete;\n    \n    // Allow move (generates optimized code)\n    MyClass(MyClass&&) = default;\n    MyClass& operator=(MyClass&&) = default;\n    \n    // Defaulted destructor (unless cleanup needed)\n    ~MyClass() = default;\n};\n```\n\n### Method Organization\n\n```cpp\nclass EventHandler {\npublic:\n    // Type aliases first\n    using EventCallback = std::function<void(const Event&)>;\n    \n    // Constructors\n    explicit EventHandler(std::string_view name);\n    \n    // Core operations (grouped by functionality)\n    void register_listener(EventCallback callback);\n    void unregister_listener(EventCallback callback);\n    void dispatch_event(const Event& event);\n    \n    // Query methods\n    size_t listener_count() const;\n    bool has_listeners() const;\n    \nprivate:\n    // Implementation details\n    std::vector<EventCallback> listeners_;\n};\n```\n\n### Getters and Setters\n\n```cpp\nclass Config {\npublic:\n    // For expensive types, return const reference\n    const std::string& name() const { return name_; }\n    \n    // For cheap types, return by value\n    int timeout_ms() const { return timeout_ms_; }\n    \n    // Boolean queries with is_/has_ prefix\n    bool is_debug_enabled() const { return debug_enabled_; }\n    bool has_ssl_enabled() const { return ssl_enabled_; }\n    \n    // Setters only if necessary (prefer builder pattern for complex)\n    void set_name(std::string_view new_name) { name_ = new_name; }\n    \nprivate:\n    std::string name_;\n    int timeout_ms_{5000};\n    bool debug_enabled_{false};\n    bool ssl_enabled_{false};\n};\n```\n\n---\n\n## 🎯 Function Guidelines\n\n### Signature Style\n\n```cpp\n// Prefer modern return types\nstd::optional<Session> create_session(const Config& cfg);  // May fail\nstd::expected<Message, Error> parse_message(std::span<const uint8_t> data);  // With error\n\n// Exceptions for exceptional cases\ntry {\n    auto session = create_session(cfg);\n} catch (const std::exception& e) {\n    logger->error(\"Failed: {}\", e.what());\n}\n\n// Use noexcept for functions that truly never throw\nvoid log_message(std::string_view msg) noexcept;\n\n// Parameters: references for mutations, const references for read-only\nvoid process_connection(Connection& conn);     // Mutable\nvoid log_message(const Message& msg);          // Read-only\nvoid parse_frame(std::span<const uint8_t> data);  // Span instead of ptr+len\n\n// String parameters: use std::string_view\nvoid set_name(std::string_view name);\n\n// Smart pointers for ownership transfer\nstd::unique_ptr<Session> create_session();\nstd::shared_ptr<Resource> get_resource();\n```\n\n### Function Length\n\n- **Target**: ≤ 50 lines (including braces)\n- **Acceptable**: ≤ 100 lines (split if possible)\n- **Refactor**: > 100 lines (break into smaller functions)\n\n---\n\n## 🧠 Type Safety\n\n### Smart Pointers Only\n\n```cpp\n// ✅ CORRECT\n{\n    auto session = std::make_unique<Session>(\"ID\");\n    session->send_message(msg);\n}  // Automatically cleaned up\n\nstd::shared_ptr<Logger> logger = GetLogger();  // Shared ownership\n\nSession& session = get_session();  // Non-owning reference\n\n// ❌ WRONG - Never do this\nSession* session = new Session(\"ID\");  // Who owns it?\ndelete session;  // Possible memory leak if exception thrown\n```\n\n### Optional & Expected\n\n```cpp\n// Use optional when operation might fail without error details\nstd::optional<User> find_user(int id) {\n    if (users_.contains(id)) {\n        return users_.at(id);\n    }\n    return std::nullopt;\n}\n\n// Use optional result\nif (auto user = find_user(123)) {\n    process(*user);\n} else {\n    log(\"User not found\");\n}\n\n// Use expected when you need error information\nstd::expected<Message, ParseError> parse_message(std::span<const uint8_t> data) {\n    if (data.empty()) {\n        return std::unexpected(ParseError::EmptyInput);\n    }\n    return Message{data};\n}\n\n// Use expected result\nif (auto msg = parse_message(frame)) {\n    handle(*msg);\n} else {\n    log(\"Parse failed: {}\", msg.error());\n}\n```\n\n### Spans Over Pointers\n\n```cpp\n// ✅ GOOD - More information, safer\nvoid process(std::span<const uint8_t> buffer) {\n    for (auto byte : buffer) {\n        // Can't go out of bounds\n    }\n}\n\n// ❌ AVOID - Loses length information\nvoid process(const uint8_t* buffer, size_t len) {\n    // Easy to pass wrong length\n}\n\n// Use\nauto data = read_frame();\nprocess(data);\n```\n\n---\n\n## 🔗 Error Handling\n\n### Exceptions for Exceptional Cases\n\n```cpp\n// ✅ Use exceptions for:\n// - Constructor failures\n// - Validation errors\n// - \"Impossible\" conditions\n\nclass Session {\npublic:\n    explicit Session(std::string_view id) {\n        if (id.empty()) {\n            throw std::invalid_argument(\"Session ID cannot be empty\");\n        }\n    }\n};\n\n// Usage\ntry {\n    auto session = Session(\"\");  // Throws\n} catch (const std::invalid_argument& e) {\n    logger->error(\"Invalid input: {}\", e.what());\n}\n```\n\n### Error Codes for Expected Alternatives\n\n```cpp\n// ✅ Use error codes for expected failures\nstd::optional<Message> queue_message(const Message& msg) {\n    if (queue_.full()) {\n        return std::nullopt;  // Expected condition\n    }\n    return queue_.push(msg);\n}\n\n// Usage (no exception handling needed)\nif (auto result = queue_message(msg)) {\n    // Success\n} else {\n    // Queue was full (expected)\n}\n```\n\n---\n\n## 📝 Comments\n\n### Good Comments (Explain WHY)\n\n```cpp\n// We skip malformed frames to prevent parser state corruption\n// (allows recovery in next iteration)\nif (frame.length < MIN_FRAME_SIZE) {\n    logger->warn(\"Skipping malformed frame\");\n    continue;\n}\n\n// Boyer-Moore is faster than naive search for long patterns\n// Time: O(n + m), Space: O(m) where n=text_len, m=pattern_len\n// Reference: https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search\nauto pos = boyer_moore_search(text, pattern);\n```\n\n### Doxygen Documentation (Public API)\n\n```cpp\n/// Sends a FIX message over the network.\n/// \n/// This method adds the message to the outbound queue.\n/// The message is serialized and checksummed before transmission.\n/// \n/// \\param msg The message to send (must be valid)\n/// \\param timeout Timeout in milliseconds (0 = infinite)\n/// \\return true if queued successfully\n/// \\throws std::invalid_argument if msg is invalid\n/// \\throws std::system_error on socket failure\n/// \n/// \\see send_message_async() for non-blocking variant\n/// \\warning This is thread-safe\nbool send_message(const Message& msg, int timeout = 0);\n```\n\n### Bad Comments (Don't Do)\n\n```cpp\n// ❌ Just repeats code\nint count = messages.size();  // Get size of messages\n\n// ❌ Stating the obvious\nif (queue.empty()) {  // Check if queue is empty\n    return;\n}\n\n// ❌ Outdated comments\n// FIXME: This is broken  (no explanation, no issue reference)\n// TODO: Add caching  (by whom? when? priority?)\n```\n\n---\n\n## 🧪 Testing Patterns\n\n```cpp\nclass MyClassTests : public ::testing::Test {\nprotected:\n    void SetUp() override {\n        obj_ = std::make_unique<MyClass>();\n    }\n    \n    std::unique_ptr<MyClass> obj_;\n};\n\n// Happy path: everything works\nTEST_F(MyClassTests, DoWork_WithValidInput_Succeeds) {\n    auto result = obj_->do_work(42);\n    EXPECT_EQ(result, expected);\n}\n\n// Error path: invalid input\nTEST_F(MyClassTests, DoWork_WithNegativeValue_Throws) {\n    EXPECT_THROW(\n        obj_->do_work(-1),\n        std::invalid_argument\n    );\n}\n\n// Edge case: boundary condition\nTEST_F(MyClassTests, DoWork_WithZero_ReturnsZero) {\n    auto result = obj_->do_work(0);\n    EXPECT_EQ(result, 0);\n}\n```\n\n---\n\n## ⚡ Modern C++20 Features\n\n### Structured Bindings\n\n```cpp\n// ✅ GOOD - Cleaner\nauto [id, status] = get_session_info();\n\n// ❌ AVOID - Verbose\nauto result = get_session_info();\nstd::string id = result.first;\nSessionStatus status = result.second;\n```\n\n### Range-Based For\n\n```cpp\n// ✅ GOOD - Idiomatic\nfor (const auto& session : sessions) {\n    session->process();\n}\n\n// ❌ AVOID - Index loops\nfor (size_t i = 0; i < sessions.size(); ++i) {\n    sessions[i]->process();\n}\n```\n\n### Concepts (C++20)\n\n```cpp\ntemplate<typename T>\nconcept Serializable = requires(T t, std::ostream& os) {\n    { os << t } -> std::convertible_to<std::ostream&>;\n};\n\ntemplate<Serializable T>\nvoid send_message(const T& msg) {\n    // T is guaranteed to be serializable\n}\n```\n\n---\n\n## 🔄 Include Order\n\n1. Associated header (for .cpp only)\n2. System headers (alphabetical)\n3. External libraries (alphabetical)\n4. Project headers (alphabetical)\n5. Blank line between groups\n\n```cpp\n#include \"module/MyClass.h\"           // Associated (if .cpp)\n\n#include <algorithm>\n#include <filesystem>\n#include <memory>\n#include <string>\n#include <vector>\n\n#include <boost/asio.hpp>\n#include <fmt/format.h>\n#include <spdlog/spdlog.h>\n\n#include \"config/Config.h\"\n#include \"logger/Logger.h\"\n#include \"utils/String.h\"\n```\n\n---\n\n## ✅ Code Review Checklist\n\nBefore submitting:\n\n- [ ] Follows naming conventions (all of them)\n- [ ] Smart pointers only (no raw pointers)\n- [ ] Public API has Doxygen docs (/// comments)\n- [ ] Complex code has explanatory comments (WHY, not WHAT)\n- [ ] Includes organized (system → external → project)\n- [ ] Functions < 50 lines (or good reason)\n- [ ] Tests included (80%+ coverage minimim)\n- [ ] No compiler warnings\n- [ ] Error handling correct (exceptions vs. returns)\n- [ ] No global mutable state\n- [ ] No raw new/delete\n- [ ] Memory-safe (no buffer overflows)\n- [ ] Move semantics correct (allow move when possible)\n- [ ] const-correct (mark immutable as const)\n\n---\n\n**For full details**, see `CODE_STYLE.md` in project root.\n"
+# FalconFIX C++20 Code Standards (Compressed)
+
+---
+
+## 📋 Naming Conventions
+
+| Element | Style | Example |
+|---------|-------|---------|
+| **Files** | PascalCase | `SessionManager.h`, `SessionManager.cpp` |
+| **Classes** | PascalCase | `class SessionManager { }` |
+| **Structs** | PascalCase | `struct ConfigOptions { }` |
+| **Functions** | snake_case | `void send_message()` |
+| **Methods** | snake_case | `obj.process_data()` |
+| **Variables** | snake_case | `int message_count` |
+| **Member vars** | snake_case_ | `std::string session_id_` |
+| **Constants** | UPPER_CASE | `constexpr int MAX_SIZE = 100` |
+| **Namespaces** | snake_case | `namespace falcon_fix::session` |
+| **Templates** | Descriptive | `template<typename MessageType>` |
+| **Enum class** | PascalCase | `enum class Status { Active, Inactive }` |
+| **Enum values** | PascalCase | `Status::Active` |
+
+---
+
+## 📝 File Structure
+
+### Header Files (`src/include/module/ClassName.h`)
+
+```cpp
+#ifndef FALCON_FIX_MODULE_CLASS_NAME_H
+#define FALCON_FIX_MODULE_CLASS_NAME_H
+
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 [Author]
+
+// 1. System includes (alphabetical)
+#include <algorithm>
+#include <memory>
+#include <string>
+
+// 2. External includes (alphabetical)
+#include <fmt/format.h>
+#include <spdlog/spdlog.h>
+
+// 3. Project includes (alphabetical)
+#include "logger/Logger.h"
+#include "module/OtherClass.h"
+
+namespace falcon_fix::module {
+
+/// Brief one-liner description.
+/// \details Longer explanation of what this class does,
+/// any important behaviors, and usage patterns.
+/// \see RelatedClass
+class ClassName {
+public:
+    // Type aliases
+    using value_type = int;
+    using iterator = std::vector<int>::iterator;
+
+    // Constructors (always explicit unless copy constructor)
+    explicit ClassName(std::string_view name, int size);
+
+    // Destructor
+    ~ClassName();
+
+    // Deleted copy operations (move-only by default)
+    ClassName(const ClassName&) = delete;
+    ClassName& operator=(const ClassName&) = delete;
+
+    // Default move operations
+    ClassName(ClassName&&) = default;
+    ClassName& operator=(ClassName&&) = default;
+
+    // Core operations
+    /// Does something important.
+    /// \param value Input value
+    /// \return Result of operation
+    /// \throws std::invalid_argument if value is negative
+    int do_work(int value);
+
+    // Query methods
+    /// Returns true if object is in active state.
+    bool is_active() const;
+
+    /// Returns current size.
+    size_t size() const;
+
+private:
+    // Private implementation
+    void validate_input(int value);
+
+    // Member variables
+    std::string name_;
+    std::vector<int> data_;
+    int size_{0};
+};
+
+}  // namespace falcon_fix::module
+
+#endif
+````
+
+### Implementation Files (`src/cpp/module/ClassName.cpp`)
+
+```cpp
+#include "module/ClassName.h"
+
+#include <algorithm>
+#include <fmt/format.h>
+#include <spdlog/spdlog.h>
+
+#include "logger/Logger.h"
+
+namespace falcon_fix::module {
+
+ClassName::ClassName(std::string_view name, int size)
+    : name_(name), size_(size) {
+    auto logger = logger::GetLogger("ClassName");
+    logger->debug("Created with name={}, size={}", name, size);
+    data_.reserve(size);  // Pre-allocate
+}
+
+ClassName::~ClassName() = default;
+
+int ClassName::do_work(int value) {
+    validate_input(value);
+    // Implementation
+    return result;
+}
+
+}  // namespace falcon_fix::module
+```
+
+---
+
+## 🔤 Class Design Patterns
+
+### Constructor Style
+
+```cpp
+class MyClass {
+public:
+    // Always explicit (prevents implicit conversions)
+    explicit MyClass(int value);
+
+    // No default constructor (unless meaningful)
+    MyClass() = delete;  // Or don't declare
+
+    // Explicitly delete copy (most classes should be move-only)
+    MyClass(const MyClass&) = delete;
+    MyClass& operator=(const MyClass&) = delete;
+
+    // Allow move (generates optimized code)
+    MyClass(MyClass&&) = default;
+    MyClass& operator=(MyClass&&) = default;
+
+    // Defaulted destructor (unless cleanup needed)
+    ~MyClass() = default;
+};
+```
+
+### Method Organization
+
+```cpp
+class EventHandler {
+public:
+    // Type aliases first
+    using EventCallback = std::function<void(const Event&)>;
+
+    // Constructors
+    explicit EventHandler(std::string_view name);
+
+    // Core operations (grouped by functionality)
+    void register_listener(EventCallback callback);
+    void unregister_listener(EventCallback callback);
+    void dispatch_event(const Event& event);
+
+    // Query methods
+    size_t listener_count() const;
+    bool has_listeners() const;
+
+private:
+    // Implementation details
+    std::vector<EventCallback> listeners_;
+};
+```
+
+### Getters and Setters
+
+```cpp
+class Config {
+public:
+    // For expensive types, return const reference
+    const std::string& name() const { return name_; }
+
+    // For cheap types, return by value
+    int timeout_ms() const { return timeout_ms_; }
+
+    // Boolean queries with is_/has_ prefix
+    bool is_debug_enabled() const { return debug_enabled_; }
+    bool has_ssl_enabled() const { return ssl_enabled_; }
+
+    // Setters only if necessary (prefer builder pattern for complex)
+    void set_name(std::string_view new_name) { name_ = new_name; }
+
+private:
+    std::string name_;
+    int timeout_ms_{5000};
+    bool debug_enabled_{false};
+    bool ssl_enabled_{false};
+};
+```
+
+---
+
+## 🎯 Function Guidelines
+
+### Signature Style
+
+```cpp
+// Prefer modern return types
+std::optional<Session> create_session(const Config& cfg);  // May fail
+std::expected<Message, Error> parse_message(
+    std::span<const uint8_t> data
+);  // With error
+
+// Exceptions for exceptional cases
+try {
+    auto session = create_session(cfg);
+} catch (const std::exception& e) {
+    logger->error("Failed: {}", e.what());
+}
+
+// Use noexcept for functions that truly never throw
+void log_message(std::string_view msg) noexcept;
+
+// Parameters: references for mutations, const references for read-only
+void process_connection(Connection& conn);     // Mutable
+void log_message(const Message& msg);           // Read-only
+void parse_frame(std::span<const uint8_t> data); // Span instead of ptr+len
+
+// String parameters: use std::string_view
+void set_name(std::string_view name);
+
+// Smart pointers for ownership transfer
+std::unique_ptr<Session> create_session();
+std::shared_ptr<Resource> get_resource();
+```
+
+### Function Length
+
+* **Target**: ≤ 50 lines (including braces)
+* **Acceptable**: ≤ 100 lines (split if possible)
+* **Refactor**: > 100 lines (break into smaller functions)
+
+---
+
+## 🧠 Type Safety
+
+### Smart Pointers Only
+
+```cpp
+// ✅ CORRECT
+{
+    auto session = std::make_unique<Session>("ID");
+    session->send_message(msg);
+}  // Automatically cleaned up
+
+std::shared_ptr<Logger> logger = GetLogger();  // Shared ownership
+
+Session& session = get_session();  // Non-owning reference
+
+// ❌ WRONG - Never do this
+Session* session = new Session("ID");  // Who owns it?
+delete session;  // Possible memory leak if exception thrown
+```
+
+### Optional & Expected
+
+```cpp
+// Use optional when operation might fail without error details
+std::optional<User> find_user(int id) {
+    if (users_.contains(id)) {
+        return users_.at(id);
+    }
+    return std::nullopt;
+}
+
+// Use optional result
+if (auto user = find_user(123)) {
+    process(*user);
+} else {
+    log("User not found");
+}
+
+// Use expected when you need error information
+std::expected<Message, ParseError> parse_message(
+    std::span<const uint8_t> data
+) {
+    if (data.empty()) {
+        return std::unexpected(ParseError::EmptyInput);
+    }
+    return Message{data};
+}
+
+// Use expected result
+if (auto msg = parse_message(frame)) {
+    handle(*msg);
+} else {
+    log("Parse failed: {}", msg.error());
+}
+```
+
+### Spans Over Pointers
+
+```cpp
+// ✅ GOOD - More information, safer
+void process(std::span<const uint8_t> buffer) {
+    for (auto byte : buffer) {
+        // Can't go out of bounds
+    }
+}
+
+// ❌ AVOID - Loses length information
+void process(const uint8_t* buffer, size_t len) {
+    // Easy to pass wrong length
+}
+
+// Use
+auto data = read_frame();
+process(data);
+```
+
+---
+
+## 🔗 Error Handling
+
+### Exceptions for Exceptional Cases
+
+```cpp
+// ✅ Use exceptions for:
+// - Constructor failures
+// - Validation errors
+// - "Impossible" conditions
+
+class Session {
+public:
+    explicit Session(std::string_view id) {
+        if (id.empty()) {
+            throw std::invalid_argument("Session ID cannot be empty");
+        }
+    }
+};
+
+// Usage
+try {
+    auto session = Session("");  // Throws
+} catch (const std::invalid_argument& e) {
+    logger->error("Invalid input: {}", e.what());
+}
+```
+
+### Error Codes for Expected Alternatives
+
+```cpp
+// ✅ Use error codes for expected failures
+std::optional<Message> queue_message(const Message& msg) {
+    if (queue_.full()) {
+        return std::nullopt;  // Expected condition
+    }
+    return queue_.push(msg);
+}
+
+// Usage (no exception handling needed)
+if (auto result = queue_message(msg)) {
+    // Success
+} else {
+    // Queue was full (expected)
+}
+```
+
+---
+
+## 📝 Comments
+
+### Good Comments (Explain WHY)
+
+```cpp
+// We skip malformed frames to prevent parser state corruption
+// (allows recovery in next iteration)
+if (frame.length < MIN_FRAME_SIZE) {
+    logger->warn("Skipping malformed frame");
+    continue;
+}
+
+// Boyer-Moore is faster than naive search for long patterns
+// Time: O(n + m), Space: O(m) where n=text_len, m=pattern_len
+// Reference: https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search
+auto pos = boyer_moore_search(text, pattern);
+```
+
+### Doxygen Documentation (Public API)
+
+```cpp
+/// Sends a FIX message over the network.
+///
+/// This method adds the message to the outbound queue.
+/// The message is serialized and checksummed before transmission.
+///
+/// \param msg The message to send (must be valid)
+/// \param timeout Timeout in milliseconds (0 = infinite)
+/// \return true if queued successfully
+/// \throws std::invalid_argument if msg is invalid
+/// \throws std::system_error on socket failure
+///
+/// \see send_message_async() for non-blocking variant
+/// \warning This is thread-safe
+bool send_message(const Message& msg, int timeout = 0);
+```
+
+### Bad Comments (Don't Do)
+
+```cpp
+// ❌ Just repeats code
+int count = messages.size();  // Get size of messages
+
+// ❌ Stating the obvious
+if (queue.empty()) {  // Check if queue is empty
+    return;
+}
+
+// ❌ Outdated comments
+// FIXME: This is broken  (no explanation, no issue reference)
+// TODO: Add caching  (by whom? when? priority?)
+```
+
+---
+
+## 🧪 Testing Patterns
+
+```cpp
+class MyClassTests : public ::testing::Test {
+protected:
+    void SetUp() override {
+        obj_ = std::make_unique<MyClass>();
+    }
+
+    std::unique_ptr<MyClass> obj_;
+};
+
+// Happy path: everything works
+TEST_F(MyClassTests, DoWork_WithValidInput_Succeeds) {
+    auto result = obj_->do_work(42);
+    EXPECT_EQ(result, expected);
+}
+
+// Error path: invalid input
+TEST_F(MyClassTests, DoWork_WithNegativeValue_Throws) {
+    EXPECT_THROW(
+        obj_->do_work(-1),
+        std::invalid_argument
+    );
+}
+
+// Edge case: boundary condition
+TEST_F(MyClassTests, DoWork_WithZero_ReturnsZero) {
+    auto result = obj_->do_work(0);
+    EXPECT_EQ(result, 0);
+}
+```
+
+---
+
+## ⚡ Modern C++20 Features
+
+### Structured Bindings
+
+```cpp
+// ✅ GOOD - Cleaner
+auto [id, status] = get_session_info();
+
+// ❌ AVOID - Verbose
+auto result = get_session_info();
+std::string id = result.first;
+SessionStatus status = result.second;
+```
+
+### Range-Based For
+
+```cpp
+// ✅ GOOD - Idiomatic
+for (const auto& session : sessions) {
+    session->process();
+}
+
+// ❌ AVOID - Index loops
+for (size_t i = 0; i < sessions.size(); ++i) {
+    sessions[i]->process();
+}
+```
+
+### Concepts (C++20)
+
+```cpp
+template<typename T>
+concept Serializable = requires(T t, std::ostream& os) {
+    { os << t } -> std::convertible_to<std::ostream&>;
+};
+
+template<Serializable T>
+void send_message(const T& msg) {
+    // T is guaranteed to be serializable
+}
+```
+
+---
+
+## 🔄 Include Order
+
+1. Associated header (for `.cpp` only)
+2. System headers (alphabetical)
+3. External libraries (alphabetical)
+4. Project headers (alphabetical)
+5. Blank line between groups
+
+```cpp
+#include "module/MyClass.h"           // Associated (if .cpp)
+
+#include <algorithm>
+#include <filesystem>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include <boost/asio.hpp>
+#include <fmt/format.h>
+#include <spdlog/spdlog.h>
+
+#include "config/Config.h"
+#include "logger/Logger.h"
+#include "utils/String.h"
+```
+
+---
+
+## ✅ Code Review Checklist
+
+Before submitting:
+
+* [ ] Follows naming conventions (all of them)
+* [ ] Smart pointers only (no raw pointers)
+* [ ] Public API has Doxygen docs (`///` comments)
+* [ ] Complex code has explanatory comments (WHY, not WHAT)
+* [ ] Includes organized (system → external → project)
+* [ ] Functions < 50 lines (or good reason)
+* [ ] Tests included (80%+ coverage minimum)
+* [ ] No compiler warnings
+* [ ] Error handling correct (exceptions vs. returns)
+* [ ] No global mutable state
+* [ ] No raw `new`/`delete`
+* [ ] Memory-safe (no buffer overflows)
+* [ ] Move semantics correct (allow move when possible)
+* [ ] const-correct (mark immutable as const)

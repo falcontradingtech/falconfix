@@ -86,7 +86,7 @@ Before writing any code:
 
 2. **Design**
    ```
-   Check ARCHITECTURE.md:
+   Check domains/architecture.md:
    - Which module owns this?
    - What are the dependencies?
    - What patterns apply?
@@ -110,7 +110,7 @@ Before writing any code:
 
 5. **Implement**
    ```
-   Follow CODE_STYLE.md:
+   Follow code-standards.md:
    - Naming conventions (PascalCase/snake_case)
    - File organization
    - Comments explaining WHY
@@ -128,7 +128,7 @@ Before writing any code:
 ## 📋 QUICK DECISION TREE
 
 **"Should I create a new class?"**
-→ Check ARCHITECTURE.md module descriptions first
+→ Check domains/architecture.md module descriptions first
 
 **"Which module should this go in?"**
 → See `domains/architecture.md`
@@ -406,8 +406,8 @@ git checkout -b feature/my-feature
 git commit -m "feat: Add send_heartbeat() with tests
 
 - Implements FIX heartbeat protocol
-- 90% code coverage
-- Updated docs/ARCHITECTURE.md"
+- 100% code coverage
+- Updated domains/architecture.md"
 
 # 3. Push and create PR
 git push origin feature/my-feature
@@ -435,7 +435,7 @@ git push origin feature/my-feature
 ## ✨ GOLDEN RULES
 
 1. **Incremental builds**: Always use same `build/windows-debug/` directory
-2. **Architecture first**: Check ARCHITECTURE.md before coding
+2. **Architecture first**: Check domains/architecture.md before coding
 3. **Tests required**: 80%+ coverage, write tests first
 4. **CMake stable**: Never modify unless necessary (discuss!)
 5. **Docs mandatory**: Every change includes documentation

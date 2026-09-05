@@ -88,8 +88,6 @@ if(FALCONFIX_CODE_COVERAGE)
         # Ensure debug info is available for better coverage reporting
         add_compile_options(/Zi)
         message(STATUS "Code coverage enabled (debug info enabled)")
-        # Include OpenCppCoverage integration
-        include(cmake/CodeCoverage.cmake)
     else()
         add_compile_options(--coverage -fprofile-arcs -ftest-coverage)
         add_link_options(--coverage)
