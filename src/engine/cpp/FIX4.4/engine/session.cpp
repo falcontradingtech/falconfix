@@ -316,8 +316,9 @@ FFStatus Session::onTimer() noexcept {
 
 			m_state.awaitingTestResponse = false;
 			m_state.status = falconfix::SessionStatus::Disconnected;
-			lock.unlock();
-			connection().close();
+            auto& conn = connection();
+            lock.unlock();
+            conn.close();
 
 			return FF_FIX_SESSION_ERR(TEST_REQUEST_TIMEOUT, 0);
 		}
