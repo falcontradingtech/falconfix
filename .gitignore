@@ -3,6 +3,7 @@ benchmark/compare/bin/
 benchmark/compare/build/
 benchmark/compare/log/
 benchmark/compare/out/
+code_coverage/
 
 # Build system
 build/

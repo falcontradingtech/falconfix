@@ -19,6 +19,7 @@ add_subdirectory(multiversion)
 add_subdirectory(session)
 add_subdirectory(socket)
 add_subdirectory(store)
+add_subdirectory(utils)
 
 add_test_custom("all_tests" falconfix_connection falconfix_logger socket falconfix_config falconfix_session falconfix_core)
 
