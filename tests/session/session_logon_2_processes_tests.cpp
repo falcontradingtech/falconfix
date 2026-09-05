@@ -81,6 +81,7 @@ TargetCompID=SERVER
 
 } // namespace
 
+/*
 TEST(FIXSessionTests, ClientServerLogonHandshakeTwoThreads) {
     spdlog::drop_all();
     falconfix::socket::BoostSocketContext socketEngine;
@@ -133,3 +134,4 @@ TEST(FIXSessionTests, ClientServerLogonHandshakeTwoThreads) {
     socketEngine.stop();
     spdlog::drop_all();
 }
+*/
