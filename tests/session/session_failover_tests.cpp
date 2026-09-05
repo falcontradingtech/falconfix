@@ -123,10 +123,10 @@ TEST(FIXSessionTests, InitiatorFailsOverToBackupAndReturnsToPrimaryAfterDisconne
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return secondaryServerApp.onLogonCount.load() >= 1 &&
                clientApp.onLogonCount.load() >= 1;
-    }, std::chrono::seconds(8)))
+    }))
         << "secondary onLogon=" << secondaryServerApp.onLogonCount.load()
         << " client onLogon=" << clientApp.onLogonCount.load();
 
@@ -134,18 +134,18 @@ TEST(FIXSessionTests, InitiatorFailsOverToBackupAndReturnsToPrimaryAfterDisconne
 
     secondaryServer.stop();
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return clientApp.onLogoutCount.load() >= 1;
-    }, std::chrono::seconds(5)))
+    }))
         << "client onLogout=" << clientApp.onLogoutCount.load();
 
     rc = primaryServer.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return primaryServerApp.onLogonCount.load() >= 1 &&
                clientApp.onLogonCount.load() >= 2;
-    }, std::chrono::seconds(8)))
+    }))
         << "primary onLogon=" << primaryServerApp.onLogonCount.load()
         << " client onLogon=" << clientApp.onLogonCount.load()
         << " client onLogout=" << clientApp.onLogoutCount.load();

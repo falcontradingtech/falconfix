@@ -75,7 +75,7 @@ struct EnginePairConfigs {
     std::string clientCfg;
 };
 
-bool waitUntil(const std::function<bool()> &predicate,
+bool waitUntilWithRetries(const std::function<bool()> &predicate,
                std::chrono::milliseconds timeout = std::chrono::milliseconds(5000)) {
     const auto deadline = std::chrono::steady_clock::now() + timeout;
     while (std::chrono::steady_clock::now() < deadline) {
@@ -422,15 +422,15 @@ TEST(SessionScheduleTests, ServerDisconnectsWhenScheduleEnds) {
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
     }, std::chrono::seconds(3)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.heartbeatInCount.load() > 0 || clientApp.heartbeatInCount.load() > 0;
     }, std::chrono::seconds(4)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
     }, std::chrono::seconds(8)))
         << "server onLogout=" << serverApp.onLogoutCount.load()
@@ -476,15 +476,15 @@ TEST(SessionScheduleTests, ClientDisconnectsWhenScheduleEnds) {
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
     }, std::chrono::seconds(3)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.heartbeatInCount.load() > 0 || clientApp.heartbeatInCount.load() > 0;
     }, std::chrono::seconds(4)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
     }, std::chrono::seconds(8)))
         << "server onLogout=" << serverApp.onLogoutCount.load()
@@ -530,7 +530,7 @@ TEST(SessionScheduleTests, InitiatorReconnectsWhenScheduleReopens) {
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() > 0 &&
                clientApp.onLogonCount.load() > 0;
     }, std::chrono::seconds(3)));
@@ -548,7 +548,7 @@ TEST(SessionScheduleTests, InitiatorReconnectsWhenScheduleReopens) {
     // Force schedule closed.
     clientSession->setScheduleForTest(1, 2);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogoutCount.load() > 0 &&
                clientApp.onLogoutCount.load() > 0;
     }, std::chrono::seconds(8)))
@@ -562,7 +562,7 @@ TEST(SessionScheduleTests, InitiatorReconnectsWhenScheduleReopens) {
     // Reopen schedule.
     clientSession->setScheduleForTest(0, 86400);
 
-    const bool reconnected = waitUntil([&] {
+    const bool reconnected = waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= 2 &&
                clientApp.onLogonCount.load() >= 2;
     }, std::chrono::seconds(8));

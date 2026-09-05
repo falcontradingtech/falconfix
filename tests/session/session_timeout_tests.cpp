@@ -65,7 +65,7 @@ public:
     FFStatus fromApp(falconfix::FIXMessageRef, const falconfix::SessionID &) noexcept override { return FF_OK(); }
 };
 
-bool waitUntil(const std::function<bool()> &predicate,
+bool waitUntilWithRetries(const std::function<bool()> &predicate,
                std::chrono::milliseconds timeout) {
     const auto deadline = std::chrono::steady_clock::now() + timeout;
     while (std::chrono::steady_clock::now() < deadline) {
@@ -111,11 +111,11 @@ TEST(FIXSessionTests, TestRequestTimeoutDisconnectsSession) {
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
     }, std::chrono::seconds(3)));
 
-    EXPECT_TRUE(waitUntil([&] {
+    EXPECT_TRUE(waitUntilWithRetries([&] {
         return clientApp.onLogoutCount.load() > 0 || serverApp.onLogoutCount.load() > 0;
     }, std::chrono::seconds(5)));
 
@@ -157,15 +157,15 @@ TEST(FIXSessionTests, InitiatorReconnectsAfterTestRequestTimeout) {
     rc = clientEngine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
     }, std::chrono::seconds(3)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return clientApp.onLogoutCount.load() > 0 || serverApp.onLogoutCount.load() > 0;
     }, std::chrono::seconds(5)));
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= 2 && clientApp.onLogonCount.load() >= 2;
     }, std::chrono::seconds(8)))
         << "server onLogon=" << serverApp.onLogonCount.load()

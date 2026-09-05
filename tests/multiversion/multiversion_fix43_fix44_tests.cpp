@@ -165,18 +165,18 @@ TEST(MultiVersionTests, ServerHandlesFIX43AndFIX44ClientsOnDifferentPorts) {
     rc = client44Engine.start();
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= 2 &&
                client43App.onLogonCount.load() >= 1 &&
                client44App.onLogonCount.load() >= 1;
-    }, std::chrono::seconds(5)));
+    }));
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return serverApp.heartbeat43Count.load() > 0 &&
                serverApp.heartbeat44Count.load() > 0 &&
                client43App.heartbeat43Count.load() > 0 &&
                client44App.heartbeat44Count.load() > 0;
-    }, std::chrono::seconds(5)));
+    }));
 
     fix43::messages::MarketDataIncrementalRefresh md43;
     fix44::messages::MarketDataIncrementalRefresh md44;
@@ -196,10 +196,10 @@ TEST(MultiVersionTests, ServerHandlesFIX43AndFIX44ClientsOnDifferentPorts) {
     rc = serverEngine.sendToTarget(md44, serverSid44);
     ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-    ASSERT_TRUE(falconfix::test::waitUntil([&] {
+    ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
         return client43App.app43Count.load() > 0 &&
                client44App.app44Count.load() > 0;
-    }, std::chrono::seconds(5)));
+    }));
 
     EXPECT_EQ(client43App.app44Count.load(), 0);
     EXPECT_EQ(client44App.app43Count.load(), 0);

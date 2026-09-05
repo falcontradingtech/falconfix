@@ -55,7 +55,7 @@ std::string makeConfig(std::string_view connectionType,
     return out.str();
 }
 
-bool waitUntil(const std::function<bool()> &predicate,
+bool waitUntilWithRetries(const std::function<bool()> &predicate,
                std::chrono::milliseconds timeout = std::chrono::milliseconds(3000)) {
     const auto deadline = std::chrono::steady_clock::now() + timeout;
     while (std::chrono::steady_clock::now() < deadline) {
@@ -165,7 +165,7 @@ bool waitForHandshake(int32_t minLogonCount,
                       TestApp &serverApp,
                       TestApp &clientApp,
                       std::chrono::milliseconds timeout) {
-    return waitUntil([&] {
+    return waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= minLogonCount &&
                clientApp.onLogonCount.load() >= minLogonCount;
     }, timeout);
@@ -279,7 +279,7 @@ TEST(FIXSessionTests, ResetOnLogoutResetsSequenceNumbers) {
     const falconfix::SessionID serverSid(app_test_support::beginString(), "SERVER", "CLIENT");
 
     sendBidirectionalAppMessages(serverEngine, clientEngine, serverSid, clientSid);
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.appInCount.load() > 0 && clientApp.appInCount.load() > 0;
     }));
 
@@ -304,7 +304,7 @@ TEST(FIXSessionTests, ResetOnLogoutResetsSequenceNumbers) {
 
     clientEngine.stop();
 
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.onLogonCount.load() >= 2 &&
             clientApp.onLogonCount.load() >= 2;
     }, std::chrono::seconds(5)));
@@ -351,7 +351,7 @@ TEST(FIXSessionTests, ResetOnDisconnectResetsSequenceNumbers) {
     const falconfix::SessionID serverSid(app_test_support::beginString(), "SERVER", "CLIENT");
 
     sendBidirectionalAppMessages(serverEngine, clientEngine, serverSid, clientSid);
-    ASSERT_TRUE(waitUntil([&] {
+    ASSERT_TRUE(waitUntilWithRetries([&] {
         return serverApp.appInCount.load() > 0 && clientApp.appInCount.load() > 0;
     }));
 

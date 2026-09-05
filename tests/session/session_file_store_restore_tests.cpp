@@ -90,18 +90,6 @@ std::string makeConfig(std::string_view connectionType,
     return out.str();
 }
 
-bool waitUntil(const std::function<bool()> &predicate,
-               std::chrono::milliseconds timeout = std::chrono::milliseconds(3000)) {
-    const auto deadline = std::chrono::steady_clock::now() + timeout;
-    while (std::chrono::steady_clock::now() < deadline) {
-        if (predicate()) {
-            return true;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-    return predicate();
-}
-
 } // namespace
 
 TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
@@ -134,7 +122,7 @@ TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
         rc = clientEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
         }));
 
@@ -149,14 +137,14 @@ TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
         rc = clientEngine.sendToTarget(clientToServer, clientSid);
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.appInCount.load() > 0 && clientApp.appInCount.load() > 0;
         }));
 
         rc = clientEngine.sendLogout(clientSid, "test shutdown");
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
         }));
 
@@ -189,9 +177,9 @@ TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
         rc = clientEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
-        }, std::chrono::milliseconds(5000)));
+        }));
 
         EXPECT_GT(serverApp.lastOutboundLogonSeqNum.load(std::memory_order_acquire), 1);
         EXPECT_GT(clientApp.lastOutboundLogonSeqNum.load(std::memory_order_acquire), 1);

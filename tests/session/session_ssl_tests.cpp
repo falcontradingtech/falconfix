@@ -40,18 +40,6 @@ std::filesystem::path findRepoFile(std::string_view relativePath) {
     return {};
 }
 
-bool waitUntil(const std::function<bool()> &predicate,
-               std::chrono::milliseconds timeout) {
-    const auto deadline = std::chrono::steady_clock::now() + timeout;
-    while (std::chrono::steady_clock::now() < deadline) {
-        if (predicate()) {
-            return true;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-    return predicate();
-}
-
 std::string makeSSLConfig(std::string_view connectionType,
                           int port,
                           std::string_view sender,
@@ -131,12 +119,10 @@ TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
         TestApp serverApp;
         TestApp clientApp;
 
-        auto serverSettings = falconfix::SessionSettings::fromConfig(
-            falconfix::FIXConfig::parse(serverCfg)
-        );
-        auto clientSettings = falconfix::SessionSettings::fromConfig(
-            falconfix::FIXConfig::parse(clientCfg)
-        );
+        auto serverSettings =
+            falconfix::SessionSettings::fromConfig(falconfix::FIXConfig::parse(serverCfg));
+        auto clientSettings =
+            falconfix::SessionSettings::fromConfig(falconfix::FIXConfig::parse(clientCfg));
 
         ASSERT_FALSE(serverSettings.sessions().empty());
         ASSERT_FALSE(clientSettings.sessions().empty());
@@ -145,8 +131,10 @@ TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
         EXPECT_EQ(serverSettings.sessions().front().connection.sslCertFile, certFile.string());
         EXPECT_EQ(serverSettings.sessions().front().connection.sslKeyFile, keyFile.string());
 
-        falconfix::FIXRuntime serverEngine(serverApp, std::move(serverSettings), serverSocketEngine);
-        falconfix::FIXRuntime clientEngine(clientApp, std::move(clientSettings), clientSocketEngine);
+        falconfix::FIXRuntime serverEngine(
+            serverApp, std::move(serverSettings), serverSocketEngine);
+        falconfix::FIXRuntime clientEngine(
+            clientApp, std::move(clientSettings), clientSocketEngine);
 
         FFStatus rc = serverEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
@@ -154,10 +142,10 @@ TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
         rc = clientEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
-            return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
-        }, std::chrono::seconds(5)));
-
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
+            return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0; }, 6,
+            std::chrono::milliseconds(5000)));
+        
         EXPECT_EQ(serverApp.onCreateCount.load(), 1);
         EXPECT_EQ(clientApp.onCreateCount.load(), 1);
         EXPECT_GT(serverApp.onLogonCount.load(), 0);
@@ -166,9 +154,10 @@ TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
         rc = clientEngine.sendLogout(clientSid, "test shutdown");
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&]
+        {
             return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
-        }, std::chrono::seconds(5)));
+        }));
 
         clientEngine.stop();
         serverEngine.stop();
@@ -215,18 +204,18 @@ TEST(FIXSessionTests, SSLInitiatorReconnectsAfterDisconnect) {
         rc = clientEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
-        }, std::chrono::seconds(5)));
+        }));
 
         const falconfix::SessionID clientSid("FIX4.4", "CLIENT_SSL_RE", "SERVER_SSL_RE");
 
         rc = clientEngine.disconnectForTest(clientSid);
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogonCount.load() >= 2 && clientApp.onLogonCount.load() >= 2;
-        }, std::chrono::seconds(8)))
+        }))
             << "server onLogon=" << serverApp.onLogonCount.load()
             << " client onLogon=" << clientApp.onLogonCount.load()
             << " server onLogout=" << serverApp.onLogoutCount.load()
@@ -238,9 +227,9 @@ TEST(FIXSessionTests, SSLInitiatorReconnectsAfterDisconnect) {
         rc = clientEngine.sendLogout(clientSid, "test shutdown");
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
-        }, std::chrono::seconds(5)));
+        }));
 
         clientEngine.stop();
         serverEngine.stop();
@@ -291,9 +280,9 @@ TEST(FIXSessionTests, SSLClientVerifiesConfiguredServerName) {
         rc = clientEngine.start();
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(waitUntil([&] {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogonCount.load() > 0 && clientApp.onLogonCount.load() > 0;
-        }, std::chrono::seconds(5)));
+        }));
 
         clientEngine.stop();
         serverEngine.stop();

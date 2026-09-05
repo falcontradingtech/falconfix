@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo
 #pragma once
 
+#include <atomic>
 #include <memory>
 
 #include <logger/engine_log.h>

@@ -94,7 +94,7 @@ public:
     }
 
     bool waitLogon(std::chrono::milliseconds timeout = std::chrono::seconds(3)) {
-        return waitUntil([&] {
+        return waitUntilWithRetries([&] {
             return m_serverApp.onLogonCount.load() > 0 &&
                    m_clientApp.onLogonCount.load() > 0;
         }, timeout);
