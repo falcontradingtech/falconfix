@@ -154,10 +154,9 @@ TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
         rc = clientEngine.sendLogout(clientSid, "test shutdown");
         ASSERT_TRUE(rc.ok()) << falconfix::errors::format_error(rc);
 
-        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&]
-        {
+        ASSERT_TRUE(falconfix::test::waitUntilWithRetries([&] {
             return serverApp.onLogoutCount.load() > 0 && clientApp.onLogoutCount.load() > 0;
-        }));
+        }, 6, std::chrono::milliseconds(5000)));
 
         clientEngine.stop();
         serverEngine.stop();

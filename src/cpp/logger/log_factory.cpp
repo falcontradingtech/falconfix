@@ -202,15 +202,4 @@ LogFactory::createSessionLog(const SessionConfig &config) {
         humanReadableFIX
     );
 }
-
-void LogFactory::disableLogging() noexcept
-{
-    m_disabled.store(true, std::memory_order_release);
-}
-
-bool LogFactory::isLoggingDisabled() noexcept
-{
-    return m_disabled.load(std::memory_order_acquire);
-}
-
 } // namespace falconfix
