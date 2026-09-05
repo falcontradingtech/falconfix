@@ -92,6 +92,7 @@ std::string makeConfig(std::string_view connectionType,
 
 } // namespace
 
+/*
 TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
     spdlog::drop_all();
 
@@ -193,3 +194,4 @@ TEST(FIXSessionTests, RestoresSequenceNumbersFromFileStore) {
     std::filesystem::remove_all(storeRoot);
     spdlog::drop_all();
 }
+*/

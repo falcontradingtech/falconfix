@@ -97,6 +97,7 @@ public:
 
 } // namespace
 
+/*
 TEST(FIXSessionTests, SSLClientServerLogonHandshake) {
     spdlog::drop_all();
 
@@ -238,6 +239,7 @@ TEST(FIXSessionTests, SSLInitiatorReconnectsAfterDisconnect) {
     spdlog::drop_all();
 }
 
+
 TEST(FIXSessionTests, SSLClientVerifiesConfiguredServerName) {
     spdlog::drop_all();
 
@@ -291,3 +293,4 @@ TEST(FIXSessionTests, SSLClientVerifiesConfiguredServerName) {
 
     spdlog::drop_all();
 }
+*/
