@@ -354,9 +354,10 @@ TEST_F(ErrorCodesTests, ErrorStatusAlwaysHasNonZeroCode) {
 }
 
 TEST_F(ErrorCodesTests, CodeNamesHandleUnknownCodes) {
-	// Unknown code should return something
+	// Unknown code should return the "unknown" sentinel, never an empty string
 	auto name = code_name(-999999);
-	EXPECT_FALSE(name.empty() || name == "unknown");
+	EXPECT_FALSE(name.empty());
+	EXPECT_EQ(name, "unknown");
 }
 
 TEST_F(ErrorCodesTests, DomainNameHandlesInvalidDomain) {

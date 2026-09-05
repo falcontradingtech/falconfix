@@ -54,7 +54,7 @@ TEST(MemoryMessageStoreTests, ResetClearsDataAndSequenceNumbers) {
     EXPECT_EQ(store.nextTargetSeqNum(), 1);
 }
 
-TEST(NullMessageStoreTests, DefaultsAndRejectGetOutgoing) {
+TEST(NullMessageStoreStandaloneTests, DefaultsAndRejectGetOutgoing) {
     falconfix::NullMessageStore store;
     EXPECT_EQ(store.nextSenderSeqNum(), 1);
     EXPECT_EQ(store.nextTargetSeqNum(), 1);
