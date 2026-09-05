@@ -362,7 +362,7 @@ add_lib(
 
 Before showing code to dev:
 
-- [ ] 80%+ code coverage
+- [ ] 100%+ code coverage
 - [ ] Happy path tested
 - [ ] Error cases tested
 - [ ] Edge cases (empty, null, boundary) tested
