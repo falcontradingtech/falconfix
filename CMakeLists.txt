@@ -85,12 +85,17 @@ enable_testing()
 
 if(FALCONFIX_CODE_COVERAGE)
     if(MSVC)
-        # Ensure debug info is available for better coverage reporting
+        # Debug information for coverage
         add_compile_options(/Zi)
-        message(STATUS "Code coverage enabled (debug info enabled)")
+
+        # Required by Visual Studio Native C++ Code Coverage
+        add_link_options(/PROFILE)
+
+        message(STATUS "Code coverage enabled for MSVC (/Zi /PROFILE)")
     else()
         add_compile_options(--coverage -fprofile-arcs -ftest-coverage)
         add_link_options(--coverage)
+
         message(STATUS "Code coverage enabled with GCC/Clang instrumentation")
     endif()
 endif()

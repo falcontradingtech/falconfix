@@ -26,6 +26,334 @@ from typing import Optional
 from code.common import namespace_from_version, normalize_version_string
 
 
+def _generate_serializer_tests_content(fix_version: str) -> str:
+	"""
+	Render a static (version-agnostic in content, but namespace-bound) unit
+	test file covering 100% of falconfix/utils/serializer.h:
+	  - write_utctimeonly (with/without milliseconds, boundary values,
+		single-digit components, default parameter, chained calls)
+	  - set_presence / clear_presence / is_present bitmap helpers
+
+	Mirrors the hand-written tests/utils/error_codes_tests.cpp convention:
+	this file is not per-FIX-version content-wise (serializer.h logic is
+	identical across FIX4.2/4.3/4.4), so it targets a single namespace.
+	"""
+	include_root = normalize_version_string(fix_version)
+	ns = namespace_from_version(fix_version)
+
+	lines = [
+		"// SPDX-License-Identifier: MIT",
+		"// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
+		"#include <gtest/gtest.h>",
+		"",
+		"#include <array>",
+		"#include <cstdint>",
+		"#include <cstring>",
+		f"#include <{include_root}/utils/serializer.h>",
+		"",
+		"namespace {",
+		"",
+		f"using namespace {ns}::serialize;",
+		"",
+		"class SerializerWriteUtcTimeOnlyTests : public ::testing::Test {",
+		"protected:",
+		"\tchar buffer[32]{};",
+		"",
+		"\t// Helper to run write_utctimeonly and return the written substring plus the pointer advance.",
+		"\tstd::string writeAndCapture(int64_t value, bool includeMilliseconds, std::ptrdiff_t& advance) {",
+		"\t\tstd::memset(buffer, 0, sizeof(buffer));",
+		"\t\tchar* p = buffer;",
+		"\t\twrite_utctimeonly(p, value, includeMilliseconds);",
+		"\t\tadvance = p - buffer;",
+		"\t\treturn std::string(buffer, static_cast<std::size_t>(advance));",
+		"\t}",
+		"};",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithMilliseconds_ZeroValue) {",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(0, true, advance);",
+		'\tEXPECT_EQ(result, "00:00:00.000");',
+		"\tEXPECT_EQ(advance, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithoutMilliseconds_ZeroValue) {",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(0, false, advance);",
+		'\tEXPECT_EQ(result, "00:00:00");',
+		"\tEXPECT_EQ(advance, 8);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithMilliseconds_TypicalValue) {",
+		"\t// 12:34:56.789 -> h=12, m=34, s=56, ms=789",
+		"\tconst int64_t value = 12LL * 10000000 + 34LL * 100000 + 56LL * 1000 + 789LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, true, advance);",
+		'\tEXPECT_EQ(result, "12:34:56.789");',
+		"\tEXPECT_EQ(advance, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithoutMilliseconds_TypicalValue) {",
+		"\tconst int64_t value = 12LL * 10000000 + 34LL * 100000 + 56LL * 1000 + 789LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, false, advance);",
+		'\tEXPECT_EQ(result, "12:34:56");',
+		"\tEXPECT_EQ(advance, 8);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithMilliseconds_MaxValidTime) {",
+		"\t// 23:59:59.999",
+		"\tconst int64_t value = 23LL * 10000000 + 59LL * 100000 + 59LL * 1000 + 999LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, true, advance);",
+		'\tEXPECT_EQ(result, "23:59:59.999");',
+		"\tEXPECT_EQ(advance, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithoutMilliseconds_MaxValidTime) {",
+		"\tconst int64_t value = 23LL * 10000000 + 59LL * 100000 + 59LL * 1000 + 999LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, false, advance);",
+		'\tEXPECT_EQ(result, "23:59:59");',
+		"\tEXPECT_EQ(advance, 8);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithMilliseconds_SingleDigitComponents) {",
+		"\t// 01:02:03.004 -> exercises the '/10 % 10' and '%10' branches with single-digit values",
+		"\tconst int64_t value = 1LL * 10000000 + 2LL * 100000 + 3LL * 1000 + 4LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, true, advance);",
+		'\tEXPECT_EQ(result, "01:02:03.004");',
+		"\tEXPECT_EQ(advance, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, WithMilliseconds_MillisecondsAllTensDigit) {",
+		"\t// ms = 090 -> tens digit non-zero, units digit zero",
+		"\tconst int64_t value = 5LL * 10000000 + 6LL * 100000 + 7LL * 1000 + 90LL;",
+		"\tstd::ptrdiff_t advance = 0;",
+		"\tconst auto result = writeAndCapture(value, true, advance);",
+		'\tEXPECT_EQ(result, "05:06:07.090");',
+		"\tEXPECT_EQ(advance, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, DefaultParameter_IncludesMilliseconds) {",
+		"\tconst int64_t value = 9LL * 10000000 + 8LL * 100000 + 7LL * 1000 + 6LL;",
+		"\tchar localBuffer[32]{};",
+		"\tchar* p = localBuffer;",
+		"\twrite_utctimeonly(p, value); // uses default includeMilliseconds = true",
+		"\tconst std::string result(localBuffer, static_cast<std::size_t>(p - localBuffer));",
+		'\tEXPECT_EQ(result, "09:08:07.006");',
+		"\tEXPECT_EQ(p - localBuffer, 12);",
+		"}",
+		"",
+		"TEST_F(SerializerWriteUtcTimeOnlyTests, PointerAdvancesCorrectly_WhenChained) {",
+		"\t// Verify the pointer can be reused across multiple calls, confirming correct advancement.",
+		"\tchar localBuffer[64]{};",
+		"\tchar* p = localBuffer;",
+		"\twrite_utctimeonly(p, 0, true);",
+		"\twrite_utctimeonly(p, 23LL * 10000000 + 59LL * 100000 + 59LL * 1000 + 999LL, false);",
+		"\tconst std::string result(localBuffer, static_cast<std::size_t>(p - localBuffer));",
+		'\tEXPECT_EQ(result, "00:00:00.00023:59:59");',
+		"\tEXPECT_EQ(p - localBuffer, 20);",
+		"}",
+		"",
+		"// ============================================================================",
+		"// PRESENCE BITMAP TESTS",
+		"// ============================================================================",
+		"",
+		"class SerializerPresenceBitmapTests : public ::testing::Test {",
+		"protected:",
+		"\tstd::array<uint64_t, 2> bitmap{};",
+		"};",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, IsPresent_DefaultsToFalse) {",
+		"\tEXPECT_FALSE(is_present(bitmap, 0));",
+		"\tEXPECT_FALSE(is_present(bitmap, 63));",
+		"\tEXPECT_FALSE(is_present(bitmap, 64));",
+		"\tEXPECT_FALSE(is_present(bitmap, 127));",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, SetPresence_FirstBitOfFirstWord) {",
+		"\tset_presence(bitmap, 0);",
+		"\tEXPECT_TRUE(is_present(bitmap, 0));",
+		"\tEXPECT_EQ(bitmap[0], 1ULL);",
+		"\tEXPECT_EQ(bitmap[1], 0ULL);",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, SetPresence_LastBitOfFirstWord) {",
+		"\tset_presence(bitmap, 63);",
+		"\tEXPECT_TRUE(is_present(bitmap, 63));",
+		"\tEXPECT_EQ(bitmap[0], (uint64_t(1) << 63));",
+		"\tEXPECT_EQ(bitmap[1], 0ULL);",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, SetPresence_FirstBitOfSecondWord) {",
+		"\tset_presence(bitmap, 64);",
+		"\tEXPECT_TRUE(is_present(bitmap, 64));",
+		"\tEXPECT_EQ(bitmap[0], 0ULL);",
+		"\tEXPECT_EQ(bitmap[1], 1ULL);",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, SetPresence_LastBitOfSecondWord) {",
+		"\tset_presence(bitmap, 127);",
+		"\tEXPECT_TRUE(is_present(bitmap, 127));",
+		"\tEXPECT_EQ(bitmap[1], (uint64_t(1) << 63));",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, SetPresence_DoesNotAffectOtherBits) {",
+		"\tset_presence(bitmap, 5);",
+		"\tEXPECT_TRUE(is_present(bitmap, 5));",
+		"\tfor (std::size_t i = 0; i < 128; ++i) {",
+		"\t\tif (i != 5) {",
+		'\t\t\tEXPECT_FALSE(is_present(bitmap, i)) << "index=" << i;',
+		"\t\t}",
+		"\t}",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, ClearPresence_ClearsSetBit) {",
+		"\tset_presence(bitmap, 10);",
+		"\tASSERT_TRUE(is_present(bitmap, 10));",
+		"\tclear_presence(bitmap, 10);",
+		"\tEXPECT_FALSE(is_present(bitmap, 10));",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, ClearPresence_OnAlreadyClearBit_IsNoOp) {",
+		"\tclear_presence(bitmap, 20);",
+		"\tEXPECT_FALSE(is_present(bitmap, 20));",
+		"\tEXPECT_EQ(bitmap[0], 0ULL);",
+		"\tEXPECT_EQ(bitmap[1], 0ULL);",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, ClearPresence_DoesNotAffectOtherBits) {",
+		"\tset_presence(bitmap, 3);",
+		"\tset_presence(bitmap, 70);",
+		"\tclear_presence(bitmap, 3);",
+		"\tEXPECT_FALSE(is_present(bitmap, 3));",
+		"\tEXPECT_TRUE(is_present(bitmap, 70));",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, ClearPresence_LastBitOfSecondWord) {",
+		"\tset_presence(bitmap, 127);",
+		"\tclear_presence(bitmap, 127);",
+		"\tEXPECT_FALSE(is_present(bitmap, 127));",
+		"\tEXPECT_EQ(bitmap[1], 0ULL);",
+		"}",
+		"",
+		"TEST_F(SerializerPresenceBitmapTests, MultipleSetAndClear_RoundTrip) {",
+		"\tfor (std::size_t i = 0; i < 128; ++i) {",
+		"\t\tset_presence(bitmap, i);",
+		"\t}",
+		"\tfor (std::size_t i = 0; i < 128; ++i) {",
+		'\t\tEXPECT_TRUE(is_present(bitmap, i)) << "index=" << i;',
+		"\t}",
+		"\tEXPECT_EQ(bitmap[0], ~uint64_t(0));",
+		"\tEXPECT_EQ(bitmap[1], ~uint64_t(0));",
+		"",
+		"\tfor (std::size_t i = 0; i < 128; ++i) {",
+		"\t\tclear_presence(bitmap, i);",
+		"\t}",
+		"\tfor (std::size_t i = 0; i < 128; ++i) {",
+		'\t\tEXPECT_FALSE(is_present(bitmap, i)) << "index=" << i;',
+		"\t}",
+		"\tEXPECT_EQ(bitmap[0], 0ULL);",
+		"\tEXPECT_EQ(bitmap[1], 0ULL);",
+		"}",
+		"",
+		"} // namespace",
+		"",
+	]
+
+	content = "\n".join(lines)
+
+	# Fixture class names must be unique per FIX version: all versions get
+	# linked together into the "all_tests" binary (whose add_test_custom
+	# GLOB_RECURSEs the whole tests/ tree), so identical TEST_F suite names
+	# across FIX4.2/4.3/4.4 would trigger GoogleTest duplicate-registration
+	# failures at runtime.
+	version_prefix = fix_version.replace(".", "_")  # e.g. "FIX4.4" -> "FIX4_4"
+	content = content.replace(
+		"SerializerWriteUtcTimeOnlyTests", f"{version_prefix}_SerializerWriteUtcTimeOnlyTests"
+	).replace(
+		"SerializerPresenceBitmapTests", f"{version_prefix}_SerializerPresenceBitmapTests"
+	)
+
+	return content
+
+
+def generate_serializer_tests(base_output: Path, fix_version: str = "FIX4.4") -> Path:
+	"""
+	Write tests/<fix_version>/utils/serializer_tests.cpp covering 100% of
+	serializer.h for the given FIX version's namespace.
+	"""
+	output_dir = base_output / "tests" / fix_version / "utils"
+	output_dir.mkdir(parents=True, exist_ok=True)
+
+	test_file = output_dir / "serializer_tests.cpp"
+	test_file.write_text(_generate_serializer_tests_content(fix_version), encoding="utf-8")
+	print(f"[ok] Generated tests/{fix_version}/utils/serializer_tests.cpp")
+	return test_file
+
+
+def _default_libs() -> list[str]:
+	return ["falconfix_config", "falconfix_session", "falconfix_core"]
+
+
+def _version_short(fix_version: str) -> str:
+	"""e.g. 'FIX4.4' -> '44'"""
+	return fix_version.upper().replace("FIX", "").replace(".", "")
+
+
+def _write_add_test_custom_cmakelists(dir_path: Path, target_name: str, libs: list[str]) -> Path:
+	"""(Re)create a CMakeLists.txt containing a single add_test_custom(...) call."""
+	dir_path.mkdir(parents=True, exist_ok=True)
+	cmake_file = dir_path / "CMakeLists.txt"
+	libs_str = " ".join(libs)
+	content = (
+		"# SPDX-License-Identifier: MIT\n"
+		"# Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo\n"
+		f'add_test_custom("{target_name}" {libs_str})\n'
+	)
+	cmake_file.write_text(content, encoding="utf-8")
+	print(f"[ok] {cmake_file}")
+	return cmake_file
+
+
+def _write_add_subdirectory_cmakelists(dir_path: Path, subdirs: list[str]) -> Path:
+	"""(Re)create the parent CMakeLists.txt with one add_subdirectory(...) per subdir."""
+	dir_path.mkdir(parents=True, exist_ok=True)
+	cmake_file = dir_path / "CMakeLists.txt"
+	lines = [
+		"# SPDX-License-Identifier: MIT",
+		"# Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
+	]
+	for subdir in subdirs:
+		lines.append(f"add_subdirectory({subdir})")
+	cmake_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
+	print(f"[ok] {cmake_file}")
+	return cmake_file
+
+
+def ensure_engine_version_cmakelists(version_dir: Path, fix_version: str, subdirs: list[str] | None = None) -> Path:
+	"""
+	Create/update the CMakeLists.txt tree for a tests/<fix_version>/ directory so that:
+	  - tests/<fix_version>/CMakeLists.txt only has add_subdirectory(...) entries
+	  - tests/<fix_version>/components/CMakeLists.txt has its own add_test_custom(...)
+	  - tests/<fix_version>/utils/CMakeLists.txt has its own add_test_custom(...)
+
+	`version_dir` must point directly at the tests/<fix_version> directory
+	(e.g. tests/engine/FIX4.4, whether staged under an "output" root or in
+	the real repo tree) — it is NOT combined with any extra "tests" segment.
+	"""
+	subdirs = subdirs if subdirs is not None else ["components", "utils"]
+	short = _version_short(fix_version)
+	libs = _default_libs()
+
+	for subdir in subdirs:
+		target_name = f"fix{short}_{subdir}_tests"
+		_write_add_test_custom_cmakelists(version_dir / subdir, target_name, libs)
+
+	return _write_add_subdirectory_cmakelists(version_dir, subdirs)
+
+
 def _find_nested_struct_blocks(content: str) -> list[tuple[str, str, int, int]]:
 	"""
 	Locate nested `struct Name { ... };` blocks (used by FalconFIX for repeating
@@ -523,7 +851,18 @@ def generate(base_output: Path, fix_version: str) -> list[Path]:
 			print(f"[warn] {error}")
 
 	print(f"[ok] component tests written → {output_dir} ({stats['generated']} components)")
-	return [Path(f) for f in stats['files']]
+
+	generated_files = [Path(f) for f in stats['files']]
+
+	# serializer.h tests: one static file per FIX version, under tests/<version>/utils/.
+	serializer_test_file = generate_serializer_tests(base_output, fix_version)
+	generated_files.append(serializer_test_file.relative_to(base_output))
+
+	# Ensure tests/<version>/CMakeLists.txt (and components/, utils/ subdirs)
+	# have their own add_test_custom(...) calls, wired via add_subdirectory(...).
+	ensure_engine_version_cmakelists(base_output / "tests" / fix_version, fix_version)
+
+	return generated_files
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
-﻿# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo
-add_test_custom("engine_fix_44_tests" falconfix_config falconfix_session falconfix_core)
+add_subdirectory(components)
+add_subdirectory(utils)
