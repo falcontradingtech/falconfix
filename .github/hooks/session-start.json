@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "timeoutSec": 5,
+        "bash": "echo 'FalconFIX: rules in .github/copilot-instructions.md. Build: cmake --build --preset linux-debug. Never edit src/engine.'",
+        "powershell": "Write-Output 'FalconFIX: rules in .github/copilot-instructions.md. Build: cmake --build --preset windows-debug. Never edit src/engine.'"
+      }
+    ]
+  }
+}

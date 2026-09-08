@@ -1,0 +1,21 @@
+{
+  "$comment": "Repo-level Copilot CLI settings. Keep small; instructions live in ../copilot-instructions.md.",
+  "instructions": [
+    ".github/copilot-instructions.md"
+  ],
+  "skills": [
+    ".github/skills"
+  ],
+  "hooks": [
+    ".github/hooks"
+  ],
+  "excludedPaths": [
+    "build/**",
+    "out/**",
+    "**/vcpkg_installed/**",
+    "falcongen/output/**",
+    "**/*.crt",
+    "**/*.key",
+    "**/certs/**"
+  ]
+}

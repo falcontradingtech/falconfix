@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "matchTools": ["edit", "create", "write", "replace_string_in_file", "multi_replace_string_in_file"],
+        "type": "command",
+        "timeoutSec": 15,
+        "bash": "f=$(cat | grep -oE '[^\"]+\\.(h|hpp|c|cpp)' | head -n1); if [ -n \"$f\" ] && command -v clang-format >/dev/null 2>&1 && [ -f \"$f\" ]; then clang-format -i \"$f\"; fi",
+        "powershell": "$i=[Console]::In.ReadToEnd(); $m=[regex]::Match($i,'[^\"]+\\.(h|hpp|c|cpp)'); if ($m.Success -and (Get-Command clang-format -ErrorAction SilentlyContinue) -and (Test-Path $m.Value)) { clang-format -i $m.Value }"
+      }
+    ]
+  }
+}

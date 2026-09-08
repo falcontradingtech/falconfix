@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "timeoutSec": 5,
+        "bash": "input=$(cat); if echo \"$input\" | grep -Eq '\"(edit|create|write)[A-Za-z_]*\"' && echo \"$input\" | grep -Eq 'src/engine/'; then echo '{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Generated code. Edit falcongen/ and regenerate.\"}'; fi",
+        "powershell": "$i=[Console]::In.ReadToEnd(); if ($i -match '\"(edit|create|write)[A-Za-z_]*\"' -and $i -match 'src[\\\\/]engine[\\\\/]') { '{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Generated code. Edit falcongen/ and regenerate.\"}' }"
+      }
+    ]
+  }
+}
