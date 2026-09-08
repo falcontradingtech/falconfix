@@ -33,8 +33,9 @@ Dependency direction: `app → runtime → session → connection → socket`; s
 
 ## Build / test (incremental — reuse the same build dir)
 ```
-cmake --preset windows-debug          # or linux-debug
-cmake --build --preset windows-debug
+# If build/windows-debug already exists, skip configure — just build incrementally.
+cmake --preset windows-debug          # first time only (or linux-debug)
+cmake --build --preset windows-debug  # incremental; never wipe the dir to force a rebuild
 ctest --preset windows-debug --output-on-failure
 ```
 

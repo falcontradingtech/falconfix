@@ -5,6 +5,7 @@ description: Configure, build and test FalconFIX incrementally with CMake preset
 # Build & test
 
 Always reuse the preset build dir; never create ad-hoc `build-*` dirs.
+**Before building, check if `build/windows-debug` (or `build/linux-debug`) already exists.** If it does, skip the configure step and build incrementally — do not delete/reconfigure it (that forces a full rebuild and wastes time). Only run the configure step the first time or after `CMakeLists.txt`/preset changes.
 
 | Step | Windows | Linux |
 |---|---|---|
