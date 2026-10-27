@@ -3,7 +3,9 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <memory>
 #include <spdlog/sinks/ringbuffer_sink.h>
+#include <logger/engine_log.h>
 #include <logger/spdlog_engine_log.h>
 
 namespace falconfix {
@@ -32,6 +34,22 @@ TEST(SpdlogEngineLogTests, WritesMessagesAtEachSupportedSeverity) {
 	EXPECT_EQ(normalize(messages[0]), "info:connected\n");
 	EXPECT_EQ(normalize(messages[1]), "warning:slow peer\n");
 	EXPECT_EQ(normalize(messages[2]), "error:disconnected\n");
+}
+
+TEST(NullEngineLogTests, AllSeveritiesAreNoOpsAndDoNotThrow) {
+	NullEngineLog engineLog;
+
+	EXPECT_NO_THROW(engineLog.info("ignored"));
+	EXPECT_NO_THROW(engineLog.warn("ignored"));
+	EXPECT_NO_THROW(engineLog.error("ignored"));
+}
+
+TEST(NullEngineLogTests, UsableThroughEngineLogInterface) {
+	std::unique_ptr<EngineLog> engineLog = std::make_unique<NullEngineLog>();
+
+	EXPECT_NO_THROW(engineLog->info("ignored"));
+	EXPECT_NO_THROW(engineLog->warn("ignored"));
+	EXPECT_NO_THROW(engineLog->error("ignored"));
 }
 
 } // namespace falconfix

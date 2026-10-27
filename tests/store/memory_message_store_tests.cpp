@@ -2,6 +2,8 @@
 // Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo
 #include <gtest/gtest.h>
 
+#include <string_view>
+
 #include <store/memory_message_store.h>
 #include <store/null_message_store.h>
 
@@ -87,3 +89,17 @@ TEST(MemoryMessageStoreTests, PersistMessagesTrueStoresBothMessages) {
     ASSERT_TRUE(store.getOutgoing(1, 2, out).ok());
     EXPECT_EQ(out.size(), 2U);
 }
+
+TEST(MemoryMessageStoreTests, StoreOutgoingReportsBadAllocOnOversizedRaw) {
+    falconfix::MemoryMessageStore store;
+
+    // A string_view whose declared length exceeds std::string::max_size() makes the
+    // std::string(raw) copy throw std::length_error before any byte is read, which
+    // storeOutgoing maps to FF_SYS_ERR(BAD_ALLOC).
+    const char dummy = 'x';
+    const std::string_view oversized(&dummy, static_cast<std::size_t>(-1));
+
+    const auto rc = store.storeOutgoing(1, "D", false, oversized);
+    EXPECT_FALSE(rc.ok());
+}
+

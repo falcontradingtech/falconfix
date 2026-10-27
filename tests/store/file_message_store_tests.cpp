@@ -347,6 +347,15 @@ TEST(FileMessageStoreTests, PersistMessagesFalseSkipsMessageStorageButTracksSeqN
     std::filesystem::remove_all(root);
 }
 
+TEST(MessageStoreFactoryTests, UnknownStoreTypeFallsBackToNullStore) {
+    falconfix::SessionConfig cfg{};
+    cfg.sessionID = falconfix::SessionID("FIX4.4", "SUF", "TUF");
+    cfg.storage.storeType = static_cast<falconfix::StoreType>(0xFF);
+
+    auto store = falconfix::MessageStoreFactory::create(cfg);
+    EXPECT_NE(dynamic_cast<falconfix::NullMessageStore *>(store.get()), nullptr);
+}
+
 TEST(MessageStoreFactoryTests, PersistMessagesFalseProducesEmptyGetOutgoing) {
     falconfix::SessionConfig cfg{};
     cfg.sessionID = falconfix::SessionID("FIX4.4", "SFPM", "TFPM");

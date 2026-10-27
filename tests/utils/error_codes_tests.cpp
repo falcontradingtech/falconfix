@@ -365,4 +365,94 @@ TEST_F(ErrorCodesTests, DomainNameHandlesInvalidDomain) {
 	EXPECT_EQ(name, "unknown");
 }
 
+// ============================================================================
+// EXHAUSTIVE CODE_NAME COVERAGE
+// ============================================================================
+
+TEST_F(ErrorCodesTests, RemainingSocketCodeStringRepresentations) {
+	EXPECT_EQ(code_name(code::socket::BIND_FAILED), "socket::bind_failed");
+	EXPECT_EQ(code_name(code::socket::LISTEN_FAILED), "socket::listen_failed");
+	EXPECT_EQ(code_name(code::socket::READ_FAILED), "socket::read_failed");
+	EXPECT_EQ(code_name(code::socket::WRITE_FAILED), "socket::write_failed");
+	EXPECT_EQ(code_name(code::socket::CLOSE_FAILED), "socket::close_failed");
+	EXPECT_EQ(code_name(code::socket::RESOLVE_FAILED), "socket::resolve_failed");
+	EXPECT_EQ(code_name(code::socket::INVALID_INTERFACE), "socket::invalid_interface");
+	EXPECT_EQ(code_name(code::socket::INTERFACE_BIND), "socket::interface_bind");
+	EXPECT_EQ(code_name(code::socket::DISCONNECTED), "socket::disconnected");
+	EXPECT_EQ(code_name(code::socket::CLOSED), "socket::closed");
+	EXPECT_EQ(code_name(code::socket::NOT_OPEN), "socket::not_open");
+	EXPECT_EQ(code_name(code::socket::ALREADY_CONNECTED), "socket::already_connected");
+	EXPECT_EQ(code_name(code::socket::NOT_CONNECTED), "socket::not_connected");
+	EXPECT_EQ(code_name(code::socket::UNAVAILABLE), "socket::unavailable");
+	EXPECT_EQ(code_name(code::socket::OPERATION_TIMEOUT), "socket::operation_timeout");
+	EXPECT_EQ(code_name(code::socket::BUFFER_OVERFLOW), "socket::buffer_overflow");
+	EXPECT_EQ(code_name(code::socket::BUFFER_UNDERFLOW), "socket::buffer_underflow");
+	EXPECT_EQ(code_name(code::socket::INVALID_FRAME), "socket::invalid_frame");
+	EXPECT_EQ(code_name(code::socket::END_OF_FILE), "socket::end_of_file");
+	EXPECT_EQ(code_name(code::socket::UNKNOWN), "socket::unknown");
+}
+
+TEST_F(ErrorCodesTests, FixParseCodeStringRepresentations) {
+	EXPECT_EQ(code_name(code::fix::parse::UNKNOWN_FIELD_ID), "fix::parse::unknown_field_id");
+	EXPECT_EQ(code_name(code::fix::parse::INVALID_FIELD_VALUE), "fix::parse::invalid_field_value");
+	EXPECT_EQ(code_name(code::fix::parse::UNEXPECTED_FIELD), "fix::parse::unexpected_field");
+	EXPECT_EQ(code_name(code::fix::parse::OUT_OF_RANGE), "fix::parse::out_of_range");
+	EXPECT_EQ(code_name(code::fix::parse::DUPLICATE_TAG), "fix::parse::duplicate_tag");
+	EXPECT_EQ(code_name(code::fix::parse::MALFORMED_TAG), "fix::parse::malformed_tag");
+	EXPECT_EQ(code_name(code::fix::parse::MISSING_EQUALS), "fix::parse::missing_equals");
+	EXPECT_EQ(code_name(code::fix::parse::MISSING_SOH), "fix::parse::missing_soh");
+	EXPECT_EQ(code_name(code::fix::parse::DECODE_FAILED), "fix::parse::decode_failed");
+	EXPECT_EQ(code_name(code::fix::parse::INVALID_CHECKSUM), "fix::parse::invalid_checksum");
+	EXPECT_EQ(code_name(code::fix::parse::INVALID_LENGTH), "fix::parse::invalid_length");
+	EXPECT_EQ(code_name(code::fix::parse::INVALID_MESSAGE_TYPE), "fix::parse::invalid_message_type");
+}
+
+TEST_F(ErrorCodesTests, FixValidationCodeStringRepresentations) {
+	EXPECT_EQ(code_name(code::fix::validation::MISSING_REQUIRED), "fix::validation::missing_required");
+	EXPECT_EQ(code_name(code::fix::validation::INVALID_FIELD_VALUE), "fix::validation::invalid_field_value");
+	EXPECT_EQ(code_name(code::fix::validation::REQUIRED_GROUP_EMPTY), "fix::validation::required_group_empty");
+	EXPECT_EQ(code_name(code::fix::validation::GROUP_COUNT_MISMATCH), "fix::validation::group_count_mismatch");
+	EXPECT_EQ(code_name(code::fix::validation::COMPONENT_VALIDATION_FAILED), "fix::validation::component_validation_failed");
+	EXPECT_EQ(code_name(code::fix::validation::ENCODE_FAILED), "fix::validation::encode_failed");
+}
+
+TEST_F(ErrorCodesTests, FixSessionCodeStringRepresentations) {
+	EXPECT_EQ(code_name(code::fix::session::UNSUPPORTED_PROTOCOL), "fix::session::unsupported_protocol");
+	EXPECT_EQ(code_name(code::fix::session::SESSION_CREATE_FAILED), "fix::session::session_create_failed");
+	EXPECT_EQ(code_name(code::fix::session::SESSION_NOT_FOUND), "fix::session::session_not_found");
+	EXPECT_EQ(code_name(code::fix::session::SEQUENCE_GAP), "fix::session::sequence_gap");
+	EXPECT_EQ(code_name(code::fix::session::SESSION_REJECT), "fix::session::session_reject");
+	EXPECT_EQ(code_name(code::fix::session::LOGON_FAILED), "fix::session::logon_failed");
+	EXPECT_EQ(code_name(code::fix::session::NOT_LOGGED_ON), "fix::session::not_logged_on");
+	EXPECT_EQ(code_name(code::fix::session::LOGOUT_FAILED), "fix::session::logout_failed");
+	EXPECT_EQ(code_name(code::fix::session::HEARTBEAT_TIMEOUT), "fix::session::heartbeat_timeout");
+	EXPECT_EQ(code_name(code::fix::session::TEST_REQUEST_TIMEOUT), "fix::session::test_request_timeout");
+	EXPECT_EQ(code_name(code::fix::session::RESEND_REQUIRED), "fix::session::resend_required");
+	EXPECT_EQ(code_name(code::fix::session::RESEND_FAILED), "fix::session::resend_failed");
+	EXPECT_EQ(code_name(code::fix::session::SEQUENCE_RESET_FAILED), "fix::session::sequence_reset_failed");
+	EXPECT_EQ(code_name(code::fix::session::REJECTED_BY_APPLICATION), "fix::session::rejected_by_application");
+	EXPECT_EQ(code_name(code::fix::session::INVALID_SEQUENCE_RESET), "fix::session::invalid_sequence_reset");
+}
+
+// ============================================================================
+// ERROR_MESSAGE OVERLOADS
+// ============================================================================
+
+TEST_F(ErrorCodesTests, ErrorMessageFromCodeMatchesCodeName) {
+	EXPECT_EQ(error_message(code::SUCCESS), code_name(code::SUCCESS));
+	EXPECT_EQ(error_message(code::socket::CONNECT_FAILED), code_name(code::socket::CONNECT_FAILED));
+	EXPECT_EQ(error_message(code::fix::session::LOGON_FAILED), code_name(code::fix::session::LOGON_FAILED));
+}
+
+TEST_F(ErrorCodesTests, ErrorMessageFromStatusMatchesCodeName) {
+	Status ok = success();
+	EXPECT_EQ(error_message(ok), code_name(code::SUCCESS));
+
+	Status failStatus = socket(code::socket::CONNECT_FAILED);
+	EXPECT_EQ(error_message(failStatus), code_name(code::socket::CONNECT_FAILED));
+
+	Status sessionStatus = fail(Domain::fix_session, code::fix::session::NOT_LOGGED_ON);
+	EXPECT_EQ(error_message(sessionStatus), "fix::session::not_logged_on");
+}
+
 } // anonymous namespace
