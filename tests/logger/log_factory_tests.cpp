@@ -144,6 +144,11 @@ TEST_F(LogFactorySessionLogTest, ScreenLogWithHumanReadableFIXReplacesSoh) {
 	ASSERT_NE(log, nullptr);
 	EXPECT_EQ(dynamic_cast<NullMessageLog *>(log.get()), nullptr);
 
+	// Mute the underlying spdlog console sinks so nothing is printed to the screen
+	// during tests; the humanReadableFIX branch still runs before info() is called,
+	// so coverage is preserved.
+	spdlog::apply_all([](std::shared_ptr<spdlog::logger> l) { l->set_level(spdlog::level::off); });
+
 	// Exercises the humanReadableFIX branch (std::replace of SOH with '|').
 	log->incoming("SESS", "8=FIX.4.2\x01" "35=A\x01");
 	log->outgoing("SESS", "8=FIX.4.2\x01" "35=0\x01");
@@ -157,6 +162,10 @@ TEST_F(LogFactorySessionLogTest, ScreenLogWithoutHumanReadableFIXKeepsRawMessage
 
 	auto log = LogFactory::createSessionLog(config);
 	ASSERT_NE(log, nullptr);
+
+	// Mute the underlying spdlog console sinks so nothing is printed to the screen;
+	// the non-humanReadable branch of incoming/outgoing still runs before info().
+	spdlog::apply_all([](std::shared_ptr<spdlog::logger> l) { l->set_level(spdlog::level::off); });
 
 	// Exercises the non-humanReadable branch of incoming/outgoing.
 	log->incoming("SESS", "8=FIX.4.2\x01" "35=A\x01");

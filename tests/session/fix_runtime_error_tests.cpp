@@ -102,3 +102,80 @@ TEST(FIXRuntimeTests, SendAndLogoutToUnknownSessionFails) {
 	socketEngine.stop();
 	spdlog::drop_all();
 }
+
+TEST(FIXRuntimeTests, UnknownProtocolFailsSessionCreation) {
+	spdlog::drop_all();
+
+	const int port = falconfix::test::findFreeLoopbackPort();
+	ASSERT_GT(port, 0);
+
+	falconfix::socket::BoostSocketContext socketEngine;
+	ASSERT_TRUE(socketEngine.start(2));
+
+	NoopApp app;
+
+	// An unknown BeginString has no registered protocol, so ProtocolFactory::
+	// createSession returns nullptr and start() reports SESSION_CREATE_FAILED.
+	std::ostringstream cfg;
+	cfg << "[DEFAULT]\n";
+	cfg << "ConnectionType=acceptor\n";
+	cfg << "SocketAcceptHost=127.0.0.1\n";
+	cfg << "SocketAcceptPort=" << port << "\n";
+	cfg << "HeartBtInt=5\n";
+	cfg << "StoreType=memory\n";
+	cfg << "LogType=none\n\n";
+	cfg << "[SESSION]\n";
+	cfg << "BeginString=FIX9.9\n";
+	cfg << "SenderCompID=SERVER\n";
+	cfg << "TargetCompID=CLIENT\n";
+
+	auto settings = falconfix::SessionSettings::fromConfig(
+		falconfix::FIXConfig::parse(cfg.str()));
+
+	falconfix::FIXRuntime engine(app, std::move(settings), socketEngine);
+
+	const FFStatus rc = engine.start();
+	EXPECT_FALSE(rc.ok());
+
+	engine.stop();
+	socketEngine.stop();
+	spdlog::drop_all();
+}
+
+TEST(FIXRuntimeTests, AcceptorBindFailureIsReported) {
+	spdlog::drop_all();
+
+	falconfix::socket::BoostSocketContext socketEngine;
+	ASSERT_TRUE(socketEngine.start(2));
+
+	NoopApp app;
+
+	// A bind address that cannot belong to this host makes the acceptor's
+	// connection->start() fail, exercising the connection-start error branch in
+	// FIXRuntime::start() (the rc.ok() == false path after start()).
+	std::ostringstream cfg;
+	cfg << "[DEFAULT]\n";
+	cfg << "ConnectionType=acceptor\n";
+	cfg << "SocketAcceptHost=203.0.113.1\n"; // TEST-NET-3, not assignable locally
+	cfg << "SocketAcceptPort=35010\n";
+	cfg << "HeartBtInt=5\n";
+	cfg << "StoreType=memory\n";
+	cfg << "LogType=none\n\n";
+	cfg << "[SESSION]\n";
+	cfg << "BeginString=FIX4.4\n";
+	cfg << "SenderCompID=SERVER\n";
+	cfg << "TargetCompID=CLIENT\n";
+
+	auto settings = falconfix::SessionSettings::fromConfig(
+		falconfix::FIXConfig::parse(cfg.str()));
+
+	falconfix::FIXRuntime engine(app, std::move(settings), socketEngine);
+
+	const FFStatus rc = engine.start();
+	EXPECT_FALSE(rc.ok());
+
+	engine.stop();
+	socketEngine.stop();
+	spdlog::drop_all();
+}
+

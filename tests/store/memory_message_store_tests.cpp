@@ -30,6 +30,21 @@ TEST(MemoryMessageStoreTests, IncomingStoreReturnsOk) {
     EXPECT_TRUE(store.storeIncoming(7, "incoming").ok());
 }
 
+TEST(MemoryMessageStoreTests, GetOutgoingBreaksPastEndSeqNum) {
+    falconfix::MemoryMessageStore store;
+    ASSERT_TRUE(store.storeOutgoing(1, "TEST", true, "msg-1").ok());
+    ASSERT_TRUE(store.storeOutgoing(2, "TEST", true, "msg-2").ok());
+    ASSERT_TRUE(store.storeOutgoing(3, "TEST", true, "msg-3").ok());
+
+    // endSeqNum below the last stored seqNum forces the loop to break once
+    // msg.seqNum > endSeqNum (MessageStoreBase::getOutgoing, the early break).
+    std::vector<falconfix::StoredMessageView> out;
+    ASSERT_TRUE(store.getOutgoing(1, 2, out).ok());
+    ASSERT_EQ(out.size(), 2U);
+    EXPECT_EQ(out[0].seqNum, 1);
+    EXPECT_EQ(out[1].seqNum, 2);
+}
+
 TEST(MemoryMessageStoreTests, SeqNumSetAndIncrementWorks) {
     falconfix::MemoryMessageStore store;
     store.setNextSenderSeqNum(41);

@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <session/session_settings.h>
@@ -43,6 +44,11 @@ std::filesystem::path outgoingFilePath(const std::filesystem::path &root,
 std::filesystem::path incomingFilePath(const std::filesystem::path &root,
                                        const falconfix::SessionID &sid) {
     return storeSessionDir(root, sid) / "incoming.bin";
+}
+
+std::filesystem::path metaFilePath(const std::filesystem::path &root,
+                                   const falconfix::SessionID &sid) {
+    return storeSessionDir(root, sid) / "seq.meta";
 }
 
 struct FileRecordHeaderWire {
@@ -302,6 +308,24 @@ TEST(FileMessageStoreTests, StopsGracefullyOnAbsurdRawSizeLargerThanFile) {
     std::filesystem::remove_all(root);
 }
 
+TEST(FileMessageStoreTests, StoreOutgoingReportsErrorOnOversizedRaw) {
+    const auto root = makeTempStorePath("oversized");
+    const falconfix::SessionID sid("FIX4.4", "OS", "OC");
+
+    falconfix::FileMessageStore store(root.string(), sid);
+
+    // A string_view whose declared length exceeds std::string::max_size() makes the
+    // std::string(raw) copy throw std::length_error before any byte is read, which
+    // storeOutgoing maps to a non-ok FFStatus via its catch(...) handler.
+    const char dummy = 'x';
+    const std::string_view oversized(&dummy, static_cast<std::size_t>(-1));
+
+    const auto rc = store.storeOutgoing(1, "D", false, oversized);
+    EXPECT_FALSE(rc.ok());
+
+    std::filesystem::remove_all(root);
+}
+
 TEST(MessageStoreFactoryTests, CreatesAllConfiguredStoreTypes) {
     falconfix::SessionConfig cfg{};
     cfg.sessionID = falconfix::SessionID("FIX4.4", "SF", "TF");
@@ -370,4 +394,45 @@ TEST(MessageStoreFactoryTests, PersistMessagesFalseProducesEmptyGetOutgoing) {
     ASSERT_TRUE(store->getOutgoing(1, 1, out).ok());
     EXPECT_TRUE(out.empty());
     EXPECT_EQ(store->nextSenderSeqNum(), 2);
+}
+
+TEST(FileMessageStoreTests, UnwritableDataFilesReportErrors) {
+    // Fault injection: after the store is constructed it has already created its
+    // session directory and resolved m_outgoingFile / m_incomingFile. Replacing
+    // each target *file path* with a directory makes every subsequent ofstream
+    // open fail deterministically (portable on Windows and Linux), exercising the
+    // open-failure branches of appendOutgoing (line 122) and storeIncoming (96).
+    const auto root = makeTempStorePath("unwritable_data");
+    const falconfix::SessionID sid("FIX4.4", "UW", "UC");
+
+    falconfix::FileMessageStore store(root.string(), sid);
+
+    std::filesystem::create_directories(outgoingFilePath(root, sid));
+    std::filesystem::create_directories(incomingFilePath(root, sid));
+
+    EXPECT_FALSE(store.storeOutgoing(1, "D", false, "msg-1").ok());
+    EXPECT_FALSE(store.storeIncoming(1, "in-1").ok());
+
+    std::filesystem::remove_all(root);
+}
+
+TEST(FileMessageStoreTests, UnwritableMetaFileIsIgnored) {
+    // Fault injection for persistMeta: replace the seq.meta path with a directory
+    // so its ofstream open fails. persistMeta swallows the failure (line 202), yet
+    // the in-memory sequence numbers keep advancing.
+    const auto root = makeTempStorePath("unwritable_meta");
+    const falconfix::SessionID sid("FIX4.4", "UM", "MC");
+
+    falconfix::FileMessageStore store(root.string(), sid);
+
+    std::filesystem::remove(metaFilePath(root, sid));
+    std::filesystem::create_directories(metaFilePath(root, sid));
+
+    store.incrNextSenderSeqNum();
+    EXPECT_EQ(store.nextSenderSeqNum(), 2);
+
+    store.setNextTargetSeqNum(7);
+    EXPECT_EQ(store.nextTargetSeqNum(), 7);
+
+    std::filesystem::remove_all(root);
 }

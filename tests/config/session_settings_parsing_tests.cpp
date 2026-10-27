@@ -288,6 +288,38 @@ TEST(SessionSettingsParsingTests, InitiatorConnectionWithEndpointsIsValid) {
     EXPECT_TRUE(cfg.connection.valid());
 }
 
+TEST(SessionSettingsConnectionTests, InitiatorWithInvalidEndpointIsNotValid) {
+    falconfix::SessionConfig::Connection c;
+    c.connectionType = falconfix::ConnectionType::Initiator;
+    // A present-but-invalid endpoint (empty host) makes valid() short-circuit to
+    // false inside the endpoint loop.
+    c.socketConnectEndpoints.push_back({"", 35001});
+    EXPECT_FALSE(c.valid());
+}
+
+TEST(SessionSettingsConnectionTests, InitiatorWithoutEndpointsFallsBackToHostPort) {
+    falconfix::SessionConfig::Connection c;
+    c.connectionType = falconfix::ConnectionType::Initiator;
+    c.socketConnectEndpoints.clear();
+
+    c.socketConnectHost = "127.0.0.1";
+    c.socketConnectPort = 35001;
+    EXPECT_TRUE(c.valid());
+
+    c.socketConnectPort = 0;
+    EXPECT_FALSE(c.valid());
+}
+
+TEST(SessionSettingsParsingTests, ReconnectIntervalMsAliasIsParsed) {
+    const auto cfg = parseSingle(wrap(
+        "ReconnectIntervalMs=1500\n"
+        "LogoutTimeoutMs=2500\n"
+        "StoreType=none\n"));
+
+    EXPECT_EQ(cfg.connection.reconnectIntervalMs, 1500U);
+    EXPECT_EQ(cfg.connection.logoutTimeoutMs, 2500U);
+}
+
 TEST(SessionSettingsParsingTests, FromFileLoadsSettingsFromDisk) {
 	const auto stamp = std::chrono::steady_clock::now().time_since_epoch().count();
 	const auto path = std::filesystem::temp_directory_path() /
