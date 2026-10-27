@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_OrderQtyDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOrderQty(3.14f);
-    component.setCashOrderQty(3.14f);
-    component.setOrderPercent(3.14f);
+    { const double test_value = 123.456; component.setOrderQty(test_value); }
+    { const double test_value = 123.456; component.setCashOrderQty(test_value); }
+    { const double test_value = 123.456; component.setOrderPercent(test_value); }
     
     // Reset component
     component.reset();
@@ -73,12 +73,12 @@ TEST_F(FIX4_4_OrderQtyDataComponentTest, SetRoundingModulusAndRoundingModulusMat
 TEST_F(FIX4_4_OrderQtyDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOrderQty(42);
+    { const double test_value = 123.456; component.setOrderQty(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_OrderQtyDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[242];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

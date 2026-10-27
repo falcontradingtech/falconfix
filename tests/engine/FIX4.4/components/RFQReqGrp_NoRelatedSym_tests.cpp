@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPrevClosePx(3.14f);
-    component.setQuoteRequestType(42);
-    component.setQuoteType(42);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
+    { const int64_t test_value = 12345; component.setQuoteRequestType(test_value); }
+    { const int64_t test_value = 12345; component.setQuoteType(test_value); }
     
     // Reset component
     component.reset();
@@ -56,15 +56,23 @@ TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetQuoteTypeAndQuoteTypeMatch
     EXPECT_TRUE(component.hasQuoteType());
 }
 
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
 TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPrevClosePx(42);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_RFQReqGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[306];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,7 +24,9 @@ protected:
 
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
+    { const char test_value = 'X'; component.setSide(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryClOrdID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,10 +42,26 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetSideAndSideMatch) {
     EXPECT_TRUE(component.hasSide());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetClOrdLinkIDAndClOrdLinkIDMatch) {
+    EXPECT_FALSE(component.hasClOrdLinkID());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetTradeOriginationDateAndTradeOriginationDateMatch) {
 }
 
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetTradeDateAndTradeDateMatch) {
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetAccountAndAccountMatch) {
+    EXPECT_FALSE(component.hasAccount());
 }
 
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
@@ -81,6 +99,10 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetPreallocMethodAndPreal
     EXPECT_TRUE(component.hasPreallocMethod());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetAllocIDAndAllocIDMatch) {
+    EXPECT_FALSE(component.hasAllocID());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetQtyTypeAndQtyTypeMatch) {
     const int64_t test_value = 12345;
     component.setQtyType(test_value);
@@ -95,6 +117,10 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetOrderCapacityAndOrderC
     EXPECT_TRUE(component.hasOrderCapacity());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetOrderRestrictionsAndOrderRestrictionsMatch) {
+    EXPECT_FALSE(component.hasOrderRestrictions());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetCustOrderCapacityAndCustOrderCapacityMatch) {
     const int64_t test_value = 12345;
     component.setCustOrderCapacity(test_value);
@@ -105,6 +131,10 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetCustOrderCapacityAndCu
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetForexReqAndForexReqMatch) {
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetSettlCurrencyAndSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasSettlCurrency());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetBookingTypeAndBookingTypeMatch) {
     const int64_t test_value = 12345;
     component.setBookingType(test_value);
@@ -112,7 +142,14 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetBookingTypeAndBookingT
     EXPECT_TRUE(component.hasBookingType());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetPositionEffectAndPositionEffectMatch) {
@@ -136,13 +173,21 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetCashMarginAndCashMargi
     EXPECT_TRUE(component.hasCashMargin());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetClearingFeeIndicatorAndClearingFeeIndicatorMatch) {
+    EXPECT_FALSE(component.hasClearingFeeIndicator());
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetSolicitedFlagAndSolicitedFlagMatch) {
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetSideComplianceIDAndSideComplianceIDMatch) {
+    EXPECT_FALSE(component.hasSideComplianceID());
 }
 
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
+    { const char test_value = 'X'; component.setSide(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

@@ -24,7 +24,7 @@ protected:
 
 TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setIOIQualifier('A');
+    { const char test_value = 'X'; component.setIOIQualifier(test_value); }
     
     // Reset component
     component.reset();
@@ -43,12 +43,12 @@ TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, SetIOIQualifierAndIOIQual
 TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setIOIQualifier('A');
+    { const char test_value = 'X'; component.setIOIQualifier(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_IOIQualGrp_NoIOIQualifiersComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[12];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

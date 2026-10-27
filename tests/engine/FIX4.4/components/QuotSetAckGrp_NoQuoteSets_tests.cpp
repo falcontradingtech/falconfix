@@ -24,13 +24,18 @@ protected:
 
 TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setTotNoQuoteEntries(42);
+    { const std::string_view test_value{"AAA"}; component.setQuoteSetID(test_value); }
+    { const int64_t test_value = 12345; component.setTotNoQuoteEntries(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, SetQuoteSetIDAndQuoteSetIDMatch) {
+    EXPECT_FALSE(component.hasQuoteSetID());
 }
 
 TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, SetTotNoQuoteEntriesAndTotNoQuoteEntriesMatch) {
@@ -46,12 +51,12 @@ TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, SetLastFragmentAndLastFrag
 TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setTotNoQuoteEntries(42);
+    { const std::string_view test_value{"AAA"}; component.setQuoteSetID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[136];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

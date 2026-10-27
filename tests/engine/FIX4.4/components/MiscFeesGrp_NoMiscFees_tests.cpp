@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setMiscFeeAmt(3.14f);
-    component.setMiscFeeType('A');
-    component.setMiscFeeBasis(42);
+    { const double test_value = 123.456; component.setMiscFeeAmt(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setMiscFeeCurr(test_value); }
+    { const char test_value = 'X'; component.setMiscFeeType(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,10 @@ TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeAmtAndMiscFeeAmtMat
     component.setMiscFeeAmt(test_value);
     EXPECT_EQ(component.getMiscFeeAmt(), test_value);
     EXPECT_TRUE(component.hasMiscFeeAmt());
+}
+
+TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeCurrAndMiscFeeCurrMatch) {
+    EXPECT_FALSE(component.hasMiscFeeCurr());
 }
 
 TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeTypeAndMiscFeeTypeMatch) {
@@ -59,12 +63,12 @@ TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, SetMiscFeeBasisAndMiscFeeBasi
 TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setMiscFeeAmt(42);
+    { const double test_value = 123.456; component.setMiscFeeAmt(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_MiscFeesGrp_NoMiscFeesComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[194];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,15 +24,19 @@ protected:
 
 TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLongQty(3.14f);
-    component.setShortQty(3.14f);
-    component.setPosQtyStatus(42);
+    { const std::string_view test_value{"AAA"}; component.setPosType(test_value); }
+    { const double test_value = 123.456; component.setLongQty(test_value); }
+    { const double test_value = 123.456; component.setShortQty(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetPosTypeAndPosTypeMatch) {
+    EXPECT_FALSE(component.hasPosType());
 }
 
 TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetLongQtyAndLongQtyMatch) {
@@ -59,12 +63,12 @@ TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, SetPosQtyStatusAndPosQtyStat
 TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLongQty(42);
+    { const std::string_view test_value{"AAA"}; component.setPosType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_PositionQty_NoPositionsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[240];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

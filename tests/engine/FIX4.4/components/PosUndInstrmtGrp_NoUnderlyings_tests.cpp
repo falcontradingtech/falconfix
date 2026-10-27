@@ -24,8 +24,8 @@ protected:
 
 TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setUnderlyingSettlPrice(3.14f);
-    component.setUnderlyingSettlPriceType(42);
+    { const double test_value = 123.456; component.setUnderlyingSettlPrice(test_value); }
+    { const int64_t test_value = 12345; component.setUnderlyingSettlPriceType(test_value); }
     
     // Reset component
     component.reset();
@@ -51,12 +51,12 @@ TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, SetUnderlyingSettlPri
 TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setUnderlyingSettlPrice(42);
+    { const double test_value = 123.456; component.setUnderlyingSettlPrice(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_PosUndInstrmtGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[108];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

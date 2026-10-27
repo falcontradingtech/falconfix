@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setDistribPaymentMethod(42);
-    component.setDistribPercentage(3.14f);
+    { const int64_t test_value = 12345; component.setDistribPaymentMethod(test_value); }
+    { const double test_value = 123.456; component.setDistribPercentage(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setCashDistribCurr(test_value); }
     
     // Reset component
     component.reset();
@@ -48,15 +49,39 @@ TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetDistribPercentageA
     EXPECT_TRUE(component.hasDistribPercentage());
 }
 
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribCurrAndCashDistribCurrMatch) {
+    EXPECT_FALSE(component.hasCashDistribCurr());
+}
+
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribAgentNameAndCashDistribAgentNameMatch) {
+    EXPECT_FALSE(component.hasCashDistribAgentName());
+}
+
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribAgentCodeAndCashDistribAgentCodeMatch) {
+    EXPECT_FALSE(component.hasCashDistribAgentCode());
+}
+
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribAgentAcctNumberAndCashDistribAgentAcctNumberMatch) {
+    EXPECT_FALSE(component.hasCashDistribAgentAcctNumber());
+}
+
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribPayRefAndCashDistribPayRefMatch) {
+    EXPECT_FALSE(component.hasCashDistribPayRef());
+}
+
+TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, SetCashDistribAgentAcctNameAndCashDistribAgentAcctNameMatch) {
+    EXPECT_FALSE(component.hasCashDistribAgentAcctName());
+}
+
 TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setDistribPaymentMethod(42);
+    { const int64_t test_value = 12345; component.setDistribPaymentMethod(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_RgstDistInstGrp_NoDistribInstsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[552];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

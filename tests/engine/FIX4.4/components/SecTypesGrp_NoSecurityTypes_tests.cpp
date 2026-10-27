@@ -24,13 +24,23 @@ protected:
 
 TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setProduct(42);
+    { const std::string_view test_value{"AAA"}; component.setSecurityType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecuritySubType(test_value); }
+    { const int64_t test_value = 12345; component.setProduct(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetSecurityTypeAndSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasSecurityType());
+}
+
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetSecuritySubTypeAndSecuritySubTypeMatch) {
+    EXPECT_FALSE(component.hasSecuritySubType());
 }
 
 TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetProductAndProductMatch) {
@@ -40,15 +50,19 @@ TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetProductAndProductMatc
     EXPECT_TRUE(component.hasProduct());
 }
 
+TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, SetCFICodeAndCFICodeMatch) {
+    EXPECT_FALSE(component.hasCFICode());
+}
+
 TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setProduct(42);
+    { const std::string_view test_value{"AAA"}; component.setSecurityType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SecTypesGrp_NoSecurityTypesComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[272];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

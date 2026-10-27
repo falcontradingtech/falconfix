@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setAllocQty(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
+    { const int64_t test_value = 12345; component.setAllocAcctIDSource(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setAllocSettlCurrency(test_value); }
     
     // Reset component
     component.reset();
@@ -34,11 +35,23 @@ TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetAllocAccountAndAllocAccountMatch) {
+    EXPECT_FALSE(component.hasAllocAccount());
+}
+
 TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAllocAcctIDSource(test_value);
     EXPECT_EQ(component.getAllocAcctIDSource(), test_value);
     EXPECT_TRUE(component.hasAllocAcctIDSource());
+}
+
+TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetAllocSettlCurrencyAndAllocSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasAllocSettlCurrency());
+}
+
+TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetIndividualAllocIDAndIndividualAllocIDMatch) {
+    EXPECT_FALSE(component.hasIndividualAllocID());
 }
 
 TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
@@ -51,12 +64,12 @@ TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch
 TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_PreAllocMlegGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[326];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

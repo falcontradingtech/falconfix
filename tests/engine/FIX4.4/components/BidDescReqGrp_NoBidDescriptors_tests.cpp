@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setBidDescriptorType(42);
-    component.setSideValueInd(42);
-    component.setLiquidityValue(3.14f);
+    { const int64_t test_value = 12345; component.setBidDescriptorType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setBidDescriptor(test_value); }
+    { const int64_t test_value = 12345; component.setSideValueInd(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,10 @@ TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetBidDescriptorTypeA
     component.setBidDescriptorType(test_value);
     EXPECT_EQ(component.getBidDescriptorType(), test_value);
     EXPECT_TRUE(component.hasBidDescriptorType());
+}
+
+TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetBidDescriptorAndBidDescriptorMatch) {
+    EXPECT_FALSE(component.hasBidDescriptor());
 }
 
 TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetSideValueIndAndSideValueIndMatch) {
@@ -108,12 +112,12 @@ TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, SetValueOfFuturesAndV
 TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setBidDescriptorType(42);
+    { const int64_t test_value = 12345; component.setBidDescriptorType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_BidDescReqGrp_NoBidDescriptorsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[630];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

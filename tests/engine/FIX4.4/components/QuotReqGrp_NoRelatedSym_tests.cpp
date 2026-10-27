@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPrevClosePx(3.14f);
-    component.setQuoteRequestType(42);
-    component.setQuoteType(42);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
+    { const int64_t test_value = 12345; component.setQuoteRequestType(test_value); }
+    { const int64_t test_value = 12345; component.setQuoteType(test_value); }
     
     // Reset component
     component.reset();
@@ -54,6 +54,14 @@ TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetQuoteTypeAndQuoteTypeMatc
     component.setQuoteType(test_value);
     EXPECT_EQ(component.getQuoteType(), test_value);
     EXPECT_TRUE(component.hasQuoteType());
+}
+
+TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
 }
 
 TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetTradeOriginationDateAndTradeOriginationDateMatch) {
@@ -91,6 +99,14 @@ TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetOrderQty2AndOrderQty2Matc
     component.setOrderQty2(test_value);
     EXPECT_EQ(component.getOrderQty2(), test_value);
     EXPECT_TRUE(component.hasOrderQty2());
+}
+
+TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
+}
+
+TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetAccountAndAccountMatch) {
+    EXPECT_FALSE(component.hasAccount());
 }
 
 TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
@@ -154,7 +170,7 @@ TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, SetPrice2AndPrice2Match) {
 TEST_F(FIX4_4_QuotReqGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPrevClosePx(42);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

@@ -24,14 +24,23 @@ protected:
 
 TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCumQty(3.14f);
-    component.setOrdStatus('A');
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryClOrdID(test_value); }
+    { const double test_value = 123.456; component.setCumQty(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
 }
 
 TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetCumQtyAndCumQtyMatch) {
@@ -79,18 +88,25 @@ TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetOrdRejReasonAndOrdRejReas
     EXPECT_TRUE(component.hasOrdRejReason());
 }
 
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCumQty(42);
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_OrdListStatGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[638];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

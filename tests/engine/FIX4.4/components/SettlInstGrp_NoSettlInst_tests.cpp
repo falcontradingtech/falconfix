@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlInstTransType('A');
-    component.setSide('A');
-    component.setProduct(42);
+    { const std::string_view test_value{"AAA"}; component.setSettlInstID(test_value); }
+    { const char test_value = 'X'; component.setSettlInstTransType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSettlInstRefID(test_value); }
     
     // Reset component
     component.reset();
@@ -35,11 +35,19 @@ TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetSettlInstIDAndSettlInstIDMatch) {
+    EXPECT_FALSE(component.hasSettlInstID());
+}
+
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetSettlInstTransTypeAndSettlInstTransTypeMatch) {
     const char test_value = 'X';
     component.setSettlInstTransType(test_value);
     EXPECT_EQ(component.getSettlInstTransType(), test_value);
     EXPECT_TRUE(component.hasSettlInstTransType());
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetSettlInstRefIDAndSettlInstRefIDMatch) {
+    EXPECT_FALSE(component.hasSettlInstRefID());
 }
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetSideAndSideMatch) {
@@ -54,6 +62,14 @@ TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetProductAndProductMatch) 
     component.setProduct(test_value);
     EXPECT_EQ(component.getProduct(), test_value);
     EXPECT_TRUE(component.hasProduct());
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetSecurityTypeAndSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasSecurityType());
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCFICodeAndCFICodeMatch) {
+    EXPECT_FALSE(component.hasCFICode());
 }
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetEffectiveTimeAndEffectiveTimeMatch) {
@@ -72,24 +88,44 @@ TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetPaymentMethodAndPaymentM
     EXPECT_TRUE(component.hasPaymentMethod());
 }
 
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetPaymentRefAndPaymentRefMatch) {
+    EXPECT_FALSE(component.hasPaymentRef());
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCardHolderNameAndCardHolderNameMatch) {
+    EXPECT_FALSE(component.hasCardHolderName());
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCardNumberAndCardNumberMatch) {
+    EXPECT_FALSE(component.hasCardNumber());
+}
+
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCardStartDateAndCardStartDateMatch) {
 }
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCardExpDateAndCardExpDateMatch) {
 }
 
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetCardIssNumAndCardIssNumMatch) {
+    EXPECT_FALSE(component.hasCardIssNum());
+}
+
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetPaymentDateAndPaymentDateMatch) {
+}
+
+TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, SetPaymentRemitterIDAndPaymentRemitterIDMatch) {
+    EXPECT_FALSE(component.hasPaymentRemitterID());
 }
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlInstTransType('A');
+    { const std::string_view test_value{"AAA"}; component.setSettlInstID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SettlInstGrp_NoSettlInstComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[998];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

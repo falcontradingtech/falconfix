@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
-    component.setAcctIDSource(42);
-    component.setAccountType(42);
+    { const char test_value = 'X'; component.setSide(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setOrderID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryOrderID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,30 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSideAndSideMatch) {
     component.setSide(test_value);
     EXPECT_EQ(component.getSide(), test_value);
     EXPECT_TRUE(component.hasSide());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOrderIDAndOrderIDMatch) {
+    EXPECT_FALSE(component.hasOrderID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSecondaryOrderIDAndSecondaryOrderIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryOrderID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetListIDAndListIDMatch) {
+    EXPECT_FALSE(component.hasListID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetAccountAndAccountMatch) {
+    EXPECT_FALSE(component.hasAccount());
 }
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
@@ -66,6 +90,26 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetProcessCodeAndProcessCod
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOddLotAndOddLotMatch) {
 }
 
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTradeInputSourceAndTradeInputSourceMatch) {
+    EXPECT_FALSE(component.hasTradeInputSource());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTradeInputDeviceAndTradeInputDeviceMatch) {
+    EXPECT_FALSE(component.hasTradeInputDevice());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOrderInputDeviceAndOrderInputDeviceMatch) {
+    EXPECT_FALSE(component.hasOrderInputDevice());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetComplianceIDAndComplianceIDMatch) {
+    EXPECT_FALSE(component.hasComplianceID());
+}
+
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSolicitedFlagAndSolicitedFlagMatch) {
 }
 
@@ -74,6 +118,10 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOrderCapacityAndOrderCap
     component.setOrderCapacity(test_value);
     EXPECT_EQ(component.getOrderCapacity(), test_value);
     EXPECT_TRUE(component.hasOrderCapacity());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOrderRestrictionsAndOrderRestrictionsMatch) {
+    EXPECT_FALSE(component.hasOrderRestrictions());
 }
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetCustOrderCapacityAndCustOrderCapacityMatch) {
@@ -90,7 +138,23 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetOrdTypeAndOrdTypeMatch) 
     EXPECT_TRUE(component.hasOrdType());
 }
 
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetExecInstAndExecInstMatch) {
+    EXPECT_FALSE(component.hasExecInst());
+}
+
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTransBkdTimeAndTransBkdTimeMatch) {
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTimeBracketAndTimeBracketMatch) {
+    EXPECT_FALSE(component.hasTimeBracket());
 }
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetGrossTradeAmtAndGrossTradeAmtMatch) {
@@ -180,6 +244,10 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSettlCurrAmtAndSettlCurr
     EXPECT_TRUE(component.hasSettlCurrAmt());
 }
 
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSettlCurrencyAndSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasSettlCurrency());
+}
+
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSettlCurrFxRateAndSettlCurrFxRateMatch) {
     const double test_value = 123.456;
     component.setSettlCurrFxRate(test_value);
@@ -201,7 +269,14 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetPositionEffectAndPositio
     EXPECT_TRUE(component.hasPositionEffect());
 }
 
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSideMultiLegReportingTypeAndSideMultiLegReportingTypeMatch) {
@@ -209,6 +284,10 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetSideMultiLegReportingTyp
     component.setSideMultiLegReportingType(test_value);
     EXPECT_EQ(component.getSideMultiLegReportingType(), test_value);
     EXPECT_TRUE(component.hasSideMultiLegReportingType());
+}
+
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetExchangeRuleAndExchangeRuleMatch) {
+    EXPECT_FALSE(component.hasExchangeRule());
 }
 
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetTradeAllocIndicatorAndTradeAllocIndicatorMatch) {
@@ -225,10 +304,14 @@ TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetPreallocMethodAndPreallo
     EXPECT_TRUE(component.hasPreallocMethod());
 }
 
+TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, SetAllocIDAndAllocIDMatch) {
+    EXPECT_FALSE(component.hasAllocID());
+}
+
 TEST_F(FIX4_4_TrdCapRptSideGrp_NoSidesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
+    { const char test_value = 'X'; component.setSide(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

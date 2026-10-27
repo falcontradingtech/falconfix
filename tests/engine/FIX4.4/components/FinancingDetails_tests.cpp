@@ -24,7 +24,8 @@ protected:
 
 TEST_F(FIX4_4_FinancingDetailsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setTerminationType(42);
+    { const std::string_view test_value{"AAA"}; component.setAgreementDesc(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setAgreementID(test_value); }
     
     // Reset component
     component.reset();
@@ -33,7 +34,19 @@ TEST_F(FIX4_4_FinancingDetailsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetAgreementDescAndAgreementDescMatch) {
+    EXPECT_FALSE(component.hasAgreementDesc());
+}
+
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetAgreementIDAndAgreementIDMatch) {
+    EXPECT_FALSE(component.hasAgreementID());
+}
+
 TEST_F(FIX4_4_FinancingDetailsComponentTest, SetAgreementDateAndAgreementDateMatch) {
+}
+
+TEST_F(FIX4_4_FinancingDetailsComponentTest, SetAgreementCurrencyAndAgreementCurrencyMatch) {
+    EXPECT_FALSE(component.hasAgreementCurrency());
 }
 
 TEST_F(FIX4_4_FinancingDetailsComponentTest, SetTerminationTypeAndTerminationTypeMatch) {
@@ -66,12 +79,12 @@ TEST_F(FIX4_4_FinancingDetailsComponentTest, SetMarginRatioAndMarginRatioMatch) 
 TEST_F(FIX4_4_FinancingDetailsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAgreementDate(42);
+    { const std::string_view test_value{"AAA"}; component.setAgreementDesc(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_FinancingDetailsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[458];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

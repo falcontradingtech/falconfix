@@ -24,13 +24,23 @@ protected:
 
 TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setContraTradeQty(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setContraBroker(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setContraTrader(test_value); }
+    { const double test_value = 123.456; component.setContraTradeQty(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraBrokerAndContraBrokerMatch) {
+    EXPECT_FALSE(component.hasContraBroker());
+}
+
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTraderAndContraTraderMatch) {
+    EXPECT_FALSE(component.hasContraTrader());
 }
 
 TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTradeQtyAndContraTradeQtyMatch) {
@@ -43,15 +53,19 @@ TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTradeQtyAndContra
 TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraTradeTimeAndContraTradeTimeMatch) {
 }
 
+TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, SetContraLegRefIDAndContraLegRefIDMatch) {
+    EXPECT_FALSE(component.hasContraLegRefID());
+}
+
 TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setContraTradeQty(42);
+    { const std::string_view test_value{"AAA"}; component.setContraBroker(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_ContraGrp_NoContraBrokersComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[324];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

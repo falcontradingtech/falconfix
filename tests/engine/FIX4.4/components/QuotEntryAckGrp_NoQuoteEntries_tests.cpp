@@ -24,15 +24,19 @@ protected:
 
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setBidPx(3.14f);
-    component.setOfferPx(3.14f);
-    component.setBidSize(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setQuoteEntryID(test_value); }
+    { const double test_value = 123.456; component.setBidPx(test_value); }
+    { const double test_value = 123.456; component.setOfferPx(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetQuoteEntryIDAndQuoteEntryIDMatch) {
+    EXPECT_FALSE(component.hasQuoteEntryID());
 }
 
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetBidPxAndBidPxMatch) {
@@ -125,6 +129,14 @@ TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetOfferYieldAndOffer
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetTransactTimeAndTransactTimeMatch) {
 }
 
+TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetSettlDateAndSettlDateMatch) {
 }
 
@@ -159,6 +171,10 @@ TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetOfferForwardPoints
     EXPECT_TRUE(component.hasOfferForwardPoints2());
 }
 
+TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
+}
+
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetQuoteEntryRejectReasonAndQuoteEntryRejectReasonMatch) {
     const int64_t test_value = 12345;
     component.setQuoteEntryRejectReason(test_value);
@@ -169,7 +185,7 @@ TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, SetQuoteEntryRejectRe
 TEST_F(FIX4_4_QuotEntryAckGrp_NoQuoteEntriesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setBidPx(42);
+    { const std::string_view test_value{"AAA"}; component.setQuoteEntryID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

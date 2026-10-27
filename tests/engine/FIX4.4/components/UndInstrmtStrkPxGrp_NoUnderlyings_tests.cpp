@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPrevClosePx(3.14f);
-    component.setSide('A');
-    component.setPrice(3.14f);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryClOrdID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,14 @@ TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetPrevClosePxAndP
     component.setPrevClosePx(test_value);
     EXPECT_EQ(component.getPrevClosePx(), test_value);
     EXPECT_TRUE(component.hasPrevClosePx());
+}
+
+TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
 }
 
 TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetSideAndSideMatch) {
@@ -56,18 +64,29 @@ TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetPriceAndPriceMa
     EXPECT_TRUE(component.hasPrice());
 }
 
+TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
+}
+
+TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPrevClosePx(42);
+    { const double test_value = 123.456; component.setPrevClosePx(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_UndInstrmtStrkPxGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[538];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

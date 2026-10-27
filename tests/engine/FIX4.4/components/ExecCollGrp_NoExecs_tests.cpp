@@ -24,6 +24,7 @@ protected:
 
 TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, ResetClearsAllFields) {
     // Set some fields
+    { const std::string_view test_value{"AAA"}; component.setExecID(test_value); }
     
     // Reset component
     component.reset();
@@ -32,28 +33,38 @@ TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, SetExecIDAndExecIDMatch) {
+    EXPECT_FALSE(component.hasExecID());
+}
+
 TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
+    { const std::string_view test_value{"AAA"}; component.setExecID(test_value); }
+    EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_ExecCollGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[72];
+    char buffer[1024];
     
-    // No scalar setter available to populate deterministically (this
-    // component only wraps nested groups/sub-components). Group-only
-    // containers with no required fields legitimately encode to 0
-    // bytes, and some decode() implementations return false when no
-    // bytes were consumed, so we only assert the two views agree.
+    // This component exposes no scalar setters of its own, so we
+    // populate it through its getRef sub-component / group accessors
+    // to exercise the real encode/decode (and group loop) paths.
+    { const std::string_view test_value{"AAA"}; component.setExecID(test_value); }
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
     char *p = buffer;
     p = component.encode(p, true);
-    std::size_t encoded_size = p - buffer;
+    ASSERT_NE(p, nullptr);
+    std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
     
+    EXPECT_GT(encoded_size, 0u);
     EXPECT_LE(encoded_size, component.compute_buffer_size());
     
     ExecCollGrp::NoExecs decoded;
     const char *q = buffer;
-    (void)decoded.decode(q, p);
+    EXPECT_TRUE(decoded.decode(q, p));
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 

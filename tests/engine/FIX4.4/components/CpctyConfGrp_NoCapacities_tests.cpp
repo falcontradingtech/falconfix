@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOrderCapacity('A');
-    component.setOrderCapacityQty(3.14f);
+    { const char test_value = 'X'; component.setOrderCapacity(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setOrderRestrictions(test_value); }
+    { const double test_value = 123.456; component.setOrderCapacityQty(test_value); }
     
     // Reset component
     component.reset();
@@ -41,6 +42,10 @@ TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityAndOrderCa
     EXPECT_TRUE(component.hasOrderCapacity());
 }
 
+TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderRestrictionsAndOrderRestrictionsMatch) {
+    EXPECT_FALSE(component.hasOrderRestrictions());
+}
+
 TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityQtyAndOrderCapacityQtyMatch) {
     const double test_value = 123.456;
     component.setOrderCapacityQty(test_value);
@@ -51,12 +56,12 @@ TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, SetOrderCapacityQtyAndOrde
 TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOrderCapacity('A');
+    { const char test_value = 'X'; component.setOrderCapacity(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_CpctyConfGrp_NoCapacitiesComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[144];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

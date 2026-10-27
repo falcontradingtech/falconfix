@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setListSeqNo(42);
-    component.setSettlInstMode('A');
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryClOrdID(test_value); }
+    { const int64_t test_value = 12345; component.setListSeqNo(test_value); }
     
     // Reset component
     component.reset();
@@ -34,11 +35,23 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetListSeqNoAndListSeqNoMatch) {
     const int64_t test_value = 12345;
     component.setListSeqNo(test_value);
     EXPECT_EQ(component.getListSeqNo(), test_value);
     EXPECT_TRUE(component.hasListSeqNo());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetClOrdLinkIDAndClOrdLinkIDMatch) {
+    EXPECT_FALSE(component.hasClOrdLinkID());
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetSettlInstModeAndSettlInstModeMatch) {
@@ -52,6 +65,10 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTradeOriginationDateAndTradeO
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTradeDateAndTradeDateMatch) {
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetAccountAndAccountMatch) {
+    EXPECT_FALSE(component.hasAccount());
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
@@ -82,6 +99,10 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetBookingUnitAndBookingUnitMatc
     EXPECT_TRUE(component.hasBookingUnit());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetAllocIDAndAllocIDMatch) {
+    EXPECT_FALSE(component.hasAllocID());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetPreallocMethodAndPreallocMethodMatch) {
     const char test_value = 'X';
     component.setPreallocMethod(test_value);
@@ -106,11 +127,19 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetCashMarginAndCashMarginMatch)
     EXPECT_TRUE(component.hasCashMargin());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetClearingFeeIndicatorAndClearingFeeIndicatorMatch) {
+    EXPECT_FALSE(component.hasClearingFeeIndicator());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetHandlInstAndHandlInstMatch) {
     const char test_value = 'X';
     component.setHandlInst(test_value);
     EXPECT_EQ(component.getHandlInst(), test_value);
     EXPECT_TRUE(component.hasHandlInst());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetExecInstAndExecInstMatch) {
+    EXPECT_FALSE(component.hasExecInst());
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetMinQtyAndMinQtyMatch) {
@@ -125,6 +154,9 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetMaxFloorAndMaxFloorMatch) {
     component.setMaxFloor(test_value);
     EXPECT_EQ(component.getMaxFloor(), test_value);
     EXPECT_TRUE(component.hasMaxFloor());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetExDestinationAndExDestinationMatch) {
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetProcessCodeAndProcessCodeMatch) {
@@ -196,7 +228,23 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetStopPxAndStopPxMatch) {
     EXPECT_TRUE(component.hasStopPx());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetComplianceIDAndComplianceIDMatch) {
+    EXPECT_FALSE(component.hasComplianceID());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetSolicitedFlagAndSolicitedFlagMatch) {
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetIOIIDAndIOIIDMatch) {
+    EXPECT_FALSE(component.hasIOIID());
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetQuoteIDAndQuoteIDMatch) {
+    EXPECT_FALSE(component.hasQuoteID());
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTimeInForceAndTimeInForceMatch) {
@@ -229,6 +277,10 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetOrderCapacityAndOrderCapacity
     EXPECT_TRUE(component.hasOrderCapacity());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetOrderRestrictionsAndOrderRestrictionsMatch) {
+    EXPECT_FALSE(component.hasOrderRestrictions());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetCustOrderCapacityAndCustOrderCapacityMatch) {
     const int64_t test_value = 12345;
     component.setCustOrderCapacity(test_value);
@@ -239,6 +291,10 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetCustOrderCapacityAndCustOrder
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetForexReqAndForexReqMatch) {
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetSettlCurrencyAndSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasSettlCurrency());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetBookingTypeAndBookingTypeMatch) {
     const int64_t test_value = 12345;
     component.setBookingType(test_value);
@@ -246,7 +302,14 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetBookingTypeAndBookingTypeMatc
     EXPECT_TRUE(component.hasBookingType());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetSettlDate2AndSettlDate2Match) {
@@ -294,6 +357,10 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTargetStrategyAndTargetStrate
     EXPECT_TRUE(component.hasTargetStrategy());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetTargetStrategyParametersAndTargetStrategyParametersMatch) {
+    EXPECT_FALSE(component.hasTargetStrategyParameters());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetParticipationRateAndParticipationRateMatch) {
     const double test_value = 123.456;
     component.setParticipationRate(test_value);
@@ -301,10 +368,14 @@ TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetParticipationRateAndParticipa
     EXPECT_TRUE(component.hasParticipationRate());
 }
 
+TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, SetDesignationAndDesignationMatch) {
+    EXPECT_FALSE(component.hasDesignation());
+}
+
 TEST_F(FIX4_4_ListOrdGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setListSeqNo(42);
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

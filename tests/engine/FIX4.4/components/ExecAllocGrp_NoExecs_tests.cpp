@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLastQty(3.14f);
-    component.setLastPx(3.14f);
-    component.setLastParPx(3.14f);
+    { const double test_value = 123.456; component.setLastQty(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setExecID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryExecID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,14 @@ TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastQtyAndLastQtyMatch) {
     component.setLastQty(test_value);
     EXPECT_EQ(component.getLastQty(), test_value);
     EXPECT_TRUE(component.hasLastQty());
+}
+
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetExecIDAndExecIDMatch) {
+    EXPECT_FALSE(component.hasExecID());
+}
+
+TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetSecondaryExecIDAndSecondaryExecIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryExecID());
 }
 
 TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastPxAndLastPxMatch) {
@@ -66,12 +74,12 @@ TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, SetLastCapacityAndLastCapacityM
 TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLastQty(42);
+    { const double test_value = 123.456; component.setLastQty(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_ExecAllocGrp_NoExecsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[326];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

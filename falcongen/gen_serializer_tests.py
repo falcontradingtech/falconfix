@@ -5,6 +5,8 @@
 """
 Standalone helper to (re)generate, directly into the real repo tree:
   - tests/engine/<FIX_VERSION>/utils/serializer_tests.cpp
+  - tests/engine/<FIX_VERSION>/utils/parser_tests.cpp
+  - tests/engine/<FIX_VERSION>/utils/datetime_tests.cpp
   - tests/engine/<FIX_VERSION>/CMakeLists.txt            (add_subdirectory only)
   - tests/engine/<FIX_VERSION>/components/CMakeLists.txt (add_test_custom)
   - tests/engine/<FIX_VERSION>/utils/CMakeLists.txt      (add_test_custom)
@@ -16,6 +18,8 @@ from pathlib import Path
 
 from code.generator_components_tests import (
 	_generate_serializer_tests_content,
+	_generate_parser_tests_content,
+	_generate_datetime_tests_content,
 	ensure_engine_version_cmakelists,
 )
 
@@ -27,8 +31,17 @@ for version in VERSIONS:
 
 	out_dir = engine_dir / version / "utils"
 	out_dir.mkdir(parents=True, exist_ok=True)
-	test_file = out_dir / "serializer_tests.cpp"
-	test_file.write_text(_generate_serializer_tests_content(version), encoding="utf-8")
-	print(f"[ok] {test_file}")
+
+	serializer_file = out_dir / "serializer_tests.cpp"
+	serializer_file.write_text(_generate_serializer_tests_content(version), encoding="utf-8")
+	print(f"[ok] {serializer_file}")
+
+	parser_file = out_dir / "parser_tests.cpp"
+	parser_file.write_text(_generate_parser_tests_content(version), encoding="utf-8")
+	print(f"[ok] {parser_file}")
+
+	datetime_file = out_dir / "datetime_tests.cpp"
+	datetime_file.write_text(_generate_datetime_tests_content(version), encoding="utf-8")
+	print(f"[ok] {datetime_file}")
 
 	ensure_engine_version_cmakelists(engine_dir / version, version)

@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSpread(3.14f);
-    component.setBenchmarkPrice(3.14f);
-    component.setBenchmarkPriceType(42);
+    { const double test_value = 123.456; component.setSpread(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setBenchmarkCurveCurrency(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setBenchmarkCurveName(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +40,18 @@ TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetSpreadAndSpreadMatch) 
     component.setSpread(test_value);
     EXPECT_EQ(component.getSpread(), test_value);
     EXPECT_TRUE(component.hasSpread());
+}
+
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkCurveCurrencyAndBenchmarkCurveCurrencyMatch) {
+    EXPECT_FALSE(component.hasBenchmarkCurveCurrency());
+}
+
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkCurveNameAndBenchmarkCurveNameMatch) {
+    EXPECT_FALSE(component.hasBenchmarkCurveName());
+}
+
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkCurvePointAndBenchmarkCurvePointMatch) {
+    EXPECT_FALSE(component.hasBenchmarkCurvePoint());
 }
 
 TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceAndBenchmarkPriceMatch) {
@@ -56,15 +68,23 @@ TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkPriceTypeAndB
     EXPECT_TRUE(component.hasBenchmarkPriceType());
 }
 
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkSecurityIDAndBenchmarkSecurityIDMatch) {
+    EXPECT_FALSE(component.hasBenchmarkSecurityID());
+}
+
+TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, SetBenchmarkSecurityIDSourceAndBenchmarkSecurityIDSourceMatch) {
+    EXPECT_FALSE(component.hasBenchmarkSecurityIDSource());
+}
+
 TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSpread(42);
+    { const double test_value = 123.456; component.setSpread(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SpreadOrBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[536];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

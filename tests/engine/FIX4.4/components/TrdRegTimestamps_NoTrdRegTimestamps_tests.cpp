@@ -24,7 +24,8 @@ protected:
 
 TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setTrdRegTimestampType(42);
+    { const int64_t test_value = 12345; component.setTrdRegTimestampType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setTrdRegTimestampOrigin(test_value); }
     
     // Reset component
     component.reset();
@@ -43,15 +44,19 @@ TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimesta
     EXPECT_TRUE(component.hasTrdRegTimestampType());
 }
 
+TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimestampOriginAndTrdRegTimestampOriginMatch) {
+    EXPECT_FALSE(component.hasTrdRegTimestampOrigin());
+}
+
 TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setTrdRegTimestamp(42);
+    { const int64_t test_value = 12345; component.setTrdRegTimestampType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[168];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

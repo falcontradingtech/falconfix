@@ -24,14 +24,19 @@ protected:
 
 TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setNested3PartyIDSource('A');
-    component.setNested3PartyRole(42);
+    { const std::string_view test_value{"AAA"}; component.setNested3PartyID(test_value); }
+    { const char test_value = 'X'; component.setNested3PartyIDSource(test_value); }
+    { const int64_t test_value = 12345; component.setNested3PartyRole(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, SetNested3PartyIDAndNested3PartyIDMatch) {
+    EXPECT_FALSE(component.hasNested3PartyID());
 }
 
 TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, SetNested3PartyIDSourceAndNested3PartyIDSourceMatch) {
@@ -51,12 +56,12 @@ TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, SetNested3PartyRole
 TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setNested3PartyIDSource('A');
+    { const std::string_view test_value{"AAA"}; component.setNested3PartyID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_NestedParties3_NoNested3PartyIDsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[136];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

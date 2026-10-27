@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_ContAmtGrp_NoContAmtsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setContAmtType(42);
-    component.setContAmtValue(3.14f);
+    { const int64_t test_value = 12345; component.setContAmtType(test_value); }
+    { const double test_value = 123.456; component.setContAmtValue(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setContAmtCurr(test_value); }
     
     // Reset component
     component.reset();
@@ -48,15 +49,19 @@ TEST_F(FIX4_4_ContAmtGrp_NoContAmtsComponentTest, SetContAmtValueAndContAmtValue
     EXPECT_TRUE(component.hasContAmtValue());
 }
 
+TEST_F(FIX4_4_ContAmtGrp_NoContAmtsComponentTest, SetContAmtCurrAndContAmtCurrMatch) {
+    EXPECT_FALSE(component.hasContAmtCurr());
+}
+
 TEST_F(FIX4_4_ContAmtGrp_NoContAmtsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setContAmtType(42);
+    { const int64_t test_value = 12345; component.setContAmtType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_ContAmtGrp_NoContAmtsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[182];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

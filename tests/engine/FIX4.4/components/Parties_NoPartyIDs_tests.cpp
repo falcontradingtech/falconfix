@@ -13,7 +13,7 @@
 
 using namespace fix44::components;
 
-class Parties_NoPartyIDsComponentTest : public ::testing::Test {
+class FIX4_4_Parties_NoPartyIDsComponentTest : public ::testing::Test {
 protected:
     Parties::NoPartyIDs component;
 
@@ -22,10 +22,11 @@ protected:
     }
 };
 
-TEST_F(Parties_NoPartyIDsComponentTest, ResetClearsAllFields) {
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPartyIDSource('A');
-    component.setPartyRole(42);
+    { const std::string_view test_value{"AAA"}; component.setPartyID(test_value); }
+    { const char test_value = 'X'; component.setPartyIDSource(test_value); }
+    { const int64_t test_value = 12345; component.setPartyRole(test_value); }
     
     // Reset component
     component.reset();
@@ -34,29 +35,33 @@ TEST_F(Parties_NoPartyIDsComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
-TEST_F(Parties_NoPartyIDsComponentTest, SetPartyIDSourceAndPartyIDSourceMatch) {
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, SetPartyIDAndPartyIDMatch) {
+    EXPECT_FALSE(component.hasPartyID());
+}
+
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, SetPartyIDSourceAndPartyIDSourceMatch) {
     const char test_value = 'X';
     component.setPartyIDSource(test_value);
     EXPECT_EQ(component.getPartyIDSource(), test_value);
     EXPECT_TRUE(component.hasPartyIDSource());
 }
 
-TEST_F(Parties_NoPartyIDsComponentTest, SetPartyRoleAndPartyRoleMatch) {
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, SetPartyRoleAndPartyRoleMatch) {
     const int64_t test_value = 12345;
     component.setPartyRole(test_value);
     EXPECT_EQ(component.getPartyRole(), test_value);
     EXPECT_TRUE(component.hasPartyRole());
 }
 
-TEST_F(Parties_NoPartyIDsComponentTest, HasAnySetTracksPresence) {
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPartyIDSource('A');
+    { const std::string_view test_value{"AAA"}; component.setPartyID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
-TEST_F(Parties_NoPartyIDsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[136];
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, EncodeDecodeRoundtrip) {
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return
@@ -81,6 +86,6 @@ TEST_F(Parties_NoPartyIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
-TEST_F(Parties_NoPartyIDsComponentTest, CheckRequiredWhenEmpty) {
+TEST_F(FIX4_4_Parties_NoPartyIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
 }

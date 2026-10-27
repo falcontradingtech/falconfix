@@ -24,7 +24,8 @@ protected:
 
 TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setInstrAttribType(42);
+    { const int64_t test_value = 12345; component.setInstrAttribType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setInstrAttribValue(test_value); }
     
     // Reset component
     component.reset();
@@ -40,15 +41,19 @@ TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, SetInstrAttribTypeAndInstrAtt
     EXPECT_TRUE(component.hasInstrAttribType());
 }
 
+TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, SetInstrAttribValueAndInstrAttribValueMatch) {
+    EXPECT_FALSE(component.hasInstrAttribValue());
+}
+
 TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setInstrAttribType(42);
+    { const int64_t test_value = 12345; component.setInstrAttribType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_AttrbGrp_NoInstrAttribComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[124];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

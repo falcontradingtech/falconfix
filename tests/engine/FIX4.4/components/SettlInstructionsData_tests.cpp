@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_SettlInstructionsDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlDeliveryType(42);
-    component.setStandInstDbType(42);
+    { const int64_t test_value = 12345; component.setSettlDeliveryType(test_value); }
+    { const int64_t test_value = 12345; component.setStandInstDbType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setStandInstDbName(test_value); }
     
     // Reset component
     component.reset();
@@ -48,15 +49,23 @@ TEST_F(FIX4_4_SettlInstructionsDataComponentTest, SetStandInstDbTypeAndStandInst
     EXPECT_TRUE(component.hasStandInstDbType());
 }
 
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, SetStandInstDbNameAndStandInstDbNameMatch) {
+    EXPECT_FALSE(component.hasStandInstDbName());
+}
+
+TEST_F(FIX4_4_SettlInstructionsDataComponentTest, SetStandInstDbIDAndStandInstDbIDMatch) {
+    EXPECT_FALSE(component.hasStandInstDbID());
+}
+
 TEST_F(FIX4_4_SettlInstructionsDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlDeliveryType(42);
+    { const int64_t test_value = 12345; component.setSettlDeliveryType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SettlInstructionsDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[248];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

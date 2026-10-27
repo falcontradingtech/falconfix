@@ -24,14 +24,27 @@ protected:
 
 TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegBenchmarkPrice(3.14f);
-    component.setLegBenchmarkPriceType(42);
+    { const std::string_view test_value{"AAA"}; component.setLegBenchmarkCurveCurrency(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setLegBenchmarkCurveName(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setLegBenchmarkCurvePoint(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkCurveCurrencyAndLegBenchmarkCurveCurrencyMatch) {
+    EXPECT_FALSE(component.hasLegBenchmarkCurveCurrency());
+}
+
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkCurveNameAndLegBenchmarkCurveNameMatch) {
+    EXPECT_FALSE(component.hasLegBenchmarkCurveName());
+}
+
+TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkCurvePointAndLegBenchmarkCurvePointMatch) {
+    EXPECT_FALSE(component.hasLegBenchmarkCurvePoint());
 }
 
 TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceAndLegBenchmarkPriceMatch) {
@@ -51,12 +64,12 @@ TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, SetLegBenchmarkPriceTypeAndLeg
 TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegBenchmarkPrice(42);
+    { const std::string_view test_value{"AAA"}; component.setLegBenchmarkCurveCurrency(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_LegBenchmarkCurveDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[330];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

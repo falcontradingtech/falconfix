@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setMDUpdateAction('A');
-    component.setDeleteReason('A');
-    component.setMDEntryType('A');
+    { const char test_value = 'X'; component.setMDUpdateAction(test_value); }
+    { const char test_value = 'X'; component.setDeleteReason(test_value); }
+    { const char test_value = 'X'; component.setMDEntryType(test_value); }
     
     // Reset component
     component.reset();
@@ -56,11 +56,31 @@ TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryTypeAndMDEntryTypeMat
     EXPECT_TRUE(component.hasMDEntryType());
 }
 
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryIDAndMDEntryIDMatch) {
+    EXPECT_FALSE(component.hasMDEntryID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryRefIDAndMDEntryRefIDMatch) {
+    EXPECT_FALSE(component.hasMDEntryRefID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetFinancialStatusAndFinancialStatusMatch) {
+    EXPECT_FALSE(component.hasFinancialStatus());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetCorporateActionAndCorporateActionMatch) {
+    EXPECT_FALSE(component.hasCorporateAction());
+}
+
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryPxAndMDEntryPxMatch) {
     const double test_value = 123.456;
     component.setMDEntryPx(test_value);
     EXPECT_EQ(component.getMDEntryPx(), test_value);
     EXPECT_TRUE(component.hasMDEntryPx());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
 }
 
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntrySizeAndMDEntrySizeMatch) {
@@ -83,6 +103,41 @@ TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTickDirectionAndTickDirectio
     EXPECT_TRUE(component.hasTickDirection());
 }
 
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDMktAndMDMktMatch) {
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetQuoteConditionAndQuoteConditionMatch) {
+    EXPECT_FALSE(component.hasQuoteCondition());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTradeConditionAndTradeConditionMatch) {
+    EXPECT_FALSE(component.hasTradeCondition());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryOriginatorAndMDEntryOriginatorMatch) {
+    EXPECT_FALSE(component.hasMDEntryOriginator());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetLocationIDAndLocationIDMatch) {
+    EXPECT_FALSE(component.hasLocationID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetDeskIDAndDeskIDMatch) {
+    EXPECT_FALSE(component.hasDeskID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetOpenCloseSettlFlagAndOpenCloseSettlFlagMatch) {
+    EXPECT_FALSE(component.hasOpenCloseSettlFlag());
+}
+
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTimeInForceAndTimeInForceMatch) {
     const char test_value = 'X';
     component.setTimeInForce(test_value);
@@ -103,11 +158,31 @@ TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMinQtyAndMinQtyMatch) {
     EXPECT_TRUE(component.hasMinQty());
 }
 
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetExecInstAndExecInstMatch) {
+    EXPECT_FALSE(component.hasExecInst());
+}
+
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetSellerDaysAndSellerDaysMatch) {
     const int64_t test_value = 12345;
     component.setSellerDays(test_value);
     EXPECT_EQ(component.getSellerDays(), test_value);
     EXPECT_TRUE(component.hasSellerDays());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetOrderIDAndOrderIDMatch) {
+    EXPECT_FALSE(component.hasOrderID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetQuoteEntryIDAndQuoteEntryIDMatch) {
+    EXPECT_FALSE(component.hasQuoteEntryID());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryBuyerAndMDEntryBuyerMatch) {
+    EXPECT_FALSE(component.hasMDEntryBuyer());
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntrySellerAndMDEntrySellerMatch) {
+    EXPECT_FALSE(component.hasMDEntrySeller());
 }
 
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetNumberOfOrdersAndNumberOfOrdersMatch) {
@@ -124,6 +199,10 @@ TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetMDEntryPositionNoAndMDEntryP
     EXPECT_TRUE(component.hasMDEntryPositionNo());
 }
 
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetScopeAndScopeMatch) {
+    EXPECT_FALSE(component.hasScope());
+}
+
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetPriceDeltaAndPriceDeltaMatch) {
     const double test_value = 123.456;
     component.setPriceDelta(test_value);
@@ -138,13 +217,20 @@ TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetNetChgPrevDayAndNetChgPrevDa
     EXPECT_TRUE(component.hasNetChgPrevDay());
 }
 
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_MDIncGrp_NoMDEntriesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setMDUpdateAction('A');
+    { const char test_value = 'X'; component.setMDUpdateAction(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

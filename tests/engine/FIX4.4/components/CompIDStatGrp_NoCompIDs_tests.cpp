@@ -24,13 +24,31 @@ protected:
 
 TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setStatusValue(42);
+    { const std::string_view test_value{"AAA"}; component.setRefCompID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setRefSubID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setLocationID(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetRefCompIDAndRefCompIDMatch) {
+    EXPECT_FALSE(component.hasRefCompID());
+}
+
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetRefSubIDAndRefSubIDMatch) {
+    EXPECT_FALSE(component.hasRefSubID());
+}
+
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetLocationIDAndLocationIDMatch) {
+    EXPECT_FALSE(component.hasLocationID());
+}
+
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetDeskIDAndDeskIDMatch) {
+    EXPECT_FALSE(component.hasDeskID());
 }
 
 TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetStatusValueAndStatusValueMatch) {
@@ -40,15 +58,19 @@ TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetStatusValueAndStatusValue
     EXPECT_TRUE(component.hasStatusValue());
 }
 
+TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, SetStatusTextAndStatusTextMatch) {
+    EXPECT_FALSE(component.hasStatusText());
+}
+
 TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setStatusValue(42);
+    { const std::string_view test_value{"AAA"}; component.setRefCompID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_CompIDStatGrp_NoCompIDsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[420];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

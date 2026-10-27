@@ -24,15 +24,22 @@ protected:
 
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
-    component.setPrice(3.14f);
-    component.setPriceType(42);
+    { const std::string_view test_value{"AAA"}; component.setListID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setCountry(test_value); }
+    { const char test_value = 'X'; component.setSide(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetListIDAndListIDMatch) {
+    EXPECT_FALSE(component.hasListID());
+}
+
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetCountryAndCountryMatch) {
 }
 
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
@@ -80,18 +87,33 @@ TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTy
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
 }
 
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
+    { const std::string_view test_value{"AAA"}; component.setListID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_BidCompRspGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[748];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

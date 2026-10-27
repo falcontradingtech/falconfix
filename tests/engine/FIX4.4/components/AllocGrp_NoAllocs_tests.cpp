@@ -24,15 +24,19 @@ protected:
 
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setMatchStatus('A');
-    component.setAllocPrice(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
+    { const int64_t test_value = 12345; component.setAllocAcctIDSource(test_value); }
+    { const char test_value = 'X'; component.setMatchStatus(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAccountAndAllocAccountMatch) {
+    EXPECT_FALSE(component.hasAllocAccount());
 }
 
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
@@ -63,6 +67,10 @@ TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocQtyAndAllocQtyMatch) {
     EXPECT_TRUE(component.hasAllocQty());
 }
 
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetIndividualAllocIDAndIndividualAllocIDMatch) {
+    EXPECT_FALSE(component.hasIndividualAllocID());
+}
+
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetProcessCodeAndProcessCodeMatch) {
     const char test_value = 'X';
     component.setProcessCode(test_value);
@@ -80,7 +88,14 @@ TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocHandlInstAndAllocHandlInst
     EXPECT_TRUE(component.hasAllocHandlInst());
 }
 
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocTextAndAllocTextMatch) {
+    EXPECT_FALSE(component.hasAllocText());
+}
+
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
+}
+
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetEncodedAllocTextAndEncodedAllocTextMatch) {
 }
 
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocAvgPxAndAllocAvgPxMatch) {
@@ -109,6 +124,14 @@ TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocSettlCurrAmtAndAllocSettlC
     component.setAllocSettlCurrAmt(test_value);
     EXPECT_EQ(component.getAllocSettlCurrAmt(), test_value);
     EXPECT_TRUE(component.hasAllocSettlCurrAmt());
+}
+
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetSettlCurrencyAndSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasSettlCurrency());
+}
+
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocSettlCurrencyAndAllocSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasAllocSettlCurrency());
 }
 
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetSettlCurrFxRateAndSettlCurrFxRateMatch) {
@@ -149,7 +172,7 @@ TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetAllocSettlInstTypeAndAllocSettl
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

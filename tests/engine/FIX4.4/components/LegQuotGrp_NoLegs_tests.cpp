@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_LegQuotGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegQty(3.14f);
-    component.setLegSwapType(42);
-    component.setLegSettlType('A');
+    { const double test_value = 123.456; component.setLegQty(test_value); }
+    { const int64_t test_value = 12345; component.setLegSwapType(test_value); }
+    { const char test_value = 'X'; component.setLegSettlType(test_value); }
     
     // Reset component
     component.reset();
@@ -83,12 +83,12 @@ TEST_F(FIX4_4_LegQuotGrp_NoLegsComponentTest, SetLegOfferPxAndLegOfferPxMatch) {
 TEST_F(FIX4_4_LegQuotGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegQty(42);
+    { const double test_value = 123.456; component.setLegQty(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_LegQuotGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[312];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_DiscretionInstructionsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setDiscretionInst('A');
-    component.setDiscretionOffsetValue(3.14f);
-    component.setDiscretionMoveType(42);
+    { const char test_value = 'X'; component.setDiscretionInst(test_value); }
+    { const double test_value = 123.456; component.setDiscretionOffsetValue(test_value); }
+    { const int64_t test_value = 12345; component.setDiscretionMoveType(test_value); }
     
     // Reset component
     component.reset();
@@ -87,12 +87,12 @@ TEST_F(FIX4_4_DiscretionInstructionsComponentTest, SetDiscretionScopeAndDiscreti
 TEST_F(FIX4_4_DiscretionInstructionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setDiscretionInst('A');
+    { const char test_value = 'X'; component.setDiscretionInst(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_DiscretionInstructionsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[320];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

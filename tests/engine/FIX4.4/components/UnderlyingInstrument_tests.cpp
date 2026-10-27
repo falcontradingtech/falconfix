@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setUnderlyingProduct(42);
-    component.setUnderlyingPutOrCall(42);
+    { const std::string_view test_value{"AAA"}; component.setUnderlyingSymbol(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setUnderlyingSymbolSfx(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setUnderlyingSecurityID(test_value); }
     
     // Reset component
     component.reset();
@@ -34,11 +35,42 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSymbolAndUnderlyingSymbolMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSymbol());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSymbolSfxAndUnderlyingSymbolSfxMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSymbolSfx());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecurityIDAndUnderlyingSecurityIDMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSecurityID());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecurityIDSourceAndUnderlyingSecurityIDSourceMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSecurityIDSource());
+}
+
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingProductAndUnderlyingProductMatch) {
     const int64_t test_value = 12345;
     component.setUnderlyingProduct(test_value);
     EXPECT_EQ(component.getUnderlyingProduct(), test_value);
     EXPECT_TRUE(component.hasUnderlyingProduct());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCFICodeAndUnderlyingCFICodeMatch) {
+    EXPECT_FALSE(component.hasUnderlyingCFICode());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecurityTypeAndUnderlyingSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSecurityType());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecuritySubTypeAndUnderlyingSecuritySubTypeMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSecuritySubType());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingMaturityMonthYearAndUnderlyingMaturityMonthYearMatch) {
 }
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingMaturityDateAndUnderlyingMaturityDateMatch) {
@@ -55,6 +87,10 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCouponPaymentDateA
 }
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingIssueDateAndUnderlyingIssueDateMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRepoCollateralSecurityTypeAndUnderlyingRepoCollateralSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasUnderlyingRepoCollateralSecurityType());
 }
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRepurchaseTermAndUnderlyingRepurchaseTermMatch) {
@@ -78,6 +114,25 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingFactorAndUnderlyin
     EXPECT_TRUE(component.hasUnderlyingFactor());
 }
 
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCreditRatingAndUnderlyingCreditRatingMatch) {
+    EXPECT_FALSE(component.hasUnderlyingCreditRating());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingInstrRegistryAndUnderlyingInstrRegistryMatch) {
+    EXPECT_FALSE(component.hasUnderlyingInstrRegistry());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCountryOfIssueAndUnderlyingCountryOfIssueMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingStateOrProvinceOfIssueAndUnderlyingStateOrProvinceOfIssueMatch) {
+    EXPECT_FALSE(component.hasUnderlyingStateOrProvinceOfIssue());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingLocaleOfIssueAndUnderlyingLocaleOfIssueMatch) {
+    EXPECT_FALSE(component.hasUnderlyingLocaleOfIssue());
+}
+
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingRedemptionDateAndUnderlyingRedemptionDateMatch) {
 }
 
@@ -86,6 +141,10 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingStrikePriceAndUnde
     component.setUnderlyingStrikePrice(test_value);
     EXPECT_EQ(component.getUnderlyingStrikePrice(), test_value);
     EXPECT_TRUE(component.hasUnderlyingStrikePrice());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingStrikeCurrencyAndUnderlyingStrikeCurrencyMatch) {
+    EXPECT_FALSE(component.hasUnderlyingStrikeCurrency());
 }
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingOptAttributeAndUnderlyingOptAttributeMatch) {
@@ -109,10 +168,39 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCouponRateAndUnder
     EXPECT_TRUE(component.hasUnderlyingCouponRate());
 }
 
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecurityExchangeAndUnderlyingSecurityExchangeMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingIssuerAndUnderlyingIssuerMatch) {
+    EXPECT_FALSE(component.hasUnderlyingIssuer());
+}
+
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingIssuerLenAndEncodedUnderlyingIssuerLenMatch) {
 }
 
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingIssuerAndEncodedUnderlyingIssuerMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingSecurityDescAndUnderlyingSecurityDescMatch) {
+    EXPECT_FALSE(component.hasUnderlyingSecurityDesc());
+}
+
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingSecurityDescLenAndEncodedUnderlyingSecurityDescLenMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetEncodedUnderlyingSecurityDescAndEncodedUnderlyingSecurityDescMatch) {
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCPProgramAndUnderlyingCPProgramMatch) {
+    EXPECT_FALSE(component.hasUnderlyingCPProgram());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCPRegTypeAndUnderlyingCPRegTypeMatch) {
+    EXPECT_FALSE(component.hasUnderlyingCPRegType());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingCurrencyAndUnderlyingCurrencyMatch) {
+    EXPECT_FALSE(component.hasUnderlyingCurrency());
 }
 
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingQtyAndUnderlyingQtyMatch) {
@@ -167,7 +255,7 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetUnderlyingEndValueAndUnderly
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setUnderlyingProduct(42);
+    { const std::string_view test_value{"AAA"}; component.setUnderlyingSymbol(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

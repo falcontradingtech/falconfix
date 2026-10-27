@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_CommissionDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCommission(3.14f);
-    component.setCommType('A');
-    component.setFundRenewWaiv('A');
+    { const double test_value = 123.456; component.setCommission(test_value); }
+    { const char test_value = 'X'; component.setCommType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setCommCurrency(test_value); }
     
     // Reset component
     component.reset();
@@ -49,6 +49,10 @@ TEST_F(FIX4_4_CommissionDataComponentTest, SetCommTypeAndCommTypeMatch) {
     EXPECT_TRUE(component.hasCommType());
 }
 
+TEST_F(FIX4_4_CommissionDataComponentTest, SetCommCurrencyAndCommCurrencyMatch) {
+    EXPECT_FALSE(component.hasCommCurrency());
+}
+
 TEST_F(FIX4_4_CommissionDataComponentTest, SetFundRenewWaivAndFundRenewWaivMatch) {
     const char test_value = 'X';
     component.setFundRenewWaiv(test_value);
@@ -59,12 +63,12 @@ TEST_F(FIX4_4_CommissionDataComponentTest, SetFundRenewWaivAndFundRenewWaivMatch
 TEST_F(FIX4_4_CommissionDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCommission(42);
+    { const double test_value = 123.456; component.setCommission(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_CommissionDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[152];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

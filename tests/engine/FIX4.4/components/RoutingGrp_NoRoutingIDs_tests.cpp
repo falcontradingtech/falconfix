@@ -24,7 +24,8 @@ protected:
 
 TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setRoutingType(42);
+    { const int64_t test_value = 12345; component.setRoutingType(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setRoutingID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,15 +41,19 @@ TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, SetRoutingTypeAndRoutingType
     EXPECT_TRUE(component.hasRoutingType());
 }
 
+TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, SetRoutingIDAndRoutingIDMatch) {
+    EXPECT_FALSE(component.hasRoutingID());
+}
+
 TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setRoutingType(42);
+    { const int64_t test_value = 12345; component.setRoutingType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_RoutingGrp_NoRoutingIDsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[124];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,13 +24,18 @@ protected:
 
 TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPosAmt(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setPosAmtType(test_value); }
+    { const double test_value = 123.456; component.setPosAmt(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, SetPosAmtTypeAndPosAmtTypeMatch) {
+    EXPECT_FALSE(component.hasPosAmtType());
 }
 
 TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, SetPosAmtAndPosAmtMatch) {
@@ -43,12 +48,12 @@ TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, SetPosAmtAndPosAmtMatch)
 TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPosAmt(42);
+    { const std::string_view test_value{"AAA"}; component.setPosAmtType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_PositionAmountData_NoPosAmtComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[132];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

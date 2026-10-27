@@ -24,8 +24,8 @@ protected:
 
 TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setEventType(42);
-    component.setEventPx(3.14f);
+    { const int64_t test_value = 12345; component.setEventType(test_value); }
+    { const double test_value = 123.456; component.setEventPx(test_value); }
     
     // Reset component
     component.reset();
@@ -51,15 +51,19 @@ TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, SetEventPxAndEventPxMatch) {
     EXPECT_TRUE(component.hasEventPx());
 }
 
+TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, SetEventTextAndEventTextMatch) {
+    EXPECT_FALSE(component.hasEventText());
+}
+
 TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setEventType(42);
+    { const int64_t test_value = 12345; component.setEventType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[208];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

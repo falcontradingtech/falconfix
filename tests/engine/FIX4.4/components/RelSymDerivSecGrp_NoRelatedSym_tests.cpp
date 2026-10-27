@@ -24,13 +24,19 @@ protected:
 
 TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setExpirationCycle(42);
+    { const std::string_view test_value{"AAA"}; component.setCurrency(test_value); }
+    { const int64_t test_value = 12345; component.setExpirationCycle(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setTradingSessionID(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
 }
 
 TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
@@ -40,18 +46,33 @@ TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetExpirationCycleAnd
     EXPECT_TRUE(component.hasExpirationCycle());
 }
 
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setExpirationCycle(42);
+    { const std::string_view test_value{"AAA"}; component.setCurrency(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_RelSymDerivSecGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[466];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

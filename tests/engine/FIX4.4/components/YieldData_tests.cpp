@@ -24,13 +24,18 @@ protected:
 
 TEST_F(FIX4_4_YieldDataComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setYield(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setYieldType(test_value); }
+    { const double test_value = 123.456; component.setYield(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_YieldDataComponentTest, SetYieldTypeAndYieldTypeMatch) {
+    EXPECT_FALSE(component.hasYieldType());
 }
 
 TEST_F(FIX4_4_YieldDataComponentTest, SetYieldAndYieldMatch) {
@@ -63,12 +68,12 @@ TEST_F(FIX4_4_YieldDataComponentTest, SetYieldRedemptionPriceTypeAndYieldRedempt
 TEST_F(FIX4_4_YieldDataComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setYield(42);
+    { const std::string_view test_value{"AAA"}; component.setYieldType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_YieldDataComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[292];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

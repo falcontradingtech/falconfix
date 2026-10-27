@@ -24,7 +24,9 @@ protected:
 
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
+    { const char test_value = 'X'; component.setSide(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setOrigClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
     
     // Reset component
     component.reset();
@@ -40,6 +42,22 @@ TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetSideAndSideMatch) {
     EXPECT_TRUE(component.hasSide());
 }
 
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetOrigClOrdIDAndOrigClOrdIDMatch) {
+    EXPECT_FALSE(component.hasOrigClOrdID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetClOrdLinkIDAndClOrdLinkIDMatch) {
+    EXPECT_FALSE(component.hasClOrdLinkID());
+}
+
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetOrigOrdModTimeAndOrigOrdModTimeMatch) {
 }
 
@@ -49,18 +67,29 @@ TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeOriginationDateAn
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetTradeDateAndTradeDateMatch) {
 }
 
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetComplianceIDAndComplianceIDMatch) {
+    EXPECT_FALSE(component.hasComplianceID());
+}
+
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
+    { const char test_value = 'X'; component.setSide(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SideCrossOrdCxlGrp_NoSidesComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[666];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -279,6 +279,309 @@ def _generate_serializer_tests_content(fix_version: str) -> str:
 	return content
 
 
+def _generate_parser_tests_content(fix_version: str) -> str:
+	"""
+	Render a unit test file covering 100% of falconfix/utils/parser.h for the
+	given FIX version's namespace: parse_int64/int32/double/bool/char,
+	parse_date32, parse_timeonly32 (incl. milliseconds paths) and
+	parse_timestamp64, exercising both valid and invalid/edge inputs.
+	"""
+	include_root = normalize_version_string(fix_version)
+	ns = namespace_from_version(fix_version)
+	version_prefix = fix_version.replace(".", "_")  # e.g. "FIX4.4" -> "FIX4_4"
+	suite = f"{version_prefix}_ParserTests"
+
+	lines = [
+		"// SPDX-License-Identifier: MIT",
+		"// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
+		"#include <gtest/gtest.h>",
+		"",
+		"#include <cstdint>",
+		"#include <string>",
+		"#include <string_view>",
+		"#include <utility>",
+		"",
+		f"#include <{include_root}/utils/parser.h>",
+		"",
+		"namespace {",
+		"",
+		f"using namespace {ns}::parser;",
+		"",
+		"std::pair<const char*, const char*> range(std::string_view s) {",
+		"\treturn {s.data(), s.data() + s.size()};",
+		"}",
+		"",
+		f"class {suite} : public ::testing::Test {{}};",
+		"",
+		f"TEST_F({suite}, ParseInt64_Valid) {{",
+		'\tauto [b, e] = range("1234567890123");',
+		"\tEXPECT_EQ(parse_int64(b, e), 1234567890123LL);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseInt64_Negative) {{",
+		'\tauto [b, e] = range("-42");',
+		"\tEXPECT_EQ(parse_int64(b, e), -42LL);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseInt64_InvalidReturnsZero) {{",
+		'\tauto [b, e] = range("abc");',
+		"\tEXPECT_EQ(parse_int64(b, e), 0LL);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseInt32_Valid) {{",
+		'\tauto [b, e] = range("65535");',
+		"\tEXPECT_EQ(parse_int32(b, e), 65535);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseInt32_InvalidReturnsZero) {{",
+		'\tauto [b, e] = range("x");',
+		"\tEXPECT_EQ(parse_int32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseDouble_Valid) {{",
+		'\tauto [b, e] = range("3.14159");',
+		"\tEXPECT_DOUBLE_EQ(parse_double(b, e), 3.14159);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseDouble_InvalidReturnsZero) {{",
+		'\tauto [b, e] = range("notanumber");',
+		"\tEXPECT_DOUBLE_EQ(parse_double(b, e), 0.0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseBool_True) {{",
+		'\tauto [b, e] = range("Y");',
+		"\tEXPECT_TRUE(parse_bool(b, e));",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseBool_False) {{",
+		'\tauto [b, e] = range("N");',
+		"\tEXPECT_FALSE(parse_bool(b, e));",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseBool_EmptyReturnsFalse) {{",
+		'\tconst char* p = "";',
+		"\tEXPECT_FALSE(parse_bool(p, p));",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseChar_Valid) {{",
+		'\tauto [b, e] = range("A");',
+		"\tEXPECT_EQ(parse_char(b, e), 'A');",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseChar_EmptyReturnsNul) {{",
+		'\tconst char* p = "";',
+		"\tEXPECT_EQ(parse_char(p, p), '\\0');",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseDate32_Valid) {{",
+		'\tauto [b, e] = range("20260101");',
+		"\tEXPECT_EQ(parse_date32(b, e), 20260101);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseDate32_TooShortReturnsZero) {{",
+		'\tauto [b, e] = range("2026");',
+		"\tEXPECT_EQ(parse_date32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseDate32_NonDigitReturnsZero) {{",
+		'\tauto [b, e] = range("2026X101");',
+		"\tEXPECT_EQ(parse_date32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_NoMillis) {{",
+		'\tauto [b, e] = range("12:34:56");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 12 * 10000000 + 34 * 100000 + 56 * 1000);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_WithMillis) {{",
+		'\tauto [b, e] = range("12:34:56.789");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 12 * 10000000 + 34 * 100000 + 56 * 1000 + 789);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_PartialMillis) {{",
+		'\tauto [b, e] = range("00:00:00.5");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 500);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_MillisStopsOnNonDigit) {{",
+		'\tauto [b, e] = range("00:00:00.5x");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 500);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_TooShortReturnsZero) {{",
+		'\tauto [b, e] = range("12:34");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_BadSeparatorReturnsZero) {{",
+		'\tauto [b, e] = range("12-34-56");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimeOnly32_NonDigitReturnsZero) {{",
+		'\tauto [b, e] = range("a2:34:56");',
+		"\tEXPECT_EQ(parse_timeonly32(b, e), 0);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimestamp64_Valid) {{",
+		'\tauto [b, e] = range("20260101123456");',
+		"\tEXPECT_EQ(parse_timestamp64(b, e), 20260101123456LL);",
+		"}",
+		"",
+		f"TEST_F({suite}, ParseTimestamp64_InvalidReturnsZero) {{",
+		'\tauto [b, e] = range("bad");',
+		"\tEXPECT_EQ(parse_timestamp64(b, e), 0LL);",
+		"}",
+		"",
+		"} // namespace",
+		"",
+	]
+	return "\n".join(lines)
+
+
+def _generate_datetime_tests_content(fix_version: str) -> str:
+	"""
+	Render a unit test file covering falconfix/utils/datetime.h for the given
+	FIX version's namespace: the pure format_* helpers (deterministic asserts),
+	gmtime_utc, and the now_* accessors / UtcSecondCache path (smoke asserts on
+	length and structure, since wall-clock values are non-deterministic).
+	"""
+	include_root = normalize_version_string(fix_version)
+	ns = namespace_from_version(fix_version)
+	version_prefix = fix_version.replace(".", "_")  # e.g. "FIX4.4" -> "FIX4_4"
+	suite = f"{version_prefix}_DateTimeTests"
+
+	lines = [
+		"// SPDX-License-Identifier: MIT",
+		"// Copyright (c) 2026 Michel Tonetti, Herik Lima, and Fabio Galuppo",
+		"#include <gtest/gtest.h>",
+		"",
+		"#include <cstdint>",
+		"#include <ctime>",
+		"#include <string>",
+		"",
+		f"#include <{include_root}/utils/datetime.h>",
+		"",
+		"namespace {",
+		"",
+		f"using namespace {ns}::datetime;",
+		"",
+		"// Compact UTCTIMESTAMP encoding: YYYYMMDDHHMMSS * 1000 + ms",
+		"int64_t makeCompact(int y, int mon, int d, int h, int m, int s, int ms) {",
+		"\tint64_t base = ((((((static_cast<int64_t>(y) * 100 + mon) * 100 + d) * 100 + h) * 100 + m) * 100 + s));",
+		"\treturn base * 1000 + ms;",
+		"}",
+		"",
+		f"class {suite} : public ::testing::Test {{",
+		"protected:",
+		"\tchar buffer[32]{};",
+		"\tstd::string capture(std::size_t len) { return std::string(buffer, len); }",
+		"};",
+		"",
+		f"TEST_F({suite}, FormatUTCTimestamp_WithMillis) {{",
+		"\tconst auto compact = makeCompact(2026, 1, 2, 3, 4, 5, 678);",
+		"\tconst auto len = format_UTCTimestamp(static_cast<UTCTIMESTAMP>(compact), buffer, true);",
+		"\tEXPECT_EQ(len, 21u);",
+		'\tEXPECT_EQ(capture(len), "20260102-03:04:05.678");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatUTCTimestamp_WithoutMillis) {{",
+		"\tconst auto compact = makeCompact(2026, 12, 31, 23, 59, 59, 999);",
+		"\tconst auto len = format_UTCTimestamp(static_cast<UTCTIMESTAMP>(compact), buffer, false);",
+		"\tEXPECT_EQ(len, 17u);",
+		'\tEXPECT_EQ(capture(len), "20261231-23:59:59");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatUTCTimestampCompact_WithMillis) {{",
+		"\tconst auto compact = makeCompact(2026, 1, 2, 3, 4, 5, 678);",
+		"\tconst auto len = format_UTCTimestamp_compact(static_cast<UTCTIMESTAMP>(compact), buffer, true);",
+		"\tEXPECT_EQ(len, 17u);",
+		'\tEXPECT_EQ(capture(len), "20260102030405678");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatUTCTimestampCompact_WithoutMillis) {{",
+		"\tconst auto compact = makeCompact(2026, 1, 2, 3, 4, 5, 678);",
+		"\tconst auto len = format_UTCTimestamp_compact(static_cast<UTCTIMESTAMP>(compact), buffer, false);",
+		"\tEXPECT_EQ(len, 14u);",
+		'\tEXPECT_EQ(capture(len), "20260102030405");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatUTCDateOnly) {{",
+		"\tconst auto len = format_UTCDateOnly(static_cast<UTCDATEONLY>(20260102), buffer);",
+		"\tEXPECT_EQ(len, 8u);",
+		'\tEXPECT_EQ(capture(len), "20260102");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatUTCTimeOnly) {{",
+		"\tconst int64_t ms = ((3 * 60 + 4) * 60 + 5) * 1000 + 678;",
+		"\tconst auto len = format_UTCTimeOnly(static_cast<UTCTIMEONLY>(ms), buffer);",
+		"\tEXPECT_EQ(len, 12u);",
+		'\tEXPECT_EQ(capture(len), "03:04:05.678");',
+		"}",
+		"",
+		f"TEST_F({suite}, FormatLocalMktDate) {{",
+		"\tconst auto len = format_LocalMktDate(static_cast<LOCALMKTDATE>(20260102), buffer);",
+		"\tEXPECT_EQ(len, 8u);",
+		'\tEXPECT_EQ(capture(len), "20260102");',
+		"}",
+		"",
+		f"TEST_F({suite}, NowUTCTimestampStr_WithMillis) {{",
+		"\tconst auto len = now_UTCTimestampStr(buffer, true);",
+		"\tEXPECT_EQ(len, 17u);",
+		"\tEXPECT_TRUE(buffer[14] >= '0' && buffer[14] <= '9');",
+		"}",
+		"",
+		f"TEST_F({suite}, NowUTCTimestampStr_WithoutMillis) {{",
+		"\tconst auto len = now_UTCTimestampStr(buffer, false);",
+		"\tEXPECT_EQ(len, 14u);",
+		"}",
+		"",
+		f"TEST_F({suite}, NowFIXUTCTimestampStr_WithMillis) {{",
+		"\tconst auto len = now_FIXUTCTimestampStr(buffer, true);",
+		"\tEXPECT_EQ(len, 21u);",
+		"\tEXPECT_EQ(buffer[8], '-');",
+		"\tEXPECT_EQ(buffer[17], '.');",
+		"}",
+		"",
+		f"TEST_F({suite}, NowFIXUTCTimestampStr_WithoutMillis) {{",
+		"\tconst auto len = now_FIXUTCTimestampStr(buffer, false);",
+		"\tEXPECT_EQ(len, 17u);",
+		"\tEXPECT_EQ(buffer[8], '-');",
+		"}",
+		"",
+		f"TEST_F({suite}, NowAccessorsAreConsistent) {{",
+		"\tconst auto ts = now_UTCTimestamp();",
+		"\tEXPECT_GT(ts, 0);",
+		"",
+		"\tconst auto date = now_UTCDateOnly();",
+		"\tEXPECT_GE(date, 20200101);",
+		"",
+		"\tconst auto timeOnly = now_UTCTimeOnly();",
+		"\tEXPECT_GE(timeOnly, 0);",
+		"\tEXPECT_LT(timeOnly, 86400000);",
+		"",
+		"\tconst auto localDate = now_LocalMktDate();",
+		"\tEXPECT_EQ(static_cast<int64_t>(localDate), static_cast<int64_t>(date));",
+		"",
+		"\tconst auto secs = detail::seconds_since_midnight_utc();",
+		"\tEXPECT_GE(secs, 0);",
+		"\tEXPECT_LT(secs, 86400);",
+		"}",
+		"",
+		f"TEST_F({suite}, GmtimeUtc_Epoch) {{",
+		"\tstd::tm tm{};",
+		"\tgmtime_utc(static_cast<std::time_t>(0), tm);",
+		"\tEXPECT_EQ(tm.tm_year + 1900, 1970);",
+		"\tEXPECT_EQ(tm.tm_mon + 1, 1);",
+		"\tEXPECT_EQ(tm.tm_mday, 1);",
+		"}",
+		"",
+		"} // namespace",
+		"",
+	]
+	return "\n".join(lines)
+
+
 def generate_serializer_tests(base_output: Path, fix_version: str = "FIX4.4") -> Path:
 	"""
 	Write tests/<fix_version>/utils/serializer_tests.cpp covering 100% of
@@ -290,6 +593,34 @@ def generate_serializer_tests(base_output: Path, fix_version: str = "FIX4.4") ->
 	test_file = output_dir / "serializer_tests.cpp"
 	test_file.write_text(_generate_serializer_tests_content(fix_version), encoding="utf-8")
 	print(f"[ok] Generated tests/{fix_version}/utils/serializer_tests.cpp")
+	return test_file
+
+
+def generate_parser_tests(base_output: Path, fix_version: str = "FIX4.4") -> Path:
+	"""
+	Write tests/<fix_version>/utils/parser_tests.cpp covering 100% of
+	parser.h for the given FIX version's namespace.
+	"""
+	output_dir = base_output / "tests" / fix_version / "utils"
+	output_dir.mkdir(parents=True, exist_ok=True)
+
+	test_file = output_dir / "parser_tests.cpp"
+	test_file.write_text(_generate_parser_tests_content(fix_version), encoding="utf-8")
+	print(f"[ok] Generated tests/{fix_version}/utils/parser_tests.cpp")
+	return test_file
+
+
+def generate_datetime_tests(base_output: Path, fix_version: str = "FIX4.4") -> Path:
+	"""
+	Write tests/<fix_version>/utils/datetime_tests.cpp covering datetime.h for
+	the given FIX version's namespace.
+	"""
+	output_dir = base_output / "tests" / fix_version / "utils"
+	output_dir.mkdir(parents=True, exist_ok=True)
+
+	test_file = output_dir / "datetime_tests.cpp"
+	test_file.write_text(_generate_datetime_tests_content(fix_version), encoding="utf-8")
+	print(f"[ok] Generated tests/{fix_version}/utils/datetime_tests.cpp")
 	return test_file
 
 
@@ -425,7 +756,7 @@ def _parse_members(scope_text: str) -> dict:
 			'name': match.group(2)
 		})
 
-	setter_pattern = r'void\s+set(\w+)\((const\s+)?(types::\w+(?:<\d+>)?)\s+[&v]\)\s+noexcept'
+	setter_pattern = r'void\s+set(\w+)\((const\s+)?(types::\w+(?:<\d+>)?)\s+&?v\)\s+noexcept'
 	for match in re.finditer(setter_pattern, scope_text):
 		methods['setters'].append({
 			'name': match.group(1),
@@ -436,11 +767,30 @@ def _parse_members(scope_text: str) -> dict:
 	for match in re.finditer(has_pattern, scope_text):
 		methods['has_methods'].append(match.group(1))
 
+	# Non-const reference accessors enable deterministic population of
+	# group-only / sub-component-only containers (which expose no scalar
+	# setters of their own):
+	#   - group vector accessors:  `std::vector<Entry> &getRefXxxGroup() noexcept`
+	#   - sub-component accessors:  `SubType      &getRefXxx()      noexcept`
+	group_accessors = []  # (accessor_suffix, entry_struct_name)
+	for match in re.finditer(r'std::vector<\s*(\w+)\s*>\s*&\s*getRef(\w+)\(\)\s+noexcept', scope_text):
+		group_accessors.append((match.group(2), match.group(1)))
+
+	ref_accessors = []  # (accessor_suffix, sub_component_type)
+	for match in re.finditer(r'(?<!const )\b([A-Z]\w+)\s*&\s*getRef(\w+)\(\)\s+noexcept', scope_text):
+		type_name = match.group(1)
+		suffix = match.group(2)
+		if type_name == "std":
+			continue
+		ref_accessors.append((suffix, type_name))
+
 	return {
 		'fields': fields,
 		'methods': methods,
 		'has_required': is_any_required,
 		'max_encode_size': max_size,
+		'group_accessors': group_accessors,
+		'ref_accessors': ref_accessors,
 	}
 
 
@@ -560,14 +910,9 @@ def _generate_reset_tests(component: dict) -> str:
 	# Add setter calls for first few fields
 	for setter in component['methods']['setters'][:3]:
 		field_name = setter['name']
-		if 'CHAR' in setter['param_type']:
-			lines.append(f"    component.set{field_name}('A');")
-		elif 'INT' in setter['param_type']:
-			lines.append(f"    component.set{field_name}(42);")
-		elif 'FLOAT' in setter['param_type']:
-			lines.append(f"    component.set{field_name}(3.14f);")
-		elif 'CURRENCY' in setter['param_type']:
-			lines.append(f"    // component.set{field_name}(...);")
+		decl, value = _populate_value_literal_and_setup(setter['param_type'])
+		if decl:
+			lines.append(f"    {{ {decl} component.set{field_name}({value}); }}")
 
 	lines.extend([
 		"    ",
@@ -635,9 +980,14 @@ def _generate_presence_tests(component: dict) -> str:
 	]
 
 	if component['methods']['setters']:
-		setter = component['methods']['setters'][0]
-		lines.append(f"    component.set{setter['name']}(" + ("'A'" if 'CHAR' in setter['param_type'] else "42") + ");")
-		lines.append("    EXPECT_TRUE(component.hasAnySet());")
+		# Pick the first setter we can populate with a type-correct literal
+		# (handles CHAR/INT/FLOAT/STRING). Falls back to nothing if none fit.
+		for setter in component['methods']['setters']:
+			decl, value = _populate_value_literal_and_setup(setter['param_type'])
+			if decl:
+				lines.append(f"    {{ {decl} component.set{setter['name']}({value}); }}")
+				lines.append("    EXPECT_TRUE(component.hasAnySet());")
+				break
 
 	lines.extend(["}", ""])
 	return "\n".join(lines)
@@ -657,6 +1007,84 @@ def _test_value_literal_and_setup(param_type: str) -> tuple[str, str]:
 	if 'FLOAT' in param_type or 'PRICE' in param_type:
 		return "const double test_value = 123.456;", "test_value"
 	return "", ""
+
+
+def _populate_value_literal_and_setup(param_type: str) -> tuple[str, str]:
+	"""
+	Like _test_value_literal_and_setup but for *populating* a field (no later
+	getter equality assertion), so it also supports STRING-like types. This
+	matters because many repeating-group entry types use their first (string)
+	field as the decode anchor/delimiter: populating that field is what makes
+	the encoded group decode back successfully.
+	"""
+	decl, value = _test_value_literal_and_setup(param_type)
+	if decl:
+		return decl, value
+	if ('STRING' in param_type or 'MULTIPLEVALUE' in param_type
+			or 'MONTHYEAR' in param_type or 'COUNTRY' in param_type
+			or 'EXCHANGE' in param_type or 'CURRENCY' in param_type
+			or 'LANGUAGE' in param_type or 'DAYOFMONTH' in param_type):
+		return 'const std::string_view test_value{"AAA"};', "test_value"
+	return "", ""
+
+
+# Registry of all parsed top-level components (keyed by class name), used to
+# resolve sub-component scalar setters when deterministically populating
+# group-only / wrapper components that expose no scalar setters of their own.
+_COMPONENT_REGISTRY: dict = {}
+
+
+def _reset_component_registry() -> None:
+	_COMPONENT_REGISTRY.clear()
+
+
+def _register_component(component: dict) -> None:
+	_COMPONENT_REGISTRY[component['name']] = component
+
+
+def _find_nested_entry(component: dict, entry_struct_name: str) -> dict | None:
+	"""Find a nested group-entry dict by its (unqualified) struct name."""
+	for nested in component.get('nested', []):
+		cpp_type = nested.get('cpp_type', '')
+		if cpp_type.endswith(f"::{entry_struct_name}") or nested.get('name', '').endswith(f"_{entry_struct_name}"):
+			return nested
+	return None
+
+
+def _emit_populate(obj_expr: str, component: dict | None, depth: int = 0) -> tuple[list[str], bool]:
+	"""
+	Emit C++ statements that deterministically populate `obj_expr` with at least
+	one scalar field, recursing through sub-component (getRef) and repeating
+	group (getRef...Group) accessors. Returns (lines, success).
+	"""
+	if component is None or depth > 5:
+		return [], False
+
+	# 1) Direct scalar setter on this component. Prefer the FIRST declared
+	#    setter, because repeating-group entry types use their first field as
+	#    the decode anchor/delimiter; populating a later field instead would
+	#    encode a payload that fails to decode.
+	for setter in component.get('methods', {}).get('setters', []):
+		decl, value = _populate_value_literal_and_setup(setter['param_type'])
+		if decl:
+			return [f"    {{ {decl} {obj_expr}.set{setter['name']}({value}); }}"], True
+
+	# 2) Sub-component reference accessors (e.g. getRefInstrument()).
+	for suffix, subtype in component.get('ref_accessors', []):
+		sub = _COMPONENT_REGISTRY.get(subtype)
+		sub_lines, ok = _emit_populate(f"{obj_expr}.getRef{suffix}()", sub, depth + 1)
+		if ok:
+			return sub_lines, True
+
+	# 3) Repeating group accessors (e.g. getRefNoRelatedSymGroup()).
+	for suffix, entry_struct in component.get('group_accessors', []):
+		entry = _find_nested_entry(component, entry_struct)
+		lines = [f"    {obj_expr}.getRef{suffix}().emplace_back();"]
+		pop_lines, ok = _emit_populate(f"{obj_expr}.getRef{suffix}().back()", entry, depth + 1)
+		if ok:
+			return lines + pop_lines, True
+
+	return [], False
 
 
 def _generate_encode_decode_tests(component: dict) -> str:
@@ -679,7 +1107,7 @@ def _generate_encode_decode_tests(component: dict) -> str:
 
 	lines = [
 		f"TEST_F({test_class_name}, EncodeDecodeRoundtrip) {{",
-		f"    char buffer[{component['max_encode_size'] * 2}];",
+		f"    char buffer[{max(component['max_encode_size'] * 2, 1024)}];",
 		"    ",
 	]
 
@@ -710,25 +1138,97 @@ def _generate_encode_decode_tests(component: dict) -> str:
 			"",
 		])
 	else:
-		lines.extend([
-			"    // No scalar setter available to populate deterministically (this",
-			"    // component only wraps nested groups/sub-components). Group-only",
-			"    // containers with no required fields legitimately encode to 0",
-			"    // bytes, and some decode() implementations return false when no",
-			"    // bytes were consumed, so we only assert the two views agree.",
-			"    char *p = buffer;",
-			"    p = component.encode(p, true);",
-			"    std::size_t encoded_size = p - buffer;",
-			"    ",
-			"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
-			"    ",
-			f"    {cpp_type} decoded;",
-			"    const char *q = buffer;",
-			"    (void)decoded.decode(q, p);",
-			"    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());",
-			"}",
-			"",
-		])
+		populate_lines, populated = _emit_populate("component", component)
+		if populated:
+			lines.extend([
+				"    // This component exposes no scalar setters of its own, so we",
+				"    // populate it through its getRef sub-component / group accessors",
+				"    // to exercise the real encode/decode (and group loop) paths.",
+			])
+			lines.extend(populate_lines)
+			lines.extend([
+				"    ",
+				"    EXPECT_TRUE(component.hasAnySet());",
+				"    ",
+				"    char *p = buffer;",
+				"    p = component.encode(p, true);",
+				"    ASSERT_NE(p, nullptr);",
+				"    std::size_t encoded_size = static_cast<std::size_t>(p - buffer);",
+				"    ",
+				"    EXPECT_GT(encoded_size, 0u);",
+				"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
+				"    ",
+				f"    {cpp_type} decoded;",
+				"    const char *q = buffer;",
+				"    EXPECT_TRUE(decoded.decode(q, p));",
+				"    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());",
+				"}",
+				"",
+			])
+		else:
+			lines.extend([
+				"    // No scalar setter available to populate deterministically (this",
+				"    // component only wraps nested groups/sub-components). Group-only",
+				"    // containers with no required fields legitimately encode to 0",
+				"    // bytes, and some decode() implementations return false when no",
+				"    // bytes were consumed, so we only assert the two views agree.",
+				"    char *p = buffer;",
+				"    p = component.encode(p, true);",
+				"    std::size_t encoded_size = p - buffer;",
+				"    ",
+				"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
+				"    ",
+				f"    {cpp_type} decoded;",
+				"    const char *q = buffer;",
+				"    (void)decoded.decode(q, p);",
+				"    EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());",
+				"}",
+				"",
+			])
+
+	# For repeating-group containers, add a dedicated test that populates two
+	# entries and round-trips them, exercising the group count/encode/decode
+	# loop and the per-entry checkRequired loop (the bulk of the generated
+	# group .cpp). The REQUIRED==0 guard line stays uncovered by design.
+	group_accessors = component.get('group_accessors', [])
+	if group_accessors:
+		suffix, entry_struct = group_accessors[0]
+		entry = _find_nested_entry(component, entry_struct)
+		e1, ok1 = _emit_populate("component.getRef{0}().back()".format(suffix), entry)
+		if ok1:
+			lines.append(f"TEST_F({test_class_name}, PopulatedGroupLoopRoundtrip) {{")
+			lines.append(f"    char buffer[{max(component['max_encode_size'] * 4, 2048)}];")
+			lines.append(f"    component.getRef{suffix}().emplace_back();")
+			lines.extend(e1)
+			lines.append(f"    component.getRef{suffix}().emplace_back();")
+			e2, _ = _emit_populate("component.getRef{0}().back()".format(suffix), entry)
+			lines.extend(e2)
+			lines.extend([
+				"    ",
+				f"    EXPECT_EQ(component.getRef{suffix}().size(), 2u);",
+				"    EXPECT_TRUE(component.hasAnySet());",
+				"    EXPECT_TRUE(component.checkRequired());",
+				"    ",
+				"    char *p = component.encode(buffer, true);",
+				"    ASSERT_NE(p, nullptr);",
+				"    EXPECT_GT(static_cast<std::size_t>(p - buffer), 0u);",
+				"    ",
+				f"    {cpp_type} decoded;",
+				"    const char *q = buffer;",
+				"    EXPECT_TRUE(decoded.decode(q, p));",
+				f"    EXPECT_EQ(decoded.getRef{suffix}().size(), component.getRef{suffix}().size());",
+				"    ",
+				"    // Decoding an unknown leading tag returns without consuming it.",
+				f"    {cpp_type} other;",
+				'    const char *bad = "99=X\\x01";',
+				"    const char *bp = bad;",
+				"    (void)other.decode(bp, bad + 5);",
+				"    ",
+				"    // setField on the container is a no-op sink (returns false).",
+				"    EXPECT_FALSE(other.setField(0, nullptr, nullptr));",
+				"}",
+				"",
+			])
 
 	return "\n".join(lines)
 
@@ -795,16 +1295,25 @@ def generate_all_component_tests(
 		stats['errors'].append(f"Components directory not found: {components_dir}")
 		return stats
 
-	# Process each component header file
+	# First pass: parse & register every component so that sub-component scalar
+	# setters can be resolved when populating group-only / wrapper components.
+	_reset_component_registry()
+	parsed: list[tuple[Path, dict]] = []
 	for header_file in sorted(components_dir.glob("*.h")):
+		try:
+			component = extract_component_info(header_file, namespace)
+		except Exception as e:
+			component = None
+			stats['errors'].append(f"{header_file.name}: {str(e)}")
+		if component:
+			_register_component(component)
+			parsed.append((header_file, component))
+
+	# Second pass: generate test files (registry is now fully populated).
+	for header_file, component in parsed:
 		stats['total'] += 1
 
 		try:
-			component = extract_component_info(header_file, namespace)
-			if not component:
-				stats['skipped'] += 1
-				continue
-
 			# Generate test file for the top-level component (or group container)
 			test_code = _generate_full_test_file(component, fix_version)
 			test_file = output_dir / f"{component['name']}_tests.cpp"
@@ -857,6 +1366,14 @@ def generate(base_output: Path, fix_version: str) -> list[Path]:
 	# serializer.h tests: one static file per FIX version, under tests/<version>/utils/.
 	serializer_test_file = generate_serializer_tests(base_output, fix_version)
 	generated_files.append(serializer_test_file.relative_to(base_output))
+
+	# parser.h tests: one file per FIX version, under tests/<version>/utils/.
+	parser_test_file = generate_parser_tests(base_output, fix_version)
+	generated_files.append(parser_test_file.relative_to(base_output))
+
+	# datetime.h tests: one file per FIX version, under tests/<version>/utils/.
+	datetime_test_file = generate_datetime_tests(base_output, fix_version)
+	generated_files.append(datetime_test_file.relative_to(base_output))
 
 	# Ensure tests/<version>/CMakeLists.txt (and components/, utils/ subdirs)
 	# have their own add_test_custom(...) calls, wired via add_subdirectory(...).

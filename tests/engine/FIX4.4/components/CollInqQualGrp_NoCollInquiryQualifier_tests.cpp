@@ -24,7 +24,7 @@ protected:
 
 TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCollInquiryQualifier(42);
+    { const int64_t test_value = 12345; component.setCollInquiryQualifier(test_value); }
     
     // Reset component
     component.reset();
@@ -43,12 +43,12 @@ TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, SetCollInquiry
 TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCollInquiryQualifier(42);
+    { const int64_t test_value = 12345; component.setCollInquiryQualifier(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_CollInqQualGrp_NoCollInquiryQualifierComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[50];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

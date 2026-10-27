@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSide('A');
-    component.setNetGrossInd(42);
-    component.setSettlType('A');
+    { const std::string_view test_value{"AAA"}; component.setListID(test_value); }
+    { const char test_value = 'X'; component.setSide(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setTradingSessionID(test_value); }
     
     // Reset component
     component.reset();
@@ -35,11 +35,23 @@ TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, ResetClearsAllFields) 
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetListIDAndListIDMatch) {
+    EXPECT_FALSE(component.hasListID());
+}
+
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSideAndSideMatch) {
     const char test_value = 'X';
     component.setSide(test_value);
     EXPECT_EQ(component.getSide(), test_value);
     EXPECT_TRUE(component.hasSide());
+}
+
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
 }
 
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetNetGrossIndAndNetGrossIndMatch) {
@@ -59,6 +71,10 @@ TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSettlTypeAndSettlTy
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetSettlDateAndSettlDateMatch) {
 }
 
+TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetAccountAndAccountMatch) {
+    EXPECT_FALSE(component.hasAccount());
+}
+
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetAcctIDSourceAndAcctIDSourceMatch) {
     const int64_t test_value = 12345;
     component.setAcctIDSource(test_value);
@@ -69,12 +85,12 @@ TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, SetAcctIDSourceAndAcct
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSide('A');
+    { const std::string_view test_value{"AAA"}; component.setListID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_BidCompReqGrp_NoBidComponentsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[434];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

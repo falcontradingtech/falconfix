@@ -24,15 +24,35 @@ protected:
 
 TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOrderQty(3.14f);
-    component.setOrderAvgPx(3.14f);
-    component.setOrderBookingQty(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setOrderID(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecondaryOrderID(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetClOrdIDAndClOrdIDMatch) {
+    EXPECT_FALSE(component.hasClOrdID());
+}
+
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderIDAndOrderIDMatch) {
+    EXPECT_FALSE(component.hasOrderID());
+}
+
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetSecondaryOrderIDAndSecondaryOrderIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryOrderID());
+}
+
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetSecondaryClOrdIDAndSecondaryClOrdIDMatch) {
+    EXPECT_FALSE(component.hasSecondaryClOrdID());
+}
+
+TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetListIDAndListIDMatch) {
+    EXPECT_FALSE(component.hasListID());
 }
 
 TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderQtyAndOrderQtyMatch) {
@@ -59,12 +79,12 @@ TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, SetOrderBookingQtyAndOrderBooki
 TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOrderQty(42);
+    { const std::string_view test_value{"AAA"}; component.setClOrdID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_OrdAllocGrp_NoOrdersComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[536];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

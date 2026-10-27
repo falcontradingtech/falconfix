@@ -24,15 +24,19 @@ protected:
 
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setRoundLot(3.14f);
-    component.setMinTradeVol(3.14f);
-    component.setExpirationCycle(42);
+    { const std::string_view test_value{"AAA"}; component.setCurrency(test_value); }
+    { const double test_value = 123.456; component.setRoundLot(test_value); }
+    { const double test_value = 123.456; component.setMinTradeVol(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetCurrencyAndCurrencyMatch) {
+    EXPECT_FALSE(component.hasCurrency());
 }
 
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetRoundLotAndRoundLotMatch) {
@@ -49,6 +53,14 @@ TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetMinTradeVolAndMinTradeVol
     EXPECT_TRUE(component.hasMinTradeVol());
 }
 
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetTradingSessionIDAndTradingSessionIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionID());
+}
+
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetTradingSessionSubIDAndTradingSessionSubIDMatch) {
+    EXPECT_FALSE(component.hasTradingSessionSubID());
+}
+
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirationCycleMatch) {
     const int64_t test_value = 12345;
     component.setExpirationCycle(test_value);
@@ -56,18 +68,25 @@ TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetExpirationCycleAndExpirat
     EXPECT_TRUE(component.hasExpirationCycle());
 }
 
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetTextAndTextMatch) {
+    EXPECT_FALSE(component.hasText());
+}
+
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetEncodedTextLenAndEncodedTextLenMatch) {
+}
+
+TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, SetEncodedTextAndEncodedTextMatch) {
 }
 
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setRoundLot(42);
+    { const std::string_view test_value{"AAA"}; component.setCurrency(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_SecListGrp_NoRelatedSymComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[582];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

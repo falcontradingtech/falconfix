@@ -24,7 +24,7 @@ protected:
 
 TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setQuoteQualifier('A');
+    { const char test_value = 'X'; component.setQuoteQualifier(test_value); }
     
     // Reset component
     component.reset();
@@ -43,12 +43,12 @@ TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, SetQuoteQualifierAndQu
 TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setQuoteQualifier('A');
+    { const char test_value = 'X'; component.setQuoteQualifier(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_QuotQualGrp_NoQuoteQualifiersComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[12];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,8 +24,8 @@ protected:
 
 TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegSwapType(42);
-    component.setLegSettlType('A');
+    { const int64_t test_value = 12345; component.setLegSwapType(test_value); }
+    { const char test_value = 'X'; component.setLegSettlType(test_value); }
     
     // Reset component
     component.reset();
@@ -51,12 +51,12 @@ TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, SetLegSettlTypeAndLegSet
 TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegSwapType(42);
+    { const int64_t test_value = 12345; component.setLegSwapType(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_InstrmtLegSecListGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[62];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

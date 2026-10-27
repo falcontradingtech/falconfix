@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegQty(3.14f);
-    component.setLegSwapType(42);
-    component.setLegPositionEffect('A');
+    { const double test_value = 123.456; component.setLegQty(test_value); }
+    { const int64_t test_value = 12345; component.setLegSwapType(test_value); }
+    { const char test_value = 'X'; component.setLegPositionEffect(test_value); }
     
     // Reset component
     component.reset();
@@ -63,6 +63,10 @@ TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegCoveredOrUncoveredAnd
     EXPECT_TRUE(component.hasLegCoveredOrUncovered());
 }
 
+TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegRefIDAndLegRefIDMatch) {
+    EXPECT_FALSE(component.hasLegRefID());
+}
+
 TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegPriceAndLegPriceMatch) {
     const double test_value = 123.456;
     component.setLegPrice(test_value);
@@ -90,12 +94,12 @@ TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, SetLegLastPxAndLegLastPxMat
 TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegQty(42);
+    { const double test_value = 123.456; component.setLegQty(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_InstrmtLegExecGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[398];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

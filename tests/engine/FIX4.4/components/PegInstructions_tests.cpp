@@ -24,9 +24,9 @@ protected:
 
 TEST_F(FIX4_4_PegInstructionsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPegOffsetValue(3.14f);
-    component.setPegMoveType(42);
-    component.setPegOffsetType(42);
+    { const double test_value = 123.456; component.setPegOffsetValue(test_value); }
+    { const int64_t test_value = 12345; component.setPegMoveType(test_value); }
+    { const int64_t test_value = 12345; component.setPegOffsetType(test_value); }
     
     // Reset component
     component.reset();
@@ -80,12 +80,12 @@ TEST_F(FIX4_4_PegInstructionsComponentTest, SetPegScopeAndPegScopeMatch) {
 TEST_F(FIX4_4_PegInstructionsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPegOffsetValue(42);
+    { const double test_value = 123.456; component.setPegOffsetValue(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_PegInstructionsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[308];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

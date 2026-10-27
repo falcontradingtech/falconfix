@@ -24,15 +24,19 @@ protected:
 
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setAllocAcctIDSource(42);
-    component.setAllocPrice(3.14f);
-    component.setIndividualAllocRejCode(42);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
+    { const int64_t test_value = 12345; component.setAllocAcctIDSource(test_value); }
+    { const double test_value = 123.456; component.setAllocPrice(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocAccountAndAllocAccountMatch) {
+    EXPECT_FALSE(component.hasAllocAccount());
 }
 
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocAcctIDSourceAndAllocAcctIDSourceMatch) {
@@ -49,6 +53,10 @@ TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocPriceAndAllocPriceMatch
     EXPECT_TRUE(component.hasAllocPrice());
 }
 
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetIndividualAllocIDAndIndividualAllocIDMatch) {
+    EXPECT_FALSE(component.hasIndividualAllocID());
+}
+
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetIndividualAllocRejCodeAndIndividualAllocRejCodeMatch) {
     const int64_t test_value = 12345;
     component.setIndividualAllocRejCode(test_value);
@@ -56,18 +64,25 @@ TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetIndividualAllocRejCodeAndInd
     EXPECT_TRUE(component.hasIndividualAllocRejCode());
 }
 
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetAllocTextAndAllocTextMatch) {
+    EXPECT_FALSE(component.hasAllocText());
+}
+
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetEncodedAllocTextLenAndEncodedAllocTextLenMatch) {
+}
+
+TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, SetEncodedAllocTextAndEncodedAllocTextMatch) {
 }
 
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setAllocAcctIDSource(42);
+    { const std::string_view test_value{"AAA"}; component.setAllocAccount(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_AllocAckGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[502];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

@@ -24,13 +24,31 @@ protected:
 
 TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setOwnerType(42);
+    { const std::string_view test_value{"AAA"}; component.setRegistDtls(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setRegistEmail(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setMailingDtls(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetRegistDtlsAndRegistDtlsMatch) {
+    EXPECT_FALSE(component.hasRegistDtls());
+}
+
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetRegistEmailAndRegistEmailMatch) {
+    EXPECT_FALSE(component.hasRegistEmail());
+}
+
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetMailingDtlsAndMailingDtlsMatch) {
+    EXPECT_FALSE(component.hasMailingDtls());
+}
+
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetMailingInstAndMailingInstMatch) {
+    EXPECT_FALSE(component.hasMailingInst());
 }
 
 TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetOwnerTypeAndOwnerTypeMatch) {
@@ -43,15 +61,18 @@ TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetOwnerTypeAndOwnerTypeMat
 TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetDateOfBirthAndDateOfBirthMatch) {
 }
 
+TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, SetInvestorCountryOfResidenceAndInvestorCountryOfResidenceMatch) {
+}
+
 TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setOwnerType(42);
+    { const std::string_view test_value{"AAA"}; component.setRegistDtls(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_RgstDtlsGrp_NoRegistDtlsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[446];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

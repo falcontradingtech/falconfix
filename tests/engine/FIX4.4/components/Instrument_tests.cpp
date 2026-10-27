@@ -24,8 +24,9 @@ protected:
 
 TEST_F(FIX4_4_InstrumentComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setProduct(42);
-    component.setPutOrCall(42);
+    { const std::string_view test_value{"AAA"}; component.setSymbol(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSymbolSfx(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setSecurityID(test_value); }
     
     // Reset component
     component.reset();
@@ -34,11 +35,42 @@ TEST_F(FIX4_4_InstrumentComponentTest, ResetClearsAllFields) {
     EXPECT_FALSE(component.hasAnySet());
 }
 
+TEST_F(FIX4_4_InstrumentComponentTest, SetSymbolAndSymbolMatch) {
+    EXPECT_FALSE(component.hasSymbol());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSymbolSfxAndSymbolSfxMatch) {
+    EXPECT_FALSE(component.hasSymbolSfx());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecurityIDAndSecurityIDMatch) {
+    EXPECT_FALSE(component.hasSecurityID());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecurityIDSourceAndSecurityIDSourceMatch) {
+    EXPECT_FALSE(component.hasSecurityIDSource());
+}
+
 TEST_F(FIX4_4_InstrumentComponentTest, SetProductAndProductMatch) {
     const int64_t test_value = 12345;
     component.setProduct(test_value);
     EXPECT_EQ(component.getProduct(), test_value);
     EXPECT_TRUE(component.hasProduct());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetCFICodeAndCFICodeMatch) {
+    EXPECT_FALSE(component.hasCFICode());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecurityTypeAndSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasSecurityType());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecuritySubTypeAndSecuritySubTypeMatch) {
+    EXPECT_FALSE(component.hasSecuritySubType());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetMaturityMonthYearAndMaturityMonthYearMatch) {
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetMaturityDateAndMaturityDateMatch) {
@@ -55,6 +87,10 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetCouponPaymentDateAndCouponPaymentDateM
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetIssueDateAndIssueDateMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetRepoCollateralSecurityTypeAndRepoCollateralSecurityTypeMatch) {
+    EXPECT_FALSE(component.hasRepoCollateralSecurityType());
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetRepurchaseTermAndRepurchaseTermMatch) {
@@ -78,6 +114,25 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetFactorAndFactorMatch) {
     EXPECT_TRUE(component.hasFactor());
 }
 
+TEST_F(FIX4_4_InstrumentComponentTest, SetCreditRatingAndCreditRatingMatch) {
+    EXPECT_FALSE(component.hasCreditRating());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetInstrRegistryAndInstrRegistryMatch) {
+    EXPECT_FALSE(component.hasInstrRegistry());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetCountryOfIssueAndCountryOfIssueMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetStateOrProvinceOfIssueAndStateOrProvinceOfIssueMatch) {
+    EXPECT_FALSE(component.hasStateOrProvinceOfIssue());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetLocaleOfIssueAndLocaleOfIssueMatch) {
+    EXPECT_FALSE(component.hasLocaleOfIssue());
+}
+
 TEST_F(FIX4_4_InstrumentComponentTest, SetRedemptionDateAndRedemptionDateMatch) {
 }
 
@@ -86,6 +141,10 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetStrikePriceAndStrikePriceMatch) {
     component.setStrikePrice(test_value);
     EXPECT_EQ(component.getStrikePrice(), test_value);
     EXPECT_TRUE(component.hasStrikePrice());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetStrikeCurrencyAndStrikeCurrencyMatch) {
+    EXPECT_FALSE(component.hasStrikeCurrency());
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetOptAttributeAndOptAttributeMatch) {
@@ -109,10 +168,34 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetCouponRateAndCouponRateMatch) {
     EXPECT_TRUE(component.hasCouponRate());
 }
 
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecurityExchangeAndSecurityExchangeMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetIssuerAndIssuerMatch) {
+    EXPECT_FALSE(component.hasIssuer());
+}
+
 TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedIssuerLenAndEncodedIssuerLenMatch) {
 }
 
+TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedIssuerAndEncodedIssuerMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetSecurityDescAndSecurityDescMatch) {
+    EXPECT_FALSE(component.hasSecurityDesc());
+}
+
 TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedSecurityDescLenAndEncodedSecurityDescLenMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetEncodedSecurityDescAndEncodedSecurityDescMatch) {
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetPoolAndPoolMatch) {
+    EXPECT_FALSE(component.hasPool());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetContractSettlMonthAndContractSettlMonthMatch) {
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetCPProgramAndCPProgramMatch) {
@@ -120,6 +203,10 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetCPProgramAndCPProgramMatch) {
     component.setCPProgram(test_value);
     EXPECT_EQ(component.getCPProgram(), test_value);
     EXPECT_TRUE(component.hasCPProgram());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetCPRegTypeAndCPRegTypeMatch) {
+    EXPECT_FALSE(component.hasCPRegType());
 }
 
 TEST_F(FIX4_4_InstrumentComponentTest, SetDatedDateAndDatedDateMatch) {
@@ -131,7 +218,7 @@ TEST_F(FIX4_4_InstrumentComponentTest, SetInterestAccrualDateAndInterestAccrualD
 TEST_F(FIX4_4_InstrumentComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setProduct(42);
+    { const std::string_view test_value{"AAA"}; component.setSymbol(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

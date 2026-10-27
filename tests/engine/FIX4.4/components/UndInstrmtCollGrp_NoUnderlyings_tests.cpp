@@ -24,7 +24,7 @@ protected:
 
 TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setCollAction(42);
+    { const int64_t test_value = 12345; component.setCollAction(test_value); }
     
     // Reset component
     component.reset();
@@ -43,12 +43,12 @@ TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, SetCollActionAndColl
 TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setCollAction(42);
+    { const int64_t test_value = 12345; component.setCollAction(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_UndInstrmtCollGrp_NoUnderlyingsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[50];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

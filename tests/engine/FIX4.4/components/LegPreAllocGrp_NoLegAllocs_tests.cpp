@@ -24,13 +24,23 @@ protected:
 
 TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setLegAllocQty(3.14f);
+    { const std::string_view test_value{"AAA"}; component.setLegAllocAccount(test_value); }
+    { const std::string_view test_value{"AAA"}; component.setLegIndividualAllocID(test_value); }
+    { const double test_value = 123.456; component.setLegAllocQty(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocAccountAndLegAllocAccountMatch) {
+    EXPECT_FALSE(component.hasLegAllocAccount());
+}
+
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegIndividualAllocIDAndLegIndividualAllocIDMatch) {
+    EXPECT_FALSE(component.hasLegIndividualAllocID());
 }
 
 TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocQtyAndLegAllocQtyMatch) {
@@ -40,15 +50,23 @@ TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocQtyAndLegAlloc
     EXPECT_TRUE(component.hasLegAllocQty());
 }
 
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegAllocAcctIDSourceAndLegAllocAcctIDSourceMatch) {
+    EXPECT_FALSE(component.hasLegAllocAcctIDSource());
+}
+
+TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, SetLegSettlCurrencyAndLegSettlCurrencyMatch) {
+    EXPECT_FALSE(component.hasLegSettlCurrency());
+}
+
 TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setLegAllocQty(42);
+    { const std::string_view test_value{"AAA"}; component.setLegAllocAccount(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_LegPreAllocGrp_NoLegAllocsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[354];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

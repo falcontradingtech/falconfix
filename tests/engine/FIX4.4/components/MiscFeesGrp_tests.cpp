@@ -38,23 +38,58 @@ TEST_F(FIX4_4_MiscFeesGrpComponentTest, HasAnySetTracksPresence) {
 }
 
 TEST_F(FIX4_4_MiscFeesGrpComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[50];
+    char buffer[1024];
     
-    // No scalar setter available to populate deterministically (this
-    // component only wraps nested groups/sub-components). Group-only
-    // containers with no required fields legitimately encode to 0
-    // bytes, and some decode() implementations return false when no
-    // bytes were consumed, so we only assert the two views agree.
+    // This component exposes no scalar setters of its own, so we
+    // populate it through its getRef sub-component / group accessors
+    // to exercise the real encode/decode (and group loop) paths.
+    component.getRefNoMiscFeesGroup().emplace_back();
+    { const double test_value = 123.456; component.getRefNoMiscFeesGroup().back().setMiscFeeAmt(test_value); }
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
     char *p = buffer;
     p = component.encode(p, true);
-    std::size_t encoded_size = p - buffer;
+    ASSERT_NE(p, nullptr);
+    std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
     
+    EXPECT_GT(encoded_size, 0u);
     EXPECT_LE(encoded_size, component.compute_buffer_size());
     
     MiscFeesGrp decoded;
     const char *q = buffer;
-    (void)decoded.decode(q, p);
+    EXPECT_TRUE(decoded.decode(q, p));
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
+}
+
+TEST_F(FIX4_4_MiscFeesGrpComponentTest, PopulatedGroupLoopRoundtrip) {
+    char buffer[2048];
+    component.getRefNoMiscFeesGroup().emplace_back();
+    { const double test_value = 123.456; component.getRefNoMiscFeesGroup().back().setMiscFeeAmt(test_value); }
+    component.getRefNoMiscFeesGroup().emplace_back();
+    { const double test_value = 123.456; component.getRefNoMiscFeesGroup().back().setMiscFeeAmt(test_value); }
+    
+    EXPECT_EQ(component.getRefNoMiscFeesGroup().size(), 2u);
+    EXPECT_TRUE(component.hasAnySet());
+    EXPECT_TRUE(component.checkRequired());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    EXPECT_GT(static_cast<std::size_t>(p - buffer), 0u);
+    
+    MiscFeesGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    EXPECT_EQ(decoded.getRefNoMiscFeesGroup().size(), component.getRefNoMiscFeesGroup().size());
+    
+    // Decoding an unknown leading tag returns without consuming it.
+    MiscFeesGrp other;
+    const char *bad = "99=X\x01";
+    const char *bp = bad;
+    (void)other.decode(bp, bad + 5);
+    
+    // setField on the container is a no-op sink (returns false).
+    EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
 TEST_F(FIX4_4_MiscFeesGrpComponentTest, CheckRequiredWhenEmpty) {

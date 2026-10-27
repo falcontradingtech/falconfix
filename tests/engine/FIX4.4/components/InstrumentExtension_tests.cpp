@@ -24,8 +24,8 @@ protected:
 
 TEST_F(FIX4_4_InstrumentExtensionComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setDeliveryForm(42);
-    component.setPctAtRisk(3.14f);
+    { const int64_t test_value = 12345; component.setDeliveryForm(test_value); }
+    { const double test_value = 123.456; component.setPctAtRisk(test_value); }
     
     // Reset component
     component.reset();
@@ -51,12 +51,12 @@ TEST_F(FIX4_4_InstrumentExtensionComponentTest, SetPctAtRiskAndPctAtRiskMatch) {
 TEST_F(FIX4_4_InstrumentExtensionComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setDeliveryForm(42);
+    { const int64_t test_value = 12345; component.setDeliveryForm(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_InstrumentExtensionComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[108];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return

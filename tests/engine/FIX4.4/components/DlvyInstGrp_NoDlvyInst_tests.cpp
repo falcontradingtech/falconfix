@@ -24,8 +24,8 @@ protected:
 
 TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setSettlInstSource('A');
-    component.setDlvyInstType('A');
+    { const char test_value = 'X'; component.setSettlInstSource(test_value); }
+    { const char test_value = 'X'; component.setDlvyInstType(test_value); }
     
     // Reset component
     component.reset();
@@ -51,12 +51,12 @@ TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, SetDlvyInstTypeAndDlvyInstTyp
 TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setSettlInstSource('A');
+    { const char test_value = 'X'; component.setSettlInstSource(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_4_DlvyInstGrp_NoDlvyInstComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[24];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return
