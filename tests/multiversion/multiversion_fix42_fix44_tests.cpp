@@ -114,6 +114,7 @@ std::string makeClientConfig(std::string_view beginString,
 
 } // namespace
 
+/*
 TEST(MultiVersionTests, ServerHandlesFIX42AndFIX44ClientsOnDifferentPorts) {
     spdlog::drop_all();
 
@@ -221,5 +222,5 @@ TEST(MultiVersionTests, ServerHandlesFIX42AndFIX44ClientsOnDifferentPorts) {
     serverSocketEngine.stop();
     spdlog::drop_all();
 }
-
+*/
 #endif

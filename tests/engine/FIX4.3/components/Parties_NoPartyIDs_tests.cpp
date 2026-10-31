@@ -24,14 +24,19 @@ protected:
 
 TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, ResetClearsAllFields) {
     // Set some fields
-    component.setPartyIDSource('A');
-    component.setPartyRole(42);
+    { const std::string_view test_value{"AAA"}; component.setPartyID(test_value); }
+    { const char test_value = 'X'; component.setPartyIDSource(test_value); }
+    { const int64_t test_value = 12345; component.setPartyRole(test_value); }
     
     // Reset component
     component.reset();
     
     // Verify all fields are cleared
     EXPECT_FALSE(component.hasAnySet());
+}
+
+TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, SetPartyIDAndPartyIDMatch) {
+    EXPECT_FALSE(component.hasPartyID());
 }
 
 TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, SetPartyIDSourceAndPartyIDSourceMatch) {
@@ -48,15 +53,19 @@ TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, SetPartyRoleAndPartyRoleMatch) {
     EXPECT_TRUE(component.hasPartyRole());
 }
 
+TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, SetPartySubIDAndPartySubIDMatch) {
+    EXPECT_FALSE(component.hasPartySubID());
+}
+
 TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    component.setPartyIDSource('A');
+    { const std::string_view test_value{"AAA"}; component.setPartyID(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 
 TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, EncodeDecodeRoundtrip) {
-    char buffer[210];
+    char buffer[1024];
     
     // Populate a real field so the encoded payload is non-empty and
     // decode() is genuinely exercised (some component wrappers return
@@ -81,6 +90,40 @@ TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.setPartyID(std::string_view{"AAA"});
+    component.setPartyIDSource('X');
+    component.setPartyRole(12345);
+    component.setPartySubID(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    Parties::NoPartyIDs decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_3_Parties_NoPartyIDsComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }
