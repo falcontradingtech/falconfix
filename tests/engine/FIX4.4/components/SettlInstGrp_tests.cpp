@@ -97,6 +97,70 @@ TEST_F(FIX4_4_SettlInstGrpComponentTest, PopulatedGroupLoopRoundtrip) {
     EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
+TEST_F(FIX4_4_SettlInstGrpComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefNoSettlInstGroup().emplace_back();
+    component.getRefNoSettlInstGroup().back().setSettlInstID(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setSettlInstTransType('X');
+    component.getRefNoSettlInstGroup().back().setSettlInstRefID(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().emplace_back();
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().setPartyID(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().setPartyIDSource('X');
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().setPartyRole(12345);
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().emplace_back();
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().back().setPartySubID(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().back().setPartySubIDType(12345);
+    component.getRefNoSettlInstGroup().back().setSide('X');
+    component.getRefNoSettlInstGroup().back().setProduct(12345);
+    component.getRefNoSettlInstGroup().back().setSecurityType(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setCFICode(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setEffectiveTime(12345);
+    component.getRefNoSettlInstGroup().back().setExpireTime(12345);
+    component.getRefNoSettlInstGroup().back().setLastUpdateTime(12345);
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().setSettlDeliveryType(12345);
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().setStandInstDbType(12345);
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().setStandInstDbName(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().setStandInstDbID(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().emplace_back();
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().setSettlInstSource('X');
+    component.getRefNoSettlInstGroup().back().getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().setDlvyInstType('X');
+    component.getRefNoSettlInstGroup().back().setPaymentMethod(12345);
+    component.getRefNoSettlInstGroup().back().setPaymentRef(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setCardHolderName(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setCardNumber(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setCardStartDate(12345);
+    component.getRefNoSettlInstGroup().back().setCardExpDate(12345);
+    component.getRefNoSettlInstGroup().back().setCardIssNum(std::string_view{"AAA"});
+    component.getRefNoSettlInstGroup().back().setPaymentDate(12345);
+    component.getRefNoSettlInstGroup().back().setPaymentRemitterID(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    SettlInstGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_SettlInstGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_SettlInstGrpComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

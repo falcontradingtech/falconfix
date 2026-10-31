@@ -97,6 +97,55 @@ TEST_F(FIX4_4_BidCompRspGrpComponentTest, PopulatedGroupLoopRoundtrip) {
     EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
+TEST_F(FIX4_4_BidCompRspGrpComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefNoBidComponentsGroup().emplace_back();
+    component.getRefNoBidComponentsGroup().back().getRefCommissionData().setCommission(123.456);
+    component.getRefNoBidComponentsGroup().back().getRefCommissionData().setCommType('X');
+    component.getRefNoBidComponentsGroup().back().getRefCommissionData().setCommCurrency(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().getRefCommissionData().setFundRenewWaiv('X');
+    component.getRefNoBidComponentsGroup().back().setListID(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().setCountry(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().setSide('X');
+    component.getRefNoBidComponentsGroup().back().setPrice(123.456);
+    component.getRefNoBidComponentsGroup().back().setPriceType(12345);
+    component.getRefNoBidComponentsGroup().back().setFairValue(123.456);
+    component.getRefNoBidComponentsGroup().back().setNetGrossInd(12345);
+    component.getRefNoBidComponentsGroup().back().setSettlType('X');
+    component.getRefNoBidComponentsGroup().back().setSettlDate(12345);
+    component.getRefNoBidComponentsGroup().back().setTradingSessionID(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().setTradingSessionSubID(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().setText(std::string_view{"AAA"});
+    component.getRefNoBidComponentsGroup().back().setEncodedTextLen(12345);
+    component.getRefNoBidComponentsGroup().back().setEncodedText(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    BidCompRspGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_BidCompRspGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_BidCompRspGrpComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

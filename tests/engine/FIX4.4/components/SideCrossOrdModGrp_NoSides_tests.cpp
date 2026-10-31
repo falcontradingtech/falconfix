@@ -217,6 +217,91 @@ TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[5232];
+    component.setSide('X');
+    component.setClOrdID(std::string_view{"AAA"});
+    component.setSecondaryClOrdID(std::string_view{"AAA"});
+    component.setClOrdLinkID(std::string_view{"AAA"});
+    component.getRefParties().getRefNoPartyIDsGroup().emplace_back();
+    component.getRefParties().getRefNoPartyIDsGroup().back().setPartyID(std::string_view{"AAA"});
+    component.getRefParties().getRefNoPartyIDsGroup().back().setPartyIDSource('X');
+    component.getRefParties().getRefNoPartyIDsGroup().back().setPartyRole(12345);
+    component.getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().emplace_back();
+    component.getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().back().setPartySubID(std::string_view{"AAA"});
+    component.getRefParties().getRefNoPartyIDsGroup().back().getRefPtysSubGrp().getRefNoPartySubIDsGroup().back().setPartySubIDType(12345);
+    component.setTradeOriginationDate(12345);
+    component.setTradeDate(12345);
+    component.setAccount(std::string_view{"AAA"});
+    component.setAcctIDSource(12345);
+    component.setAccountType(12345);
+    component.setDayBookingInst('X');
+    component.setBookingUnit('X');
+    component.setPreallocMethod('X');
+    component.setAllocID(std::string_view{"AAA"});
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().emplace_back();
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().setAllocAccount(std::string_view{"AAA"});
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().setAllocAcctIDSource(12345);
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().setAllocSettlCurrency(std::string_view{"AAA"});
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().setIndividualAllocID(std::string_view{"AAA"});
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().getRefNestedParties().getRefNoNestedPartyIDsGroup().emplace_back();
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyID(std::string_view{"AAA"});
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyIDSource('X');
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyRole(12345);
+    component.getRefPreAllocGrp().getRefNoAllocsGroup().back().setAllocQty(123.456);
+    component.setQtyType(12345);
+    component.getRefOrderQtyData().setOrderQty(123.456);
+    component.getRefOrderQtyData().setCashOrderQty(123.456);
+    component.getRefOrderQtyData().setOrderPercent(123.456);
+    component.getRefOrderQtyData().setRoundingDirection('X');
+    component.getRefOrderQtyData().setRoundingModulus(123.456);
+    component.getRefCommissionData().setCommission(123.456);
+    component.getRefCommissionData().setCommType('X');
+    component.getRefCommissionData().setCommCurrency(std::string_view{"AAA"});
+    component.getRefCommissionData().setFundRenewWaiv('X');
+    component.setOrderCapacity('X');
+    component.setOrderRestrictions(std::string_view{"AAA"});
+    component.setCustOrderCapacity(12345);
+    component.setForexReq(true);
+    component.setSettlCurrency(std::string_view{"AAA"});
+    component.setBookingType(12345);
+    component.setText(std::string_view{"AAA"});
+    component.setEncodedTextLen(12345);
+    component.setEncodedText(std::string_view{"AAA"});
+    component.setPositionEffect('X');
+    component.setCoveredOrUncovered(12345);
+    component.setCashMargin('X');
+    component.setClearingFeeIndicator(std::string_view{"AAA"});
+    component.setSolicitedFlag(true);
+    component.setSideComplianceID(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    SideCrossOrdModGrp::NoSides decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[5232];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_SideCrossOrdModGrp_NoSidesComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

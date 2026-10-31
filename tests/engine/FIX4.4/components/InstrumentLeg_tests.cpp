@@ -248,6 +248,80 @@ TEST_F(FIX4_4_InstrumentLegComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_InstrumentLegComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[9720];
+    component.setLegSymbol(std::string_view{"AAA"});
+    component.setLegSymbolSfx(std::string_view{"AAA"});
+    component.setLegSecurityID(std::string_view{"AAA"});
+    component.setLegSecurityIDSource(std::string_view{"AAA"});
+    component.getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().emplace_back();
+    component.getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltID(std::string_view{"AAA"});
+    component.getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltIDSource(std::string_view{"AAA"});
+    component.setLegProduct(12345);
+    component.setLegCFICode(std::string_view{"AAA"});
+    component.setLegSecurityType(std::string_view{"AAA"});
+    component.setLegSecuritySubType(std::string_view{"AAA"});
+    component.setLegMaturityMonthYear(std::string_view{"AAA"});
+    component.setLegMaturityDate(12345);
+    component.setLegCouponPaymentDate(12345);
+    component.setLegIssueDate(12345);
+    component.setLegRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.setLegRepurchaseTerm(12345);
+    component.setLegRepurchaseRate(123.456);
+    component.setLegFactor(123.456);
+    component.setLegCreditRating(std::string_view{"AAA"});
+    component.setLegInstrRegistry(std::string_view{"AAA"});
+    component.setLegCountryOfIssue(std::string_view{"AAA"});
+    component.setLegStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.setLegLocaleOfIssue(std::string_view{"AAA"});
+    component.setLegRedemptionDate(12345);
+    component.setLegStrikePrice(123.456);
+    component.setLegStrikeCurrency(std::string_view{"AAA"});
+    component.setLegOptAttribute('X');
+    component.setLegContractMultiplier(123.456);
+    component.setLegCouponRate(123.456);
+    component.setLegSecurityExchange(std::string_view{"AAA"});
+    component.setLegIssuer(std::string_view{"AAA"});
+    component.setEncodedLegIssuerLen(12345);
+    component.setEncodedLegIssuer(std::string_view{"AAA"});
+    component.setLegSecurityDesc(std::string_view{"AAA"});
+    component.setEncodedLegSecurityDescLen(12345);
+    component.setEncodedLegSecurityDesc(std::string_view{"AAA"});
+    component.setLegRatioQty(123.456);
+    component.setLegSide('X');
+    component.setLegCurrency(std::string_view{"AAA"});
+    component.setLegPool(std::string_view{"AAA"});
+    component.setLegDatedDate(12345);
+    component.setLegContractSettlMonth(std::string_view{"AAA"});
+    component.setLegInterestAccrualDate(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    InstrumentLeg decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[9720];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_InstrumentLegComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_InstrumentLegComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

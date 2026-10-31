@@ -61,6 +61,85 @@ TEST_F(FIX4_4_InstrmtStrkPxGrp_NoStrikesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_InstrmtStrkPxGrp_NoStrikesComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefInstrument().setSymbol(std::string_view{"AAA"});
+    component.getRefInstrument().setSymbolSfx(std::string_view{"AAA"});
+    component.getRefInstrument().setSecurityID(std::string_view{"AAA"});
+    component.getRefInstrument().setSecurityIDSource(std::string_view{"AAA"});
+    component.getRefInstrument().getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().emplace_back();
+    component.getRefInstrument().getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().back().setSecurityAltID(std::string_view{"AAA"});
+    component.getRefInstrument().getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().back().setSecurityAltIDSource(std::string_view{"AAA"});
+    component.getRefInstrument().setProduct(12345);
+    component.getRefInstrument().setCFICode(std::string_view{"AAA"});
+    component.getRefInstrument().setSecurityType(std::string_view{"AAA"});
+    component.getRefInstrument().setSecuritySubType(std::string_view{"AAA"});
+    component.getRefInstrument().setMaturityMonthYear(std::string_view{"AAA"});
+    component.getRefInstrument().setMaturityDate(12345);
+    component.getRefInstrument().setPutOrCall(12345);
+    component.getRefInstrument().setCouponPaymentDate(12345);
+    component.getRefInstrument().setIssueDate(12345);
+    component.getRefInstrument().setRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.getRefInstrument().setRepurchaseTerm(12345);
+    component.getRefInstrument().setRepurchaseRate(123.456);
+    component.getRefInstrument().setFactor(123.456);
+    component.getRefInstrument().setCreditRating(std::string_view{"AAA"});
+    component.getRefInstrument().setInstrRegistry(std::string_view{"AAA"});
+    component.getRefInstrument().setCountryOfIssue(std::string_view{"AAA"});
+    component.getRefInstrument().setStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.getRefInstrument().setLocaleOfIssue(std::string_view{"AAA"});
+    component.getRefInstrument().setRedemptionDate(12345);
+    component.getRefInstrument().setStrikePrice(123.456);
+    component.getRefInstrument().setStrikeCurrency(std::string_view{"AAA"});
+    component.getRefInstrument().setOptAttribute('X');
+    component.getRefInstrument().setContractMultiplier(123.456);
+    component.getRefInstrument().setCouponRate(123.456);
+    component.getRefInstrument().setSecurityExchange(std::string_view{"AAA"});
+    component.getRefInstrument().setIssuer(std::string_view{"AAA"});
+    component.getRefInstrument().setEncodedIssuerLen(12345);
+    component.getRefInstrument().setEncodedIssuer(std::string_view{"AAA"});
+    component.getRefInstrument().setSecurityDesc(std::string_view{"AAA"});
+    component.getRefInstrument().setEncodedSecurityDescLen(12345);
+    component.getRefInstrument().setEncodedSecurityDesc(std::string_view{"AAA"});
+    component.getRefInstrument().setPool(std::string_view{"AAA"});
+    component.getRefInstrument().setContractSettlMonth(std::string_view{"AAA"});
+    component.getRefInstrument().setCPProgram(12345);
+    component.getRefInstrument().setCPRegType(std::string_view{"AAA"});
+    component.getRefInstrument().getRefEvntGrp().getRefNoEventsGroup().emplace_back();
+    component.getRefInstrument().getRefEvntGrp().getRefNoEventsGroup().back().setEventType(12345);
+    component.getRefInstrument().getRefEvntGrp().getRefNoEventsGroup().back().setEventDate(12345);
+    component.getRefInstrument().getRefEvntGrp().getRefNoEventsGroup().back().setEventPx(123.456);
+    component.getRefInstrument().getRefEvntGrp().getRefNoEventsGroup().back().setEventText(std::string_view{"AAA"});
+    component.getRefInstrument().setDatedDate(12345);
+    component.getRefInstrument().setInterestAccrualDate(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    InstrmtStrkPxGrp::NoStrikes decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_InstrmtStrkPxGrp_NoStrikesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_InstrmtStrkPxGrp_NoStrikesComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

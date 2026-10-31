@@ -1059,6 +1059,91 @@ def _populate_value_literal_and_setup(param_type: str) -> tuple[str, str]:
 	return "", ""
 
 
+def _inline_value_expr(param_type: str) -> str:
+	"""
+	Return a single inline C++ expression (no helper variable/statement) that is
+	a valid argument for a setter of `param_type`, or "" if we cannot populate
+	that type deterministically. Used by the fully-populated roundtrip to set
+	every field on one line each without name collisions.
+	"""
+	if 'CHAR' in param_type and '<' not in param_type:
+		return "'X'"
+	# FixedString-backed text types are always templated (e.g. types::STRING<32>,
+	# types::UTCDATE<17>). The `<` discriminates them from int-backed aliases
+	# whose names can share a prefix (e.g. UTCDATEONLY = int32_t has no `<`).
+	if '<' in param_type and (
+			'STRING' in param_type or 'MULTIPLEVALUE' in param_type
+			or 'MULTIPLECHARVALUE' in param_type or 'MONTHYEAR' in param_type
+			or 'COUNTRY' in param_type or 'EXCHANGE' in param_type
+			or 'CURRENCY' in param_type or 'LANGUAGE' in param_type
+			or 'DATA' in param_type or 'XMLDATA' in param_type
+			or 'UTCDATE' in param_type):
+		return 'std::string_view{"AAA"}'
+	if 'FLOAT' in param_type or 'PRICE' in param_type or 'AMT' in param_type \
+			or 'QTY' in param_type or 'PERCENTAGE' in param_type:
+		return "123.456"
+	if 'BOOLEAN' in param_type:
+		return "true"
+	# Remaining numeric / temporal aliases (INT/LONG/SEQNUM/LENGTH/NUMINGROUP/
+	# DAYOFMONTH/UTCTIMESTAMP/LOCALMKTDATE/UTCDATEONLY/UTCTIMEONLY/TZTIMEONLY).
+	if '<' not in param_type and param_type.startswith('types::'):
+		return "12345"
+	return ""
+
+
+def _emit_populate_all(obj_expr: str, component: dict | None, depth: int = 0) -> tuple[list[str], bool]:
+	"""
+	Emit C++ statements that populate EVERY settable scalar field of `component`
+	(recursing into sub-components and the first entry of each repeating group),
+	so the encode/decode/setField branches of every field are exercised. Returns
+	(lines, any_populated). Members are emitted in declaration order so the
+	group decode anchor (first field) is always set first.
+	"""
+	if component is None or depth > 5:
+		return [], False
+
+	setter_by_name = {s['name']: s for s in component.get('methods', {}).get('setters', [])}
+	ref_by_suffix = {suffix: subtype for suffix, subtype in component.get('ref_accessors', [])}
+	group_by_suffix = {suffix: entry for suffix, entry in component.get('group_accessors', [])}
+
+	lines: list[str] = []
+	any_set = False
+	ordered = component.get('ordered_members', [])
+	# Fallback to a flat setter list when ordered members are unavailable.
+	if not ordered:
+		ordered = [('scalar', s['name']) for s in component.get('methods', {}).get('setters', [])]
+
+	for category, member_name in ordered:
+		if category == 'scalar':
+			setter = setter_by_name.get(member_name)
+			if not setter:
+				continue
+			expr = _inline_value_expr(setter['param_type'])
+			if expr:
+				lines.append(f"    {obj_expr}.set{setter['name']}({expr});")
+				any_set = True
+		elif category == 'ref':
+			subtype = ref_by_suffix.get(member_name)
+			sub = _COMPONENT_REGISTRY.get(subtype) if subtype else None
+			sub_lines, ok = _emit_populate_all(f"{obj_expr}.getRef{member_name}()", sub, depth + 1)
+			if ok:
+				lines.extend(sub_lines)
+				any_set = True
+		elif category == 'group':
+			entry_struct = group_by_suffix.get(member_name)
+			if entry_struct is None:
+				continue
+			entry = _find_nested_entry(component, entry_struct)
+			tmp = [f"    {obj_expr}.getRef{member_name}().emplace_back();"]
+			pop_lines, ok = _emit_populate_all(f"{obj_expr}.getRef{member_name}().back()", entry, depth + 1)
+			if ok:
+				lines.extend(tmp)
+				lines.extend(pop_lines)
+				any_set = True
+
+	return lines, any_set
+
+
 # Registry of all parsed top-level components (keyed by class name), used to
 # resolve sub-component scalar setters when deterministically populating
 # group-only / wrapper components that expose no scalar setters of their own.
@@ -1298,6 +1383,44 @@ def _generate_encode_decode_tests(component: dict) -> str:
 				"",
 			])
 
+	# Fully-populated roundtrip: set EVERY settable scalar field (recursing into
+	# sub-components and the first entry of each repeating group), then
+	# encode -> decode -> re-encode and compare the byte streams. This exercises
+	# every field's encode (`if(hasX())`), decode (`case field_id::X`) and
+	# setField branch in a single deterministic test, which is the bulk of the
+	# generated per-field code.
+	all_lines, all_ok = _emit_populate_all("component", component)
+	if all_ok:
+		big = max(component['max_encode_size'] * 8, 4096)
+		lines.append(f"TEST_F({test_class_name}, FullyPopulatedRoundtrip) {{")
+		lines.append(f"    char buffer[{big}];")
+		lines.extend(all_lines)
+		lines.extend([
+			"    ",
+			"    EXPECT_TRUE(component.hasAnySet());",
+			"    ",
+			"    char *p = component.encode(buffer, true);",
+			"    ASSERT_NE(p, nullptr);",
+			"    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);",
+			"    EXPECT_GT(encoded_size, 0u);",
+			"    EXPECT_LE(encoded_size, component.compute_buffer_size());",
+			"    ",
+			f"    {cpp_type} decoded;",
+			"    const char *q = buffer;",
+			"    EXPECT_TRUE(decoded.decode(q, p));",
+			"    ",
+			"    // Re-encode the decoded view and compare the two byte streams to",
+			"    // confirm every populated field survived the roundtrip.",
+			f"    char buffer2[{big}];",
+			"    char *p2 = decoded.encode(buffer2, true);",
+			"    ASSERT_NE(p2, nullptr);",
+			"    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);",
+			"    ASSERT_EQ(encoded_size, encoded_size2);",
+			"    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));",
+			"}",
+			"",
+		])
+
 	return "\n".join(lines)
 
 
@@ -1314,6 +1437,20 @@ def _generate_boundary_tests(component: dict) -> str:
 		lines.append("    EXPECT_TRUE(component.checkRequired());")
 
 	lines.extend(["}", ""])
+
+	# Exercise setField's `default: return false` branch with a tag that is not
+	# a member of this component. Tag 0 is never a valid FIX field id, so it
+	# always lands in the default case. This covers the uncovered default line
+	# present in every generated setField (and, for group containers, drives the
+	# decode() path that breaks out when an unknown trailing tag is seen).
+	lines.extend([
+		f"TEST_F({test_class_name}, SetFieldUnknownTagReturnsFalse) {{",
+		'    const char *v = "X";',
+		"    EXPECT_FALSE(component.setField(0, v, v + 1));",
+		"}",
+		"",
+	])
+
 	return "\n".join(lines)
 
 

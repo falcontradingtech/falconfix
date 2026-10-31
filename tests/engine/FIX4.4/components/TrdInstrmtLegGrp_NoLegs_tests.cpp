@@ -124,6 +124,99 @@ TEST_F(FIX4_4_TrdInstrmtLegGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_TrdInstrmtLegGrp_NoLegsComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefInstrumentLeg().setLegSymbol(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSymbolSfx(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSecurityID(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSecurityIDSource(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().emplace_back();
+    component.getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltID(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltIDSource(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegProduct(12345);
+    component.getRefInstrumentLeg().setLegCFICode(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSecurityType(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSecuritySubType(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegMaturityMonthYear(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegMaturityDate(12345);
+    component.getRefInstrumentLeg().setLegCouponPaymentDate(12345);
+    component.getRefInstrumentLeg().setLegIssueDate(12345);
+    component.getRefInstrumentLeg().setLegRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegRepurchaseTerm(12345);
+    component.getRefInstrumentLeg().setLegRepurchaseRate(123.456);
+    component.getRefInstrumentLeg().setLegFactor(123.456);
+    component.getRefInstrumentLeg().setLegCreditRating(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegInstrRegistry(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegCountryOfIssue(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegLocaleOfIssue(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegRedemptionDate(12345);
+    component.getRefInstrumentLeg().setLegStrikePrice(123.456);
+    component.getRefInstrumentLeg().setLegStrikeCurrency(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegOptAttribute('X');
+    component.getRefInstrumentLeg().setLegContractMultiplier(123.456);
+    component.getRefInstrumentLeg().setLegCouponRate(123.456);
+    component.getRefInstrumentLeg().setLegSecurityExchange(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegIssuer(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setEncodedLegIssuerLen(12345);
+    component.getRefInstrumentLeg().setEncodedLegIssuer(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegSecurityDesc(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setEncodedLegSecurityDescLen(12345);
+    component.getRefInstrumentLeg().setEncodedLegSecurityDesc(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegRatioQty(123.456);
+    component.getRefInstrumentLeg().setLegSide('X');
+    component.getRefInstrumentLeg().setLegCurrency(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegPool(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegDatedDate(12345);
+    component.getRefInstrumentLeg().setLegContractSettlMonth(std::string_view{"AAA"});
+    component.getRefInstrumentLeg().setLegInterestAccrualDate(12345);
+    component.setLegQty(123.456);
+    component.setLegSwapType(12345);
+    component.getRefLegStipulations().getRefNoLegStipulationsGroup().emplace_back();
+    component.getRefLegStipulations().getRefNoLegStipulationsGroup().back().setLegStipulationType(std::string_view{"AAA"});
+    component.getRefLegStipulations().getRefNoLegStipulationsGroup().back().setLegStipulationValue(std::string_view{"AAA"});
+    component.setLegPositionEffect('X');
+    component.setLegCoveredOrUncovered(12345);
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().emplace_back();
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyID(std::string_view{"AAA"});
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyIDSource('X');
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyRole(12345);
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().emplace_back();
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().back().setNestedPartySubID(std::string_view{"AAA"});
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().back().setNestedPartySubIDType(12345);
+    component.setLegRefID(std::string_view{"AAA"});
+    component.setLegPrice(123.456);
+    component.setLegSettlType('X');
+    component.setLegSettlDate(12345);
+    component.setLegLastPx(123.456);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    TrdInstrmtLegGrp::NoLegs decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_TrdInstrmtLegGrp_NoLegsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_TrdInstrmtLegGrp_NoLegsComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

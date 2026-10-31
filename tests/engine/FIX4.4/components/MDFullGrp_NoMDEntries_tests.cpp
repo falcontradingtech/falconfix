@@ -223,6 +223,69 @@ TEST_F(FIX4_4_MDFullGrp_NoMDEntriesComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_MDFullGrp_NoMDEntriesComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[7656];
+    component.setMDEntryType('X');
+    component.setMDEntryPx(123.456);
+    component.setCurrency(std::string_view{"AAA"});
+    component.setMDEntrySize(123.456);
+    component.setMDEntryDate(12345);
+    component.setMDEntryTime(12345);
+    component.setTickDirection('X');
+    component.setMDMkt(std::string_view{"AAA"});
+    component.setTradingSessionID(std::string_view{"AAA"});
+    component.setTradingSessionSubID(std::string_view{"AAA"});
+    component.setQuoteCondition(std::string_view{"AAA"});
+    component.setTradeCondition(std::string_view{"AAA"});
+    component.setMDEntryOriginator(std::string_view{"AAA"});
+    component.setLocationID(std::string_view{"AAA"});
+    component.setDeskID(std::string_view{"AAA"});
+    component.setOpenCloseSettlFlag(std::string_view{"AAA"});
+    component.setTimeInForce('X');
+    component.setExpireDate(12345);
+    component.setExpireTime(12345);
+    component.setMinQty(123.456);
+    component.setExecInst(std::string_view{"AAA"});
+    component.setSellerDays(12345);
+    component.setOrderID(std::string_view{"AAA"});
+    component.setQuoteEntryID(std::string_view{"AAA"});
+    component.setMDEntryBuyer(std::string_view{"AAA"});
+    component.setMDEntrySeller(std::string_view{"AAA"});
+    component.setNumberOfOrders(12345);
+    component.setMDEntryPositionNo(12345);
+    component.setScope(std::string_view{"AAA"});
+    component.setPriceDelta(123.456);
+    component.setText(std::string_view{"AAA"});
+    component.setEncodedTextLen(12345);
+    component.setEncodedText(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    MDFullGrp::NoMDEntries decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[7656];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_MDFullGrp_NoMDEntriesComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_FALSE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_MDFullGrp_NoMDEntriesComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

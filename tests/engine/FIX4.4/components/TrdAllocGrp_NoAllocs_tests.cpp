@@ -94,6 +94,48 @@ TEST_F(FIX4_4_TrdAllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_TrdAllocGrp_NoAllocsComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.setAllocAccount(std::string_view{"AAA"});
+    component.setAllocAcctIDSource(12345);
+    component.setAllocSettlCurrency(std::string_view{"AAA"});
+    component.setIndividualAllocID(std::string_view{"AAA"});
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().emplace_back();
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyID(std::string_view{"AAA"});
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyIDSource('X');
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyRole(12345);
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().emplace_back();
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().back().setNested2PartySubID(std::string_view{"AAA"});
+    component.getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().back().setNested2PartySubIDType(12345);
+    component.setAllocQty(123.456);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    TrdAllocGrp::NoAllocs decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_TrdAllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_TrdAllocGrp_NoAllocsComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

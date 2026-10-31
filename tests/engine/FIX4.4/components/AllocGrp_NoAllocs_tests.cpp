@@ -202,6 +202,88 @@ TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4832];
+    component.setAllocAccount(std::string_view{"AAA"});
+    component.setAllocAcctIDSource(12345);
+    component.setMatchStatus('X');
+    component.setAllocPrice(123.456);
+    component.setAllocQty(123.456);
+    component.setIndividualAllocID(std::string_view{"AAA"});
+    component.setProcessCode('X');
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().emplace_back();
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyID(std::string_view{"AAA"});
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyIDSource('X');
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().setNestedPartyRole(12345);
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().emplace_back();
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().back().setNestedPartySubID(std::string_view{"AAA"});
+    component.getRefNestedParties().getRefNoNestedPartyIDsGroup().back().getRefNstdPtysSubGrp().getRefNoNestedPartySubIDsGroup().back().setNestedPartySubIDType(12345);
+    component.setNotifyBrokerOfCredit(true);
+    component.setAllocHandlInst(12345);
+    component.setAllocText(std::string_view{"AAA"});
+    component.setEncodedAllocTextLen(12345);
+    component.setEncodedAllocText(std::string_view{"AAA"});
+    component.getRefCommissionData().setCommission(123.456);
+    component.getRefCommissionData().setCommType('X');
+    component.getRefCommissionData().setCommCurrency(std::string_view{"AAA"});
+    component.getRefCommissionData().setFundRenewWaiv('X');
+    component.setAllocAvgPx(123.456);
+    component.setAllocNetMoney(123.456);
+    component.setSettlCurrAmt(123.456);
+    component.setAllocSettlCurrAmt(123.456);
+    component.setSettlCurrency(std::string_view{"AAA"});
+    component.setAllocSettlCurrency(std::string_view{"AAA"});
+    component.setSettlCurrFxRate(123.456);
+    component.setSettlCurrFxRateCalc('X');
+    component.setAllocAccruedInterestAmt(123.456);
+    component.setAllocInterestAtMaturity(123.456);
+    component.getRefMiscFeesGrp().getRefNoMiscFeesGroup().emplace_back();
+    component.getRefMiscFeesGrp().getRefNoMiscFeesGroup().back().setMiscFeeAmt(123.456);
+    component.getRefMiscFeesGrp().getRefNoMiscFeesGroup().back().setMiscFeeCurr(std::string_view{"AAA"});
+    component.getRefMiscFeesGrp().getRefNoMiscFeesGroup().back().setMiscFeeType('X');
+    component.getRefMiscFeesGrp().getRefNoMiscFeesGroup().back().setMiscFeeBasis(12345);
+    component.getRefClrInstGrp().getRefNoClearingInstructionsGroup().emplace_back();
+    component.getRefClrInstGrp().getRefNoClearingInstructionsGroup().back().setClearingInstruction(12345);
+    component.setAllocSettlInstType(12345);
+    component.getRefSettlInstructionsData().setSettlDeliveryType(12345);
+    component.getRefSettlInstructionsData().setStandInstDbType(12345);
+    component.getRefSettlInstructionsData().setStandInstDbName(std::string_view{"AAA"});
+    component.getRefSettlInstructionsData().setStandInstDbID(std::string_view{"AAA"});
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().emplace_back();
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().setSettlInstSource('X');
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().setDlvyInstType('X');
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().getRefSettlParties().getRefNoSettlPartyIDsGroup().emplace_back();
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().getRefSettlParties().getRefNoSettlPartyIDsGroup().back().setSettlPartyID(std::string_view{"AAA"});
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().getRefSettlParties().getRefNoSettlPartyIDsGroup().back().setSettlPartyIDSource('X');
+    component.getRefSettlInstructionsData().getRefDlvyInstGrp().getRefNoDlvyInstGroup().back().getRefSettlParties().getRefNoSettlPartyIDsGroup().back().setSettlPartyRole(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    AllocGrp::NoAllocs decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4832];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_AllocGrp_NoAllocsComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

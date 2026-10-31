@@ -248,6 +248,85 @@ TEST_F(FIX4_4_InstrumentComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_InstrumentComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[9808];
+    component.setSymbol(std::string_view{"AAA"});
+    component.setSymbolSfx(std::string_view{"AAA"});
+    component.setSecurityID(std::string_view{"AAA"});
+    component.setSecurityIDSource(std::string_view{"AAA"});
+    component.getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().emplace_back();
+    component.getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().back().setSecurityAltID(std::string_view{"AAA"});
+    component.getRefSecAltIDGrp().getRefNoSecurityAltIDGroup().back().setSecurityAltIDSource(std::string_view{"AAA"});
+    component.setProduct(12345);
+    component.setCFICode(std::string_view{"AAA"});
+    component.setSecurityType(std::string_view{"AAA"});
+    component.setSecuritySubType(std::string_view{"AAA"});
+    component.setMaturityMonthYear(std::string_view{"AAA"});
+    component.setMaturityDate(12345);
+    component.setPutOrCall(12345);
+    component.setCouponPaymentDate(12345);
+    component.setIssueDate(12345);
+    component.setRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.setRepurchaseTerm(12345);
+    component.setRepurchaseRate(123.456);
+    component.setFactor(123.456);
+    component.setCreditRating(std::string_view{"AAA"});
+    component.setInstrRegistry(std::string_view{"AAA"});
+    component.setCountryOfIssue(std::string_view{"AAA"});
+    component.setStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.setLocaleOfIssue(std::string_view{"AAA"});
+    component.setRedemptionDate(12345);
+    component.setStrikePrice(123.456);
+    component.setStrikeCurrency(std::string_view{"AAA"});
+    component.setOptAttribute('X');
+    component.setContractMultiplier(123.456);
+    component.setCouponRate(123.456);
+    component.setSecurityExchange(std::string_view{"AAA"});
+    component.setIssuer(std::string_view{"AAA"});
+    component.setEncodedIssuerLen(12345);
+    component.setEncodedIssuer(std::string_view{"AAA"});
+    component.setSecurityDesc(std::string_view{"AAA"});
+    component.setEncodedSecurityDescLen(12345);
+    component.setEncodedSecurityDesc(std::string_view{"AAA"});
+    component.setPool(std::string_view{"AAA"});
+    component.setContractSettlMonth(std::string_view{"AAA"});
+    component.setCPProgram(12345);
+    component.setCPRegType(std::string_view{"AAA"});
+    component.getRefEvntGrp().getRefNoEventsGroup().emplace_back();
+    component.getRefEvntGrp().getRefNoEventsGroup().back().setEventType(12345);
+    component.getRefEvntGrp().getRefNoEventsGroup().back().setEventDate(12345);
+    component.getRefEvntGrp().getRefNoEventsGroup().back().setEventPx(123.456);
+    component.getRefEvntGrp().getRefNoEventsGroup().back().setEventText(std::string_view{"AAA"});
+    component.setDatedDate(12345);
+    component.setInterestAccrualDate(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    Instrument decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[9808];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_InstrumentComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_InstrumentComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

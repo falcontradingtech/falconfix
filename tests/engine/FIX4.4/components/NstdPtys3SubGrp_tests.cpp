@@ -97,6 +97,39 @@ TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, PopulatedGroupLoopRoundtrip) {
     EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefNoNested3PartySubIDsGroup().emplace_back();
+    component.getRefNoNested3PartySubIDsGroup().back().setNested3PartySubID(std::string_view{"AAA"});
+    component.getRefNoNested3PartySubIDsGroup().back().setNested3PartySubIDType(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    NstdPtys3SubGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_NstdPtys3SubGrpComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

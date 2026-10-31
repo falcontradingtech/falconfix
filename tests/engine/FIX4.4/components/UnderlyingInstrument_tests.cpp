@@ -285,6 +285,87 @@ TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, EncodeDecodeRoundtrip) {
     EXPECT_EQ(decoded.hasAnySet(), component.hasAnySet());
 }
 
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[11056];
+    component.setUnderlyingSymbol(std::string_view{"AAA"});
+    component.setUnderlyingSymbolSfx(std::string_view{"AAA"});
+    component.setUnderlyingSecurityID(std::string_view{"AAA"});
+    component.setUnderlyingSecurityIDSource(std::string_view{"AAA"});
+    component.getRefUndSecAltIDGrp().getRefNoUnderlyingSecurityAltIDGroup().emplace_back();
+    component.getRefUndSecAltIDGrp().getRefNoUnderlyingSecurityAltIDGroup().back().setUnderlyingSecurityAltID(std::string_view{"AAA"});
+    component.getRefUndSecAltIDGrp().getRefNoUnderlyingSecurityAltIDGroup().back().setUnderlyingSecurityAltIDSource(std::string_view{"AAA"});
+    component.setUnderlyingProduct(12345);
+    component.setUnderlyingCFICode(std::string_view{"AAA"});
+    component.setUnderlyingSecurityType(std::string_view{"AAA"});
+    component.setUnderlyingSecuritySubType(std::string_view{"AAA"});
+    component.setUnderlyingMaturityMonthYear(std::string_view{"AAA"});
+    component.setUnderlyingMaturityDate(12345);
+    component.setUnderlyingPutOrCall(12345);
+    component.setUnderlyingCouponPaymentDate(12345);
+    component.setUnderlyingIssueDate(12345);
+    component.setUnderlyingRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.setUnderlyingRepurchaseTerm(12345);
+    component.setUnderlyingRepurchaseRate(123.456);
+    component.setUnderlyingFactor(123.456);
+    component.setUnderlyingCreditRating(std::string_view{"AAA"});
+    component.setUnderlyingInstrRegistry(std::string_view{"AAA"});
+    component.setUnderlyingCountryOfIssue(std::string_view{"AAA"});
+    component.setUnderlyingStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.setUnderlyingLocaleOfIssue(std::string_view{"AAA"});
+    component.setUnderlyingRedemptionDate(12345);
+    component.setUnderlyingStrikePrice(123.456);
+    component.setUnderlyingStrikeCurrency(std::string_view{"AAA"});
+    component.setUnderlyingOptAttribute('X');
+    component.setUnderlyingContractMultiplier(123.456);
+    component.setUnderlyingCouponRate(123.456);
+    component.setUnderlyingSecurityExchange(std::string_view{"AAA"});
+    component.setUnderlyingIssuer(std::string_view{"AAA"});
+    component.setEncodedUnderlyingIssuerLen(12345);
+    component.setEncodedUnderlyingIssuer(std::string_view{"AAA"});
+    component.setUnderlyingSecurityDesc(std::string_view{"AAA"});
+    component.setEncodedUnderlyingSecurityDescLen(12345);
+    component.setEncodedUnderlyingSecurityDesc(std::string_view{"AAA"});
+    component.setUnderlyingCPProgram(std::string_view{"AAA"});
+    component.setUnderlyingCPRegType(std::string_view{"AAA"});
+    component.setUnderlyingCurrency(std::string_view{"AAA"});
+    component.setUnderlyingQty(123.456);
+    component.setUnderlyingPx(123.456);
+    component.setUnderlyingDirtyPrice(123.456);
+    component.setUnderlyingEndPrice(123.456);
+    component.setUnderlyingStartValue(123.456);
+    component.setUnderlyingCurrentValue(123.456);
+    component.setUnderlyingEndValue(123.456);
+    component.getRefUnderlyingStipulations().getRefNoUnderlyingStipsGroup().emplace_back();
+    component.getRefUnderlyingStipulations().getRefNoUnderlyingStipsGroup().back().setUnderlyingStipType(std::string_view{"AAA"});
+    component.getRefUnderlyingStipulations().getRefNoUnderlyingStipsGroup().back().setUnderlyingStipValue(std::string_view{"AAA"});
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    UnderlyingInstrument decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[11056];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_UnderlyingInstrumentComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

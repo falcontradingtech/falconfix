@@ -97,6 +97,81 @@ TEST_F(FIX4_4_InstrmtLegGrpComponentTest, PopulatedGroupLoopRoundtrip) {
     EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
+TEST_F(FIX4_4_InstrmtLegGrpComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefNoLegsGroup().emplace_back();
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSymbol(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSymbolSfx(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecurityID(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecurityIDSource(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().emplace_back();
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltID(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().getRefLegSecAltIDGrp().getRefNoLegSecurityAltIDGroup().back().setLegSecurityAltIDSource(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegProduct(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCFICode(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecurityType(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecuritySubType(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegMaturityMonthYear(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegMaturityDate(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCouponPaymentDate(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegIssueDate(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegRepoCollateralSecurityType(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegRepurchaseTerm(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegRepurchaseRate(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegFactor(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCreditRating(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegInstrRegistry(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCountryOfIssue(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegStateOrProvinceOfIssue(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegLocaleOfIssue(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegRedemptionDate(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegStrikePrice(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegStrikeCurrency(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegOptAttribute('X');
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegContractMultiplier(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCouponRate(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecurityExchange(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegIssuer(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setEncodedLegIssuerLen(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setEncodedLegIssuer(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSecurityDesc(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setEncodedLegSecurityDescLen(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setEncodedLegSecurityDesc(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegRatioQty(123.456);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegSide('X');
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegCurrency(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegPool(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegDatedDate(12345);
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegContractSettlMonth(std::string_view{"AAA"});
+    component.getRefNoLegsGroup().back().getRefInstrumentLeg().setLegInterestAccrualDate(12345);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    InstrmtLegGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_InstrmtLegGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_InstrmtLegGrpComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }

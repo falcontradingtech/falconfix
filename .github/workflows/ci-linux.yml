@@ -53,8 +53,8 @@ jobs:
 
     - name: Generate coverage report
       run: |
-        lcov --directory build/linux-release --capture --output-file coverage.info --ignore-errors negative,mismatch
-        lcov --remove coverage.info '*/vcpkg/*' '*/build/*' '*/usr/include/*' --output-file coverage.info --ignore-errors unused
+        lcov --directory build/linux-release --capture --output-file coverage.info --ignore-errors negative,mismatch,inconsistent
+        lcov --remove coverage.info '*/vcpkg/*' '*/build/*' '*/usr/include/*' --output-file coverage.info --ignore-errors unused,inconsistent
         lcov --list coverage.info
         # Verify coverage.info was created
         if [ ! -f coverage.info ]; then

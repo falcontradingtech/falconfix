@@ -97,6 +97,52 @@ TEST_F(FIX4_4_OrdAllocGrpComponentTest, PopulatedGroupLoopRoundtrip) {
     EXPECT_FALSE(other.setField(0, nullptr, nullptr));
 }
 
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, FullyPopulatedRoundtrip) {
+    char buffer[4096];
+    component.getRefNoOrdersGroup().emplace_back();
+    component.getRefNoOrdersGroup().back().setClOrdID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().setOrderID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().setSecondaryOrderID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().setSecondaryClOrdID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().setListID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().emplace_back();
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyIDSource('X');
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().setNested2PartyRole(12345);
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().emplace_back();
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().back().setNested2PartySubID(std::string_view{"AAA"});
+    component.getRefNoOrdersGroup().back().getRefNestedParties2().getRefNoNested2PartyIDsGroup().back().getRefNstdPtys2SubGrp().getRefNoNested2PartySubIDsGroup().back().setNested2PartySubIDType(12345);
+    component.getRefNoOrdersGroup().back().setOrderQty(123.456);
+    component.getRefNoOrdersGroup().back().setOrderAvgPx(123.456);
+    component.getRefNoOrdersGroup().back().setOrderBookingQty(123.456);
+    
+    EXPECT_TRUE(component.hasAnySet());
+    
+    char *p = component.encode(buffer, true);
+    ASSERT_NE(p, nullptr);
+    const std::size_t encoded_size = static_cast<std::size_t>(p - buffer);
+    EXPECT_GT(encoded_size, 0u);
+    EXPECT_LE(encoded_size, component.compute_buffer_size());
+    
+    OrdAllocGrp decoded;
+    const char *q = buffer;
+    EXPECT_TRUE(decoded.decode(q, p));
+    
+    // Re-encode the decoded view and compare the two byte streams to
+    // confirm every populated field survived the roundtrip.
+    char buffer2[4096];
+    char *p2 = decoded.encode(buffer2, true);
+    ASSERT_NE(p2, nullptr);
+    const std::size_t encoded_size2 = static_cast<std::size_t>(p2 - buffer2);
+    ASSERT_EQ(encoded_size, encoded_size2);
+    EXPECT_EQ(0, std::memcmp(buffer, buffer2, encoded_size));
+}
+
 TEST_F(FIX4_4_OrdAllocGrpComponentTest, CheckRequiredWhenEmpty) {
     EXPECT_TRUE(component.checkRequired());
+}
+
+TEST_F(FIX4_4_OrdAllocGrpComponentTest, SetFieldUnknownTagReturnsFalse) {
+    const char *v = "X";
+    EXPECT_FALSE(component.setField(0, v, v + 1));
 }
