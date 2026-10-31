@@ -26,6 +26,7 @@ TEST_F(FIX4_4_YieldDataComponentTest, ResetClearsAllFields) {
     // Set some fields
     { const std::string_view test_value{"AAA"}; component.setYieldType(test_value); }
     { const double test_value = 123.456; component.setYield(test_value); }
+    { const int64_t test_value = 12345; component.setYieldCalcDate(test_value); }
     
     // Reset component
     component.reset();

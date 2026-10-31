@@ -25,6 +25,7 @@ protected:
 TEST_F(FIX4_4_EvntGrp_NoEventsComponentTest, ResetClearsAllFields) {
     // Set some fields
     { const int64_t test_value = 12345; component.setEventType(test_value); }
+    { const int64_t test_value = 12345; component.setEventDate(test_value); }
     { const double test_value = 123.456; component.setEventPx(test_value); }
     
     // Reset component

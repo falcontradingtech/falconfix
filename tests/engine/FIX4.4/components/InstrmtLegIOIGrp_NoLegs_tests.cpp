@@ -50,7 +50,7 @@ TEST_F(FIX4_4_InstrmtLegIOIGrp_NoLegsComponentTest, EncodeDecodeRoundtrip) {
     // This component exposes no scalar setters of its own, so we
     // populate it through its getRef sub-component / group accessors
     // to exercise the real encode/decode (and group loop) paths.
-    { const std::string_view test_value{"AAA"}; component.setLegIOIQty(test_value); }
+    { const std::string_view test_value{"AAA"}; component.getRefInstrumentLeg().setLegSymbol(test_value); }
     
     EXPECT_TRUE(component.hasAnySet());
     

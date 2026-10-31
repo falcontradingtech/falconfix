@@ -24,6 +24,7 @@ protected:
 
 TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, ResetClearsAllFields) {
     // Set some fields
+    { const int64_t test_value = 12345; component.setTrdRegTimestamp(test_value); }
     { const int64_t test_value = 12345; component.setTrdRegTimestampType(test_value); }
     { const std::string_view test_value{"AAA"}; component.setTrdRegTimestampOrigin(test_value); }
     
@@ -51,7 +52,7 @@ TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, SetTrdRegTimesta
 TEST_F(FIX4_4_TrdRegTimestamps_NoTrdRegTimestampsComponentTest, HasAnySetTracksPresence) {
     EXPECT_FALSE(component.hasAnySet());
     
-    { const int64_t test_value = 12345; component.setTrdRegTimestampType(test_value); }
+    { const int64_t test_value = 12345; component.setTrdRegTimestamp(test_value); }
     EXPECT_TRUE(component.hasAnySet());
 }
 

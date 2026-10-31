@@ -26,6 +26,7 @@ TEST_F(FIX4_4_QuotSetAckGrp_NoQuoteSetsComponentTest, ResetClearsAllFields) {
     // Set some fields
     { const std::string_view test_value{"AAA"}; component.setQuoteSetID(test_value); }
     { const int64_t test_value = 12345; component.setTotNoQuoteEntries(test_value); }
+    { const int64_t test_value = 12345; component.setLastFragment(test_value); }
     
     // Reset component
     component.reset();

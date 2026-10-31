@@ -26,6 +26,7 @@ TEST_F(FIX4_4_FinancingDetailsComponentTest, ResetClearsAllFields) {
     // Set some fields
     { const std::string_view test_value{"AAA"}; component.setAgreementDesc(test_value); }
     { const std::string_view test_value{"AAA"}; component.setAgreementID(test_value); }
+    { const int64_t test_value = 12345; component.setAgreementDate(test_value); }
     
     // Reset component
     component.reset();

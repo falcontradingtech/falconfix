@@ -25,6 +25,7 @@ protected:
 TEST_F(FIX4_4_LinesOfTextGrp_NoLinesOfTextComponentTest, ResetClearsAllFields) {
     // Set some fields
     { const std::string_view test_value{"AAA"}; component.setText(test_value); }
+    { const int64_t test_value = 12345; component.setEncodedTextLen(test_value); }
     
     // Reset component
     component.reset();
